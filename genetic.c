@@ -46,11 +46,16 @@ person*** genetic_generate_initial_population(person **all, int personCount, int
 /* Put members randomly into the chromosome array */
 void genetic_generate_chromosome(person **chromosome, person **all, int personCount) {
     
+    int i;
+    
     /* g_rand() returns an array with all integers between 0 and the argument,
         where each values occurs exactly once. */
     int *idx = g_rand(personCount);
     
-    
+    for (i = 0; i < personCount; i++) {
+        /* Fill chromosome systematically with pointers to members */
+        chromosome[i] = all[idx[i]];
+    }
     
     free(idx);
 }
