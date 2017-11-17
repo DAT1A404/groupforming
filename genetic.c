@@ -55,12 +55,23 @@ void genetic_generate_chromosome(person **chromosome, person **all, int personCo
     free(idx);
 }
 
-int * g_rand(personCount) {
-  /*
-  need seed generated from srand()
-  could probably use recursion?
-  choose a, c, m, so that we'll get a unique string of integers between 0 and m-1
-  x_n+1 = (ax_n + c) mod m
-  */
+int * g_rand(int personCount) {
+
+  /* declaring and filling array from 0 to personCount */
+  int *arrRand = (int *) malloc(sizeof(int) * personCount);
+  int i, n, temp;
+  for (i=0; i < personCount; i++) {
+    arrRand[i] = i;
+  }
+
+  /* implementing Fisher Yates-algorithm for shuffling array */
+  for (i=0; i < personCount; i++) {
+    n = rand() % (personCount - i) + i;
+    temp = arrRand[n];
+    arrRand[n] = arrRand[i];
+    arrRand[i] = temp;
+  }
+
+  return arrRand;
 
 }
