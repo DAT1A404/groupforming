@@ -10,7 +10,7 @@ typedef struct group{
     double fitnessValue;
 }group;
 
-enum command{
+typedef enum command{
     seePerson;
     seeGroup;
     seeAll;
@@ -18,7 +18,7 @@ enum command{
     exit;
 }command;
 
-enum fileType{
+typedef enum fileType{
     csv;
     xlsx;
-}file;
+}fileType;
