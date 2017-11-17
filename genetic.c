@@ -14,12 +14,29 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
     person ***population genetic_generate_initial_population(all, personCount, popsize);
     
     for (gen = 0; gen < generations; gen++) {
+        int i;
         
         /* Algorithm ... */
+        
+        /* Sort according to fitness */
+        qsort(population, popsize, sizeof(person**), genetic_q_compare);
+        
+        /* Create new population */
+        for (i = 0; i < popsize; i += 2) {
+            
+            
+        }
     }
     
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
+}
+
+int genetic_q_compare(const void * i, const void * j) {
+    person **a = (person**)i;
+    person **b = (person**)j;
+    
+    return fitness_chromosome(a) - fitness_chromosome(b);
 }
 
 person*** genetic_generate_initial_population(person **all, int personCount, int popsize) {
