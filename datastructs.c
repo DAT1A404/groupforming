@@ -5,7 +5,7 @@ typedef struct person {
 } person;
 
 typedef struct group {
-    person;
+    person members[8];
     int groupNumber;
     double fitnessValue;
 } group;
