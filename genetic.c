@@ -24,7 +24,10 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
             
+            person **par1, **par2, **chi1, **chi2;
             
+            /* Selection */
+            genetic_selection(population, popsize, &par1, &par2);
         }
     }
     
@@ -37,6 +40,16 @@ int genetic_q_compare(const void * i, const void * j) {
     person **b = (person**)j;
     
     return fitness_chromosome(a) - fitness_chromosome(b);
+}
+
+/* Selects two random parents from the upper half of population */
+void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
+    
+    int a = rand() % (popsize / 2);
+    int b = rand() % (popsize / 2);
+    
+    *par1 = &(population[a]);
+    *par2 = &(population[b]);
 }
 
 person*** genetic_generate_initial_population(person **all, int personCount, int popsize) {
