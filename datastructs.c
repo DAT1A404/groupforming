@@ -9,3 +9,16 @@ typedef struct group{
     int groupNumber;
     double fitnessValue;
 }group;
+
+enum command{
+    seePerson;
+    seeGroup;
+    seeAll;
+    export;
+    exit;
+}command;
+
+enum fileType{
+    csv;
+    xlsx;
+}file;
