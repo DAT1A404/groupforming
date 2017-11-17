@@ -1,24 +1,24 @@
-typedef struct person{
+typedef struct person {
     char name[40];
     int personID;
     double criteria[5];
-}person;
+} person;
 
-typedef struct group{
+typedef struct group {
     person;
     int groupNumber;
     double fitnessValue;
-}group;
+} group;
 
-typedef enum command{
+typedef enum command {
     seePerson;
     seeGroup;
     seeAll;
     export;
     exit;
-}command;
+} command;
 
-typedef enum fileType{
+typedef enum fileType {
     csv;
     xlsx;
-}fileType;
+} fileType;
