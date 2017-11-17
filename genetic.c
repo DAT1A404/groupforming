@@ -50,14 +50,14 @@ void genetic_generate_chromosome(person **chromosome, person **all, int personCo
     
     /* g_rand() returns an array with all integers between 0 and the argument,
         where each values occurs exactly once. */
-    int *idx = g_rand(personCount);
+    int *rn_idx = g_rand(personCount);
     
     for (i = 0; i < personCount; i++) {
         /* Fill chromosome systematically with pointers to members */
-        chromosome[i] = all[idx[i]];
+        chromosome[i] = all[rn_idx[i]];
     }
     
-    free(idx);
+    free(rn_idx);
 }
 
 int * g_rand(personCount) {
