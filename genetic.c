@@ -3,7 +3,7 @@
     - generations   : how many iterations the algorithm should run
     - murationrate  : how likely a mutations is to happen. Between [0..1]
 */
-void genetic_algorithm(int popsize, int generations, double mutationrate) {
+void genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     int gen;
 
@@ -36,8 +36,8 @@ void genetic_algorithm(int popsize, int generations, double mutationrate) {
             genetic_crossover(&par1, &par2, &chi1, &chi2);
             
             /* Mutation */
-            genetic_mutation(&chi1, murationrate);
-            genetic_mutation(&chi2, murationrate);
+            genetic_mutation(chi1, murationrate);
+            genetic_mutation(chi2, murationrate);
             
             /* Add children to next generation */
             nextGeneration[i] = chi1;
@@ -100,9 +100,26 @@ void genetic_crossover(person ***par1, person ***par2, person ***child1, person 
 }
 
 /* Takes a pointer to chromosome and slighty alter it */
-void genetic_mutation(person ***child, double mutationrate) {
+void genetic_mutation(person **child, float mutationrate) {
     
-    /* TODO: Small chance of mutation. Should probably swap to elements at random */
+    /* Small chance of mutation */
+    float rn = (rand() % 1000) / 1000.;
+    if (rn <= murationrate) {
+        
+        person **temp;
+        
+        /* Find two random indexes */
+        int i = 0, j = 0;
+        while (i == j && m_PersonCount > 0) {
+            i = rand() % m_PersonCount;
+            j = rand() % m_PersonCount;
+        }
+        
+        /* Swaps two random elements */
+        temp = child[i];
+        child[i] = child[j];
+        child[j] = temp;
+    }
 }
 
 person*** genetic_get_memory_for_pop(int popsize) {
