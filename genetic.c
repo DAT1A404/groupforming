@@ -31,6 +31,10 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
             
             /* Crossover */
             genetic_crossover(&par1, &par2, &chi1, &chi2);
+            
+            /* Mutation */
+            genetic_mutation(&chi1, murationrate);
+            genetic_mutation(&chi2, murationrate);
         }
     }
 
@@ -60,6 +64,12 @@ void genetic_selection(person ***population, int popsize, person ***par1, person
 void genetic_crossover(person ***par1, person ***par2, person ***child1, person ***child2) {
     
     /* TODO: Crossover algorithm with unique elements. Maybe Cycle (CX)? */
+}
+
+/* Takes a pointer to chromosome and slighty alter it */
+void genetic_mutation(person ***child, double mutationrate) {
+    
+    /* TODO: Small chance of mutation. Should probably swap to elements at random */
 }
 
 person*** genetic_generate_initial_population(person **all, int personCount, int popsize) {
