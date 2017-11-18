@@ -1,21 +1,19 @@
 /* Starts the genetic algorithm
-    - person **all  : a pointer to an array with size personCount
-    - personCount   : the number of persons in the datafile
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - murationrate  : how likely a mutations is to happen. Between [0..1]
 */
-void genetic_algorithm(person **all, int personCount, int popsize, int generations, double mutationrate) {
+void genetic_algorithm(int popsize, int generations, double mutationrate) {
 
     int gen;
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
         Also generates the some random chromosomes */
-    person ***population = genetic_generate_initial_population(all, personCount, popsize);
+    person ***population = genetic_generate_initial_population(popsize);
     
     /* Similarly, allocate memory to generate a new population */
-    person ***nextGeneration = genetic_get_memory_for_pop(personCount, popsize);
+    person ***nextGeneration = genetic_get_memory_for_pop(popsize);
 
     for (gen = 0; gen < generations; gen++) {
         int i;
@@ -107,40 +105,40 @@ void genetic_mutation(person ***child, double mutationrate) {
     /* TODO: Small chance of mutation. Should probably swap to elements at random */
 }
 
-person*** genetic_get_memory_for_pop(int personCount, int popsize) {
+person*** genetic_get_memory_for_pop(int popsize) {
     int i;
 
     /* Create an array of pointers to persons,
         AND an array of pointers to parts of that other array */
-    person *chromosomes = (person*)malloc(personCount * popsize * sizeof(person));
+    person *chromosomes = (person*)malloc(m_PersonCount * popsize * sizeof(person));
     person **population = (person**)malloc(popsize * sizeof(person*));
 
     for (i = 0; i < popsize; i++) {
         /* Setup populations pointers to the right spots.
             They shall not be moved again. Only their content should change */
-        population[i] = chromosomes + i * personCount;
+        population[i] = chromosomes + i * m_PersonCount;
     }
     
     return population;
 }
 
-person*** genetic_generate_initial_population(person **all, int personCount, int popsize) {
+person*** genetic_generate_initial_population(int popsize) {
 
     int i;
 
     /* Allocate memory to the population */
-    person ***population = genetic_get_memory_for_pop(personCount, popsize);
+    person ***population = genetic_get_memory_for_pop(popsize);
 
     /* Generate chromosomes */
     for (i = 0; i < popsize; i++) {    
-        genetic_generate_chromosome(population[i], all, personCount);
+        genetic_generate_chromosome(population[i]);
     }
 
     return population;
 }
 
 /* Put members randomly into the chromosome array */
-void genetic_generate_chromosome(person **chromosome, person **all, int personCount) {
+void genetic_generate_chromosome(person **chromosome) {
 
     int i;
 
@@ -148,13 +146,13 @@ void genetic_generate_chromosome(person **chromosome, person **all, int personCo
     int i, n;
 
     /* Fill chromosome with all persons systematically */
-    for (i = 0; i < personCount; i++) {
-        chromosome[i] = all[i];
+    for (i = 0; i < m_PersonCount; i++) {
+        chromosome[i] = m_AllPersons[i];
     }
 
     /* Do Fisher Yates-algorithm for shuffling array */
-    for (i = 0; i < personCount; i++) {
-        n = rand() % (personCount - i) + i;
+    for (i = 0; i < m_PersonCount; i++) {
+        n = rand() % (m_PersonCount - i) + i;
         
         /* Swap index i and n */
         temp = chromosome[n];
