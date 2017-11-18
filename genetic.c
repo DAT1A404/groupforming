@@ -130,35 +130,21 @@ void genetic_generate_chromosome(person **chromosome, person **all, int personCo
 
     int i;
 
-    /* g_rand() returns an array with all integers between 0 and the argument,
-        where each values occurs exactly once. */
-    int *rn_idx = g_rand(personCount);
+    person *temp;
+    int i, n;
 
+    /* Fill chromosome with all persons systematically */
     for (i = 0; i < personCount; i++) {
-        /* Fill chromosome systematically with pointers to members */
-        chromosome[i] = all[rn_idx[i]];
+        chromosome[i] = all[i];
     }
 
-    free(rn_idx);
-}
-
-int * g_rand(int personCount) {
-
-    /* declaring and filling array from 0 to personCount */
-    int *arrRand = (int *) malloc(sizeof(int) * personCount);
-    int i, n, temp;
-    
-    for (i=0; i < personCount; i++) {
-        arrRand[i] = i;
-    }
-
-    /* implementing Fisher Yates-algorithm for shuffling array */
-    for (i=0; i < personCount; i++) {
+    /* Do Fisher Yates-algorithm for shuffling array */
+    for (i = 0; i < personCount; i++) {
         n = rand() % (personCount - i) + i;
-        temp = arrRand[n];
-        arrRand[n] = arrRand[i];
-        arrRand[i] = temp;
+        
+        /* Swap index i and n */
+        temp = chromosome[n];
+        chromosome[n] = chromosome[i];
+        chromosome[i] = temp;
     }
-
-    return arrRand;
 }
