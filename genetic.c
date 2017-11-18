@@ -71,6 +71,20 @@ int genetic_q_compare(const void * i, const void * j) {
     return fitness_chromosome(b) - fitness_chromosome(a);
 }
 
+/* Returns the fitness of a chromosome */
+double fitness_chromosome(person **a) {
+    
+    /* TODO */
+    return 0;
+}
+
+/* Returns the fitness of a single group */
+double fitness_group(group *g) {
+    
+    /* TODO */
+    return 0;
+}
+
 /* Selects two random parents from the upper half of population */
 void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
 
