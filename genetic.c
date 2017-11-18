@@ -28,6 +28,9 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
 
             /* Selection */
             genetic_selection(population, popsize, &par1, &par2);
+            
+            /* Crossover */
+            genetic_crossover(&par1, &par2, &chi1, &chi2);
         }
     }
 
@@ -51,6 +54,12 @@ void genetic_selection(person ***population, int popsize, person ***par1, person
 
     *par1 = &(population[a]);
     *par2 = &(population[b]);
+}
+
+/* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */
+void genetic_crossover(person ***par1, person ***par2, person ***child1, person ***child2) {
+    
+    /* TODO: Crossover algorithm with unique elements. Maybe Cycle (CX)? */
 }
 
 person*** genetic_generate_initial_population(person **all, int personCount, int popsize) {
