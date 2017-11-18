@@ -19,6 +19,7 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
 
     for (gen = 0; gen < generations; gen++) {
         int i;
+        person ***temp;
 
         /* Algorithm ... */
 
@@ -39,11 +40,27 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
             /* Mutation */
             genetic_mutation(&chi1, murationrate);
             genetic_mutation(&chi2, murationrate);
+            
+            /* Add children to next generation */
+            nextGeneration[i] = chi1;
+            nextGeneration[i + 1] = chi2;
+            
+            /* TODO: Currently we assume popsize is an even number! */
         }
+        
+        /* Set population to next generation, by swapping current and next */
+        temp = population;
+        population = nextGeneration;
+        nextGeneration = temp;
     }
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
+    
+    free(*nextGeneration);
+    free(nextGeneration);
+    
+    /* TODO: Return the best chromosome? */
 }
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
