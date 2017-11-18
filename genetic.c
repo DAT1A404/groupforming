@@ -33,7 +33,7 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
             genetic_selection(population, popsize, &par1, &par2);
             
             /* Crossover */
-            genetic_crossover(&par1, &par2, &chi1, &chi2);
+            genetic_crossover(par1, par2, chi1, chi2);
             
             /* Mutation */
             genetic_mutation(chi1, murationrate);
@@ -94,9 +94,58 @@ void genetic_selection(person ***population, int popsize, person ***par1, person
 }
 
 /* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */
-void genetic_crossover(person ***par1, person ***par2, person ***child1, person ***child2) {
+void genetic_crossover(person **par1, person **par2, person **child1, person **child2) {
     
-    /* TODO: Crossover algorithm with unique elements. Maybe Cycle (CX)? */
+    /* The bitstring is used to determine which parent genes is taken from */
+    int *bitstring = (int*) calloc(m_PersonCount, sizeof(int));
+    int i, limit = m_PersonCount + 1;
+    
+    /* Reset children */
+    genetic_reset_chromosome(child1);
+    genetic_reset_chromosome(child2);
+    
+    /* Do cycle */
+    i = 0;
+    do {
+        int indexInPar2, j;
+        person* p = par1[i]
+        
+        /* Mark index i */
+        bitstring[i] = 1;
+        
+        /* Find index j of element par1[i] in par2 */
+        for (j = 0; j < m_PersonCount; j++) {
+            if (par1[i] == par2[indexInPar2]) {
+                /* Set index i to j */
+                i = j;
+                break;
+            }
+        }
+        
+        limit--;
+    } while (i != 0 && limit > 0);
+    assert(limit > 0);
+    
+    /* Copy flagged genes from the other chromosome */
+    for (i = 0; i < m_PersonCount; i++) {
+        if (bitstring[i]) {
+            child1[i] = par1[i];
+            child2[i] = par2[i];
+        } else {
+            child1[i] = par2[i];
+            child2[i] = par1[i];
+        }
+    }
+    
+    free(bitstring);
+}
+
+/* Sets all person pointers in a chromosome to NULL */
+void genetic_reset_chromosome(person **chromosome) {
+    int i;
+    for (i = 0; i < m_PersonCount; i++) {
+        chromosome[i] = NULL;
+    }
 }
 
 /* Takes a pointer to chromosome and slighty alter it */
