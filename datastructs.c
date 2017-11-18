@@ -27,3 +27,9 @@ typedef enum {
     xlsx,
     json
 } fileType;
+
+/* ================ */
+/* Global variables */
+/* ================ */
+int m_PersonCount;
+int m_GroupCount;
