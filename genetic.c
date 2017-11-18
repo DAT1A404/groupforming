@@ -39,7 +39,7 @@ int genetic_q_compare(const void * i, const void * j) {
     person **a = (person**)i;
     person **b = (person**)j;
 
-    return fitness_chromosome(a) - fitness_chromosome(b);
+    return fitness_chromosome(b) - fitness_chromosome(a);
 }
 
 /* Selects two random parents from the upper half of population */
