@@ -35,6 +35,7 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
 }
 
+/* Compare function used to sort chromosomes. Will sort in descending order */
 int genetic_q_compare(const void * i, const void * j) {
     person **a = (person**)i;
     person **b = (person**)j;
