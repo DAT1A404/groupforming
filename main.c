@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
+#if 0
 /* holds structs for the whole program */
 #include "datastructs.h"
 
@@ -21,6 +23,13 @@
 
 /* holds functions that aren't applicable to above categories */
 #include "utility.h"
+#endif
+
+void clear_screen() {
+    system("@cls||clear");
+}
+
+int genetic_setup();
 
 int main(void) {
 
@@ -33,7 +42,7 @@ int main(void) {
 /* Initializing genetic variables before running the algorithm */
 int genetic_setup() {
     
-    int groups = _PersonCount / 7;
+    int groups = 10;
     int popsize = 50;
     int generations = 200;
     float mutationrate = 0.04f;
@@ -45,26 +54,31 @@ int genetic_setup() {
         clear_screen();
         
         /* Show current settings */
-        printf("== Current settings for genetic algorithm:\n(1) Number of groups: %d\n(2) Population size: %d\n(3) Generations: %d\n(4) Mutation rate: %f\n",
+        printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %f\n",
             groups, popsize, generations, mutationrate);
         
         /* Instruct how to change */
-        printf("To change a variable, please write the number next to the setting you wanna change.\nIf ready, write '0' instead!\n");
-        scanf(" %c ", &option);
+        printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
+        scanf(" %c", &option);
         
         /* Continue if option = 0 */
-        if (option = '0') break;
+        if (option == 'x') break;
+        if (option == 'q') return -1;
         
-        /* Read new value */
-        printf("New value: \n");
-        scanf(" %f ", newValue);
-        
-        /* Save new value */
-        switch (option) {
-            case '1': groups = (int)newValue; break;
-            case '2': popsize = (int)newValue; break;
-            case '3': generations = (int)newValue; break;
-            case '4': mutationrate = newValue; break;
+        /* Change a variable */
+        if (option >= 'a' && option <= 'd') {
+            
+            /* Read new value */
+            printf("New value: \n");
+            scanf(" %f", &newValue);
+            
+            /* Save new value */
+            switch (option) {
+                case 'a': groups = (int)newValue; break;
+                case 'b': popsize = (int)newValue; break;
+                case 'c': generations = (int)newValue; break;
+                case 'd': mutationrate = newValue; break;
+            }
         }
         
     } while (1);
@@ -73,5 +87,9 @@ int genetic_setup() {
     
     /* Run algorithm */
     printf("Running algorithm...\n");
+#if 0
     genetic_algorithm(popsize, generations, mutationrate);
+#endif
+    
+    return 0;
 }
