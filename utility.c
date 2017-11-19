@@ -1,4 +1,6 @@
 
+#include <windows.h>
+
 /* Liniar lerp from a to b with time t */
 double lerp(double a, double b, double t) {
     return t * (b - a) + a;
@@ -23,4 +25,9 @@ double clamp(double v, double a, double b) {
 /* Returns value v as a time between a to b */
 double inverse_lerp(double a, double b, double v) {
     return (v - a) / (b - a);
+}
+
+/* Clears the terminal */
+void clear_screen() {
+    system("@cls||clear");
 }
