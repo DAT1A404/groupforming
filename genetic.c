@@ -84,13 +84,13 @@ double fitness_group(group *g) {
 }
 
 /* Selects two random parents from the upper half of population */
-void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
+void genetic_selection(person ***population, int popsize, person **par1, person **par2) {
 
     int a = rand() % (popsize / 2);
     int b = rand() % (popsize / 2);
 
-    *par1 = &(population[a]);
-    *par2 = &(population[b]);
+    par1 = population[a];
+    par2 = population[b];
 }
 
 /* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */
