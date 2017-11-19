@@ -31,6 +31,6 @@ typedef enum {
 /* ================ */
 /* Global variables */
 /* ================ */
-person **m_AllPersons;
-int m_PersonCount;
-int m_GroupCount;
+person **_AllPersons;
+int _PersonCount;
+int _GroupCount;
