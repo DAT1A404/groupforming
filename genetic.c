@@ -1,3 +1,4 @@
+#include <math.h>
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
@@ -69,18 +70,55 @@ int genetic_q_compare(const void * i, const void * j) {
     return fitness_chromosome(b) - fitness_chromosome(a);
 }
 
-/* Returns the fitness of a chromosome */
-double fitness_chromosome(person **a) {
-    
-    /* TODO */
-    return 0;
+
+double fitness_groups(group **groups, int groupCount) {
+    double result = 0;
+    int i;
+    /*call this function bunch of times*/
+    for (i = 0; i <= _GroupCount; i++) {
+        result += fitness_group(groups[i])
+    }
+    return result;
 }
 
 /* Returns the fitness of a single group */
-double fitness_group(group *g) {
-    
-    /* TODO */
-    return 0;
+double fitness_group(group *group) {
+    double result = 0, average, criteria_min, criteria_max, time;
+    int i, j;
+
+    for (i = 0; i <= _CriteriaCount; i++) {
+        average = average_criteria(*group, i);
+        /*finds min and max values of criteria*/
+        for (j = 0; <= group->memberCount; j++) {
+            double a;
+            a = group.members[j].criteria[i];
+            if (j == 0) {
+                criteria_min = a;
+                criteria_max = a;
+            }
+            criteria_min = min(criteria_min, a);
+            criteria_max = max(criteria_max, a);
+        }
+        time = inverse_lerp(criteria_min, criteria_max, average);
+        result += fitness_of_criteria(time, (_Criteria[i])->weight );
+    }
+    return result;
+}
+
+/*Returns fitness of specific criteria*/
+double fitness_of_criteria(double time, double weight){
+    return -4 * weight * pow(time,2) + 4 * weight * time;
+}
+
+/*Finds average of 1 criteria*/
+double average_criteria(group *group, int i){
+    double result;
+    for (j=0; j <= persons_pr_group; j++) {
+            result += group.members[j].criteria[i]
+        }
+    result / persons_pr_group;
+
+    return result;
 }
 
 /* Selects two random parents from the upper half of population */
