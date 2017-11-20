@@ -10,6 +10,7 @@ typedef struct {
 
 typedef struct {
     person members[8];
+    int memberCount;
     int groupNumber;
     double fitnessValue;
 } group;
