@@ -14,6 +14,11 @@ typedef struct {
     double fitnessValue;
 } group;
 
+typedef struct {
+    char name[40];
+    double weight;
+} criteria;
+
 typedef enum {
     seePerson,
     seeGroup,
@@ -34,3 +39,5 @@ typedef enum {
 person **_AllPersons;
 int _PersonCount;
 int _GroupCount;
+criteria **_Criteria;
+int _CriteriaCount;
