@@ -4,13 +4,21 @@
 #define LINE_MAX_SIZE 50
 
 /* ====== GLOBALS =====*/
+/*person name, id and data*/
 typedef struct{
 	char name[40];
 	int personID;
 	double criteria[10];
 } person;
 
-double _Weights[10];
+/*criteria name and weight*/
+typedef struct {
+    char name[40];
+    double weight;
+} criteria;
+
+person **_AllPersons;
+criteria **_Criteria;
 int _CriteriaCount;
 /* ===================== */
 
@@ -19,17 +27,20 @@ int count_lines(FILE * file_pointer);
 
 void input_buffer(char *buffer, FILE * file_pointer);
 
-int check_line(char *buffer, char Hashtag, char Quotation, char Dollar);
+int check_line(char *buffer, char Hashtag, char Quotation, char Dollar, int *xp);
 
 
 
 int main(){
-  int nr_of_lines = 0, line_check = 0, criteria_or_name = 0;
+  int nr_of_lines = 0, line_check = 0, criteria_or_name = 0, x = 0;
   char line[LINE_MAX_SIZE], line_buffer[LINE_MAX_SIZE];
   const char Hashtag = '#';
   const char Quotation = '"';
   const char Dollar = '$';
   _CriteriaCount = 0;
+  int *xp;
+  
+  xp = &x;
   
   FILE * file_pointer; /*Create a pointer to a file*/
   file_pointer = fopen("datafile.txt", "r"); /*Set parameters for pointer to file*/
@@ -38,7 +49,7 @@ int main(){
   
   /*Check if file exists*/
   if (file_pointer == NULL){
-    printf("Could not open file Datafile");
+    printf("Error could not open file Datafile");
     return 0;
   }
  
@@ -64,7 +75,7 @@ int main(){
   for(i = 0; i <= nr_of_lines; i++) {
   input_buffer(line_buffer ,file_pointer);
   
-  line_check = check_line(line_buffer, Hashtag, Quotation, Dollar);
+  line_check = check_line(line_buffer, Hashtag, Quotation, Dollar, xp);
   
   printf("Found char %d \n", line_check);
   
@@ -133,20 +144,20 @@ void input_buffer(char *buffer, FILE * file_pointer){
 }
 
 /*Check line for a certain sign*/
-int check_line(char *buffer, char Hashtag, char Quotation, char Dollar){
-  int i;
+int check_line(char *buffer, char Hashtag, char Quotation, char Dollar, int *xp){
   
-  for(i = 0; i < 2; i++) {
-    if(buffer[i] == Hashtag || Quotation || Dollar){
-      if(buffer[i] == Hashtag){ 
+  
+  for(xp = 0; xp < 2; xp++) {
+    if(buffer[xp] == Hashtag || Quotation || Dollar){
+      if(buffer[xp] == Hashtag){ 
 	    printf("Found char '%c'\n", Hashtag);
 	    return 1;
 	  }
-	  else if(buffer[i] == Quotation){
+	  else if(buffer[xp] == Quotation){
 	    printf("Found char '%c'\n", Quotation);
 	    return 2;
 	  }
-	  else if(buffer[i] == Dollar){
+	  else if(buffer[xp] == Dollar){
 	    printf("Found char '%c'\n", Dollar);
 	    return 3;
       }
