@@ -1,21 +1,19 @@
 /* Starts the genetic algorithm
-    - person **all  : a pointer to an array with size personCount
-    - personCount   : the number of persons in the datafile
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - murationrate  : how likely a mutations is to happen. Between [0..1]
 */
-void genetic_algorithm(person **all, int personCount, int popsize, int generations, double mutationrate) {
+void genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     int gen;
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
         Also generates the some random chromosomes */
-    person ***population = genetic_generate_initial_population(all, personCount, popsize);
+    person ***population = genetic_generate_initial_population(popsize);
     
     /* Similarly, allocate memory to generate a new population */
-    person ***nextGeneration = genetic_get_memory_for_pop(personCount, popsize);
+    person ***nextGeneration = genetic_get_memory_for_pop(popsize);
 
     for (gen = 0; gen < generations; gen++) {
         int i;
@@ -35,11 +33,11 @@ void genetic_algorithm(person **all, int personCount, int popsize, int generatio
             genetic_selection(population, popsize, &par1, &par2);
             
             /* Crossover */
-            genetic_crossover(&par1, &par2, &chi1, &chi2);
+            genetic_crossover(par1, par2, chi1, chi2);
             
             /* Mutation */
-            genetic_mutation(&chi1, murationrate);
-            genetic_mutation(&chi2, murationrate);
+            genetic_mutation(chi1, murationrate);
+            genetic_mutation(chi2, murationrate);
             
             /* Add children to next generation */
             nextGeneration[i] = chi1;
@@ -86,61 +84,127 @@ double fitness_group(group *g) {
 }
 
 /* Selects two random parents from the upper half of population */
-void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
+void genetic_selection(person ***population, int popsize, person **par1, person **par2) {
 
     int a = rand() % (popsize / 2);
     int b = rand() % (popsize / 2);
 
-    *par1 = &(population[a]);
-    *par2 = &(population[b]);
+    par1 = population[a];
+    par2 = population[b];
 }
 
 /* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */
-void genetic_crossover(person ***par1, person ***par2, person ***child1, person ***child2) {
+void genetic_crossover(person **par1, person **par2, person **child1, person **child2) {
     
-    /* TODO: Crossover algorithm with unique elements. Maybe Cycle (CX)? */
+    /* The bitstring is used to determine which parent genes is taken from */
+    int *bitstring = (int*) calloc(_PersonCount, sizeof(int));
+    int i, limit = _PersonCount + 1;
+    
+    /* Reset children */
+    genetic_reset_chromosome(child1);
+    genetic_reset_chromosome(child2);
+    
+    /* Do cycle */
+    i = 0;
+    do {
+        int indexInPar2, j;
+        person* p = par1[i]
+        
+        /* Mark index i */
+        bitstring[i] = 1;
+        
+        /* Find index j of element par1[i] in par2 */
+        for (j = 0; j < _PersonCount; j++) {
+            if (par1[i] == par2[indexInPar2]) {
+                /* Set index i to j */
+                i = j;
+                break;
+            }
+        }
+        
+        limit--;
+    } while (i != 0 && limit > 0);
+    assert(limit > 0);
+    
+    /* Copy flagged genes from the other chromosome */
+    for (i = 0; i < _PersonCount; i++) {
+        if (bitstring[i]) {
+            child1[i] = par1[i];
+            child2[i] = par2[i];
+        } else {
+            child1[i] = par2[i];
+            child2[i] = par1[i];
+        }
+    }
+    
+    free(bitstring);
+}
+
+/* Sets all person pointers in a chromosome to NULL */
+void genetic_reset_chromosome(person **chromosome) {
+    int i;
+    for (i = 0; i < _PersonCount; i++) {
+        chromosome[i] = NULL;
+    }
 }
 
 /* Takes a pointer to chromosome and slighty alter it */
-void genetic_mutation(person ***child, double mutationrate) {
+void genetic_mutation(person **child, float mutationrate) {
     
-    /* TODO: Small chance of mutation. Should probably swap to elements at random */
+    /* Small chance of mutation */
+    float rn = (rand() % 1000) / 1000.;
+    if (rn <= murationrate) {
+        
+        person **temp;
+        
+        /* Find two random indexes */
+        int i = 0, j = 0;
+        while (i == j && _PersonCount > 0) {
+            i = rand() % _PersonCount;
+            j = rand() % _PersonCount;
+        }
+        
+        /* Swaps two random elements */
+        temp = child[i];
+        child[i] = child[j];
+        child[j] = temp;
+    }
 }
 
-person*** genetic_get_memory_for_pop(int personCount, int popsize) {
+person*** genetic_get_memory_for_pop(int popsize) {
     int i;
 
     /* Create an array of pointers to persons,
         AND an array of pointers to parts of that other array */
-    person *chromosomes = (person*)malloc(personCount * popsize * sizeof(person));
+    person *chromosomes = (person*)malloc(_PersonCount * popsize * sizeof(person));
     person **population = (person**)malloc(popsize * sizeof(person*));
 
     for (i = 0; i < popsize; i++) {
         /* Setup populations pointers to the right spots.
             They shall not be moved again. Only their content should change */
-        population[i] = chromosomes + i * personCount;
+        population[i] = chromosomes + i * _PersonCount;
     }
     
     return population;
 }
 
-person*** genetic_generate_initial_population(person **all, int personCount, int popsize) {
+person*** genetic_generate_initial_population(int popsize) {
 
     int i;
 
     /* Allocate memory to the population */
-    person ***population = genetic_get_memory_for_pop(personCount, popsize);
+    person ***population = genetic_get_memory_for_pop(popsize);
 
     /* Generate chromosomes */
     for (i = 0; i < popsize; i++) {    
-        genetic_generate_chromosome(population[i], all, personCount);
+        genetic_generate_chromosome(population[i]);
     }
 
     return population;
 }
 
 /* Put members randomly into the chromosome array */
-void genetic_generate_chromosome(person **chromosome, person **all, int personCount) {
+void genetic_generate_chromosome(person **chromosome) {
 
     int i;
 
@@ -148,13 +212,13 @@ void genetic_generate_chromosome(person **chromosome, person **all, int personCo
     int i, n;
 
     /* Fill chromosome with all persons systematically */
-    for (i = 0; i < personCount; i++) {
-        chromosome[i] = all[i];
+    for (i = 0; i < _PersonCount; i++) {
+        chromosome[i] = _AllPersons[i];
     }
 
     /* Do Fisher Yates-algorithm for shuffling array */
-    for (i = 0; i < personCount; i++) {
-        n = rand() % (personCount - i) + i;
+    for (i = 0; i < _PersonCount; i++) {
+        n = rand() % (_PersonCount - i) + i;
         
         /* Swap index i and n */
         temp = chromosome[n];
