@@ -1,0 +1,9 @@
+#Kriterier og Vægte
+"Gender" = 1
+"Foreign" = 1
+$
+#Navne og data
+"Katherine K" = 1,1,
+"Miller M" = 0,0
+#Test på ekstra udefineret input
+!Ende
