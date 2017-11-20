@@ -30,3 +30,21 @@ void set_color(int ForgC, int BackC)
 void reset_color() {
     set_color(LIGHTGRAY, BLACK);
 }
+
+/* Prints all groups */
+void print_all_groups(group **groups, int groupCount) {
+    int i;
+    for (i = 0; i < groupCount; i++) {
+        if (i != 0) printf("\n");
+        print_group(groups[i]);
+    }
+}
+
+/* Print a group and it's members */
+void print_group(group *g) {
+    int i;
+    printf("Gruppe %d:\n");
+    for (i = 0; i < g->memberCount; i++) {
+        printf("%s\n", g->members[i].name);
+    }
+}
