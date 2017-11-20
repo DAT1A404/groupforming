@@ -23,10 +23,14 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
+        
+        /* Show how the algorithm is doing */
+        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population), population[0], population[popsize - 1]);
 
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
-
+            
+            
             person **par1, **par2, **chi1, **chi2;
 
             /* Selection */
@@ -59,6 +63,16 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
     free(nextGeneration);
     
     /* TODO: Return the best chromosome? */
+}
+
+/* Returns the average fitness of the population of chromosomes */
+double genetic_average_fitness(person ***population, int popsize) {
+    int i;
+    double total = 0;
+    for (i = 0; i < popsize; i++) {
+        total += fitness_chromosome(population[i]);
+    }
+    return total / popsize;
 }
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
