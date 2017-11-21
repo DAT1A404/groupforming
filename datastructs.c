@@ -10,6 +10,7 @@ typedef struct {
 
 typedef struct {
     person members[8];
+    int memberCount;
     int groupNumber;
     double fitnessValue;
 } group;
@@ -36,8 +37,8 @@ typedef enum {
 /* ================ */
 /* Global variables */
 /* ================ */
-person **_AllPersons;
+person *_AllPersons;
 int _PersonCount;
 int _GroupCount;
-criteria **_Criteria;
+criteria *_Criteria;
 int _CriteriaCount;
