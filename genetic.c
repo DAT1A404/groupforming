@@ -101,6 +101,10 @@ group* genetic_chromosome_to_groups(person **chromosome) {
         /* TODO: Optimize group memory use. Allocate memory to groups
             members instead of fixed length which it currently is */
         
+        /* Setup some data about the group */
+        groups[i].groupNumber = i;
+        groups[i].fitnessValue = -1;
+        
         /* Add persons to group */
         for (j = 0; j < personPerGroup; j++) {
             groups[i].members[j] = *(chromosome[currentPerson]);
@@ -188,6 +192,10 @@ double fitness_group(group g) {
         /* Adds the fitness of the specific criteria in the single group to result */
         result += fitness_of_criteria(t, _Criteria[i].weight);
     }
+    
+    /* Save fitness in the group struct */
+    g.fitnessValue = result;
+    
     return result;
 }
 
