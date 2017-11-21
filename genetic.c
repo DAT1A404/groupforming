@@ -70,25 +70,26 @@ int genetic_q_compare(const void * i, const void * j) {
     return fitness_chromosome(b) - fitness_chromosome(a);
 }
 
-
+/*returns the total fitness of all groups*/
 double fitness_groups(group **groups, int groupCount) {
     double result = 0;
     int i;
-    /*call this function bunch of times*/
+    /*Calls the fitness_group function as many times as the number of groups*/
     for (i = 0; i <= _GroupCount; i++) {
         result += fitness_group(groups[i])
     }
     return result;
 }
 
-/* Returns the fitness of a single group */
+/* Returns the total fitness of a single group */
 double fitness_group(group *group) {
     double result = 0, average, criteria_min, criteria_max, time;
     int i, j;
-
+    /*Goes through all criteria*/
     for (i = 0; i <= _CriteriaCount; i++) {
-        average = average_criteria(*group, i);
-        /*finds min and max values of criteria*/
+        /*Finds the average value of specific criteria*/
+        average = average_criteria(group, i);
+        /*Finds min and max values of specific criteria in group*/
         for (j = 0; <= group->memberCount; j++) {
             double a;
             a = group.members[j].criteria[i];
@@ -96,10 +97,12 @@ double fitness_group(group *group) {
                 criteria_min = a;
                 criteria_max = a;
             }
+            /*Calls min/max function and assigns min/max*/
             criteria_min = min(criteria_min, a);
             criteria_max = max(criteria_max, a);
         }
         time = inverse_lerp(criteria_min, criteria_max, average);
+        /*Adds the fitness of the specific criteria in the single group to result*/
         result += fitness_of_criteria(time, (_Criteria[i])->weight );
     }
     return result;
@@ -107,16 +110,17 @@ double fitness_group(group *group) {
 
 /*Returns fitness of specific criteria*/
 double fitness_of_criteria(double time, double weight){
-    return -4 * weight * pow(time,2) + 4 * weight * time;
+    return (-4 * weight * pow(time,2)) + (4 * weight * time);
 }
 
-/*Finds average of 1 criteria*/
+/*Finds average of one criteria*/
 double average_criteria(group *group, int i){
-    double result;
-    for (j=0; j <= persons_pr_group; j++) {
-            result += group.members[j].criteria[i]
-        }
-    result / persons_pr_group;
+    double result = 0;
+    int j;
+    for (j = 0; j <= persons_pr_group; j++) {
+        result += group.members[j].criteria[i]
+    }
+    result = result / persons_pr_group;
 
     return result;
 }
