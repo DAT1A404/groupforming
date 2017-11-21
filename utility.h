@@ -1,4 +1,4 @@
-
+#include <windows.h>
 double lerp(double a, double b, double t);
 double min(double a, double b);
 double max(double a, double b);
