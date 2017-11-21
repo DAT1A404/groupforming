@@ -1,9 +1,10 @@
-#Kriterier og Vægte
+#Kriterier og Vï¿½gte
 "Gender" = 1
 "Foreign" = 1
 $
 #Navne og data
-"Katherine K" = 1,1,
+"Katherine K" = 1,1
 "Miller M" = 0,0
-#Test på ekstra udefineret input
+"Pia K" = 1,0
+#Test pï¿½ ekstra udefineret input
 !Ende
