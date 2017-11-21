@@ -75,6 +75,47 @@ double genetic_average_fitness(person ***population, int popsize) {
     return total / popsize;
 }
 
+/* This function takes a chromosome from the genetic algorithm and splits
+    it into groups. It returns an array to the formed groups. Remember to free */
+group* genetic_chromosome_to_groups(person **chromosome, int *size) {
+    
+    int i, j, currentPerson;
+    
+    /* personPerGroup is the minimum size of each group. leftoverPerons
+        is the amount of groups, which have an extra member */
+    int personPerGroup = _PersonCount / _GroupCount;
+    int leftoverPersons = _PersonCount % personPerGroup;
+    
+    /* Allocate memory */
+    group *groups = (group*)malloc(_GroupCount * sizeof(group));
+    
+    currentPerson = 0;
+    for (i = 0; i < _GroupCount; i++) {
+        /* TODO: Optimize group memory use. Allocate memory to groups
+            members instead of fixed length which it currently is */
+        
+        /* Add persons to group */
+        for (j = 0; j < personPerGroup; j++) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+        }
+        
+        /* Add another person if i < leftoverPersons.
+            Now that we know the size of the group let's set
+            the memberCount variable in the group struct */
+        if (i < leftoverPersons) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+            
+            groups[i].memberCount = personPerGroup + 1;
+        } else {
+            groups[i].memberCount = personPerGroup;
+        }
+    }
+    
+    return groups;
+}
+
 /* Compare function used to sort chromosomes. Will sort in descending order */
 int genetic_q_compare(const void * i, const void * j) {
     person **a = (person**)i;
