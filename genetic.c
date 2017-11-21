@@ -24,10 +24,14 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
+        
+        /* Show how the algorithm is doing */
+        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population), population[0], population[popsize - 1]);
 
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
-
+            
+            
             person **par1, **par2, **chi1, **chi2;
 
             /* Selection */
@@ -60,6 +64,57 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
     free(nextGeneration);
     
     /* TODO: Return the best chromosome? */
+}
+
+/* Returns the average fitness of the population of chromosomes */
+double genetic_average_fitness(person ***population, int popsize) {
+    int i;
+    double total = 0;
+    for (i = 0; i < popsize; i++) {
+        total += fitness_chromosome(population[i]);
+    }
+    return total / popsize;
+}
+
+/* This function takes a chromosome from the genetic algorithm and splits
+    it into groups. It returns an array to the formed groups. Remember to free */
+group* genetic_chromosome_to_groups(person **chromosome, int *size) {
+    
+    int i, j, currentPerson;
+    
+    /* personPerGroup is the minimum size of each group. leftoverPerons
+        is the amount of groups, which have an extra member */
+    int personPerGroup = _PersonCount / _GroupCount;
+    int leftoverPersons = _PersonCount % personPerGroup;
+    
+    /* Allocate memory */
+    group *groups = (group*)malloc(_GroupCount * sizeof(group));
+    
+    currentPerson = 0;
+    for (i = 0; i < _GroupCount; i++) {
+        /* TODO: Optimize group memory use. Allocate memory to groups
+            members instead of fixed length which it currently is */
+        
+        /* Add persons to group */
+        for (j = 0; j < personPerGroup; j++) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+        }
+        
+        /* Add another person if i < leftoverPersons.
+            Now that we know the size of the group let's set
+            the memberCount variable in the group struct */
+        if (i < leftoverPersons) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+            
+            groups[i].memberCount = personPerGroup + 1;
+        } else {
+            groups[i].memberCount = personPerGroup;
+        }
+    }
+    
+    return groups;
 }
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
