@@ -346,7 +346,7 @@ void genetic_generate_chromosome(person **chromosome) {
 
     /* Fill chromosome with all persons systematically */
     for (i = 0; i < _PersonCount; i++) {
-        chromosome[i] = _AllPersons[i];
+        chromosome[i] = _AllPersons + i;
     }
 
     /* Do Fisher Yates-algorithm for shuffling array */
