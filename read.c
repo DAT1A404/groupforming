@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define LINE_MAX_SIZE 50
+#define LINE_MAX_SIZE 50 /*Defines the max size of a line that cann be read*/
 
 /* ====== GLOBALS =====*/
 /*person name, id and data*/
@@ -10,15 +10,15 @@ typedef struct{
 	int personID;
 	double criteria[10];
 } person;
-
+/* _allPersons[i].name = "string name"*/
 /*criteria name and weight*/
 typedef struct {
-    char name[40];
+    char name[50];
     double weight;
 } criteria;
 
-person **_AllPersons;
-criteria **_Criteria;
+person *_AllPersons;
+criteria *_Criteria;
 int _CriteriaCount;
 /* ===================== */
 
@@ -32,20 +32,24 @@ int check_line(char *buffer, char Hashtag, char Quotation, char Dollar, int *xp)
 
 
 int main(){
-  int nr_of_lines = 0, line_check = 0, criteria_or_name = 0, x = 0, i;
-	int *xp;
+  int nr_of_lines = 0, /*Details the number of lines*/
+  line_check = 0, /*Used to find out what sign is found*/
+  criteria_or_name = 0, /*Used to know if the program is going to store criterias or names*/
+  x = 0, i; /*variables used for loops*/
+
+  int *xp;
 	FILE * file_pointer; /*Create a pointer to a file*/
   char line[LINE_MAX_SIZE], line_buffer[LINE_MAX_SIZE];
   const char Hashtag = '#';
   const char Quotation = '"';
   const char Dollar = '$';
-  _CriteriaCount = 0;
+  _CriteriaCount = 0; /*Stores the amount of criterias that have been found*/
 
-  xp = &x;
+  xp = &x; /*Set pointer xp to x*/
 
 	file_pointer = fopen("datafile.txt", "r"); /*Set parameters for pointer to file*/
 
-  printf("t0\n");
+  printf("Test0\n");
 
   /*Check if file exists*/
   if (file_pointer == NULL){
@@ -53,12 +57,12 @@ int main(){
     return 0;
   }
 
-  printf("t1\n");
+  printf("Test1\n");
 
   /*Determine number of lines in file*/
   nr_of_lines = count_lines(file_pointer);
 
-  printf("t2\n");
+  printf("Test2\n");
 
   file_pointer = fopen("datafile.txt", "r"); /*Reset markør*/
 
@@ -70,18 +74,48 @@ int main(){
   Read persons name in "" sign thereafter
   Read the data values after the = sign, where each of the values are separated by a , sign
   */
+  int y;
+  char temp_buffer[LINE_MAX_SIZE];
 
   for(i = 0; i <= nr_of_lines; i++) {
-	  input_buffer(line_buffer ,file_pointer);
+	input_buffer(line_buffer ,file_pointer);
 
-	  line_check = check_line(line_buffer, Hashtag, Quotation, Dollar, xp);
+	line_check = check_line(line_buffer, Hashtag, Quotation, Dollar, xp);
 
-	  printf("Found char %d \n", line_check);
+	printf("Found char %d \n", line_check);
 
   	if(line_check == 2){
-	    if(criteria_or_name == 0){
-		    _CriteriaCount++;
+	    if(criteria_or_name == 0){ /*If criteria*/
+		    /*struckt criteria: char name, double weight*/
+			
+			/*Find string between xp and y*/
+			
+			int t = 0;
+			
+			for(y = *xp + 1; line_buffer[y] != '"'; y++){
+			
+				temp_buffer[t] = line_buffer[y];
+				t++;
 			}
+			temp_buffer[t] = '\0';
+			
+			
+			printf("temp_buffer: %s \n", temp_buffer);
+			//strcpy(_Criteria[_CriteriaCount].name, temp_buffer);
+			/*_Criteria[_CriteriaCount].name = temp_buffer;*/
+			/* _Criteria[_CriteriaCount].name = "string name"*/
+			
+			/* _Criteria[_CriteriaCount].weight = "value"*/
+			
+			
+			_CriteriaCount++;
+		}
+		else{ /*If Name*/
+			/*struckt person: char name, int personID, double criteria*/
+			
+			
+			/*ID++*/
+		}
 	  }
 	  else if(line_check == 3){
 			criteria_or_name = 1;
@@ -100,7 +134,7 @@ int main(){
 	  puts(line);
   }
 
-  printf("t3\n");
+  printf("Test3\n");
 
   printf("Number of lines in file: %d\n", nr_of_lines);
 
@@ -109,7 +143,7 @@ int main(){
   return 0;
 
 }
-
+/*Counts the number of lines in the file*/
 int count_lines(FILE * file_pointer){
   int nr_of_lines = 0;
   char c;
@@ -135,7 +169,7 @@ void input_buffer(char *buffer, FILE * file_pointer){
 int check_line(char *buffer, char Hashtag, char Quotation, char Dollar, int *xp){
 
 
-  for(*xp = 0; *xp < 2; (*xp)++) {
+  for(*xp = 0; buffer[*xp] != '\0'; (*xp)++) {
     if(buffer[*xp] == Hashtag || buffer[*xp] == Quotation || buffer[*xp] == Dollar){
       if(buffer[*xp] == Hashtag){
 	    	printf("Found char '%c'\n", Hashtag);
