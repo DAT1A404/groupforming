@@ -152,23 +152,33 @@ double fitness_groups(group *groups) {
 double fitness_group(group g) {
     double result = 0, average, criteriaMin, criteriaMax, t;
     int i, j;
+    
     /* Goes through all criteria */
     for (i = 0; i <= _CriteriaCount; i++) {
+        
         /*Finds the average value of specific criteria */
         average = average_criteria(&g, i);
+        
         /*Finds min and max values of specific criteria in group */
         for (j = 0; <= g.memberCount; j++) {
-            double a;
-            a = g.members[j].criteria[i];
+
+            double a = g.members[j].criteria[i];
+            
+            /* If min/max is not set yet, set them to a */
             if (j == 0) {
                 criteriaMin = a;
                 criteriaMax = a;
+            } else {
+                
+                /* Calls min/max function and finds min/max */
+                criteriaMin = min(criteriaMin, a);
+                criteriaMax = max(criteriaMax, a);
             }
-            /* Calls min/max function and assigns min/max */
-            criteriaMin = min(criteriaMin, a);
-            criteriaMax = max(criteriaMax, a);
         }
+        
+        /* t is the average compared to min and max */
         t = inverse_lerp(criteriaMin, criteriaMax, average);
+        
         /* Adds the fitness of the specific criteria in the single group to result */
         result += fitness_of_criteria(t, _Criteria[i].weight);
     }
@@ -184,6 +194,8 @@ double fitness_of_criteria(double t, double weight) {
 double average_criteria(group *g, int i) {
     double result = 0;
     int j;
+    
+    /* Find sum of group's criteria */
     for (j = 0; j < g->memberCount; j++) {
         result += g->members[j].criteria[i]
     }
