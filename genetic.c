@@ -138,7 +138,7 @@ double fitness_chromosome(person **chromosome) {
 }
 
 /* Returns the total fitness of all groups */
-double fitness_groups(group **groups, int groupCount) {
+double fitness_groups(group *groups) {
     double result = 0;
     int i;
     /* Calls the fitness_group function as many times as the number of groups */
@@ -149,17 +149,17 @@ double fitness_groups(group **groups, int groupCount) {
 }
 
 /* Returns the total fitness of a single group */
-double fitness_group(group *group) {
+double fitness_group(group g) {
     double result = 0, average, criteriaMin, criteriaMax, t;
     int i, j;
     /* Goes through all criteria */
     for (i = 0; i <= _CriteriaCount; i++) {
         /*Finds the average value of specific criteria */
-        average = average_criteria(group, i);
+        average = average_criteria(&g, i);
         /*Finds min and max values of specific criteria in group */
-        for (j = 0; <= group->memberCount; j++) {
+        for (j = 0; <= g.memberCount; j++) {
             double a;
-            a = group.members[j].criteria[i];
+            a = g.members[j].criteria[i];
             if (j == 0) {
                 criteriaMin = a;
                 criteriaMax = a;
@@ -170,26 +170,24 @@ double fitness_group(group *group) {
         }
         t = inverse_lerp(criteriaMin, criteriaMax, average);
         /* Adds the fitness of the specific criteria in the single group to result */
-        result += fitness_of_criteria(t, (_Criteria[i])->weight );
+        result += fitness_of_criteria(t, _Criteria[i].weight);
     }
     return result;
 }
 
 /* Returns fitness of specific criteria */
-double fitness_of_criteria(double t, double weight){
+double fitness_of_criteria(double t, double weight) {
     return (-4 * weight * pow(t, 2)) + (4 * weight * t) ;
 }
 
 /* Finds average of one criteria */
-double average_criteria(group *group, int i){
+double average_criteria(group *g, int i) {
     double result = 0;
     int j;
-    for (j = 0; j <= persons_pr_group; j++) {
-        result += group.members[j].criteria[i]
+    for (j = 0; j < g->memberCount; j++) {
+        result += g->members[j].criteria[i]
     }
-    result = result / persons_pr_group;
-
-    return result;
+    return result / g->memberCount; 
 }
 
 /* Selects two random parents from the upper half of population */
