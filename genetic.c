@@ -78,7 +78,7 @@ double genetic_average_fitness(person ***population, int popsize) {
 
 /* This function takes a chromosome from the genetic algorithm and splits
     it into groups. It returns an array to the formed groups. Remember to free */
-group* genetic_chromosome_to_groups(person **chromosome, int *size) {
+group* genetic_chromosome_to_groups(person **chromosome) {
     
     int i, j, currentPerson;
     
@@ -125,11 +125,23 @@ int genetic_q_compare(const void * i, const void * j) {
     return fitness_chromosome(b) - fitness_chromosome(a);
 }
 
-/*returns the total fitness of all groups*/
+/* Returns the fitness of a chromosome */
+double fitness_chromosome(person **chromosome) {
+    
+    /* Split chromosome into groups, then calculate fitness */
+    group *groups = genetic_chromosome_to_groups(chromosome);
+    double fitness = fitness_groups(groups);
+    
+    free (groups);
+    
+    return fitness;
+}
+
+/* Returns the total fitness of all groups */
 double fitness_groups(group **groups, int groupCount) {
     double result = 0;
     int i;
-    /*Calls the fitness_group function as many times as the number of groups*/
+    /* Calls the fitness_group function as many times as the number of groups */
     for (i = 0; i <= _GroupCount; i++) {
         result += fitness_group(groups[i])
     }
@@ -138,37 +150,37 @@ double fitness_groups(group **groups, int groupCount) {
 
 /* Returns the total fitness of a single group */
 double fitness_group(group *group) {
-    double result = 0, average, criteria_min, criteria_max, time;
+    double result = 0, average, criteriaMin, criteriaMax, t;
     int i, j;
-    /*Goes through all criteria*/
+    /* Goes through all criteria */
     for (i = 0; i <= _CriteriaCount; i++) {
-        /*Finds the average value of specific criteria*/
+        /*Finds the average value of specific criteria */
         average = average_criteria(group, i);
-        /*Finds min and max values of specific criteria in group*/
+        /*Finds min and max values of specific criteria in group */
         for (j = 0; <= group->memberCount; j++) {
             double a;
             a = group.members[j].criteria[i];
             if (j == 0) {
-                criteria_min = a;
-                criteria_max = a;
+                criteriaMin = a;
+                criteriaMax = a;
             }
-            /*Calls min/max function and assigns min/max*/
-            criteria_min = min(criteria_min, a);
-            criteria_max = max(criteria_max, a);
+            /* Calls min/max function and assigns min/max */
+            criteriaMin = min(criteriaMin, a);
+            criteriaMax = max(criteriaMax, a);
         }
-        time = inverse_lerp(criteria_min, criteria_max, average);
-        /*Adds the fitness of the specific criteria in the single group to result*/
-        result += fitness_of_criteria(time, (_Criteria[i])->weight );
+        t = inverse_lerp(criteriaMin, criteriaMax, average);
+        /* Adds the fitness of the specific criteria in the single group to result */
+        result += fitness_of_criteria(t, (_Criteria[i])->weight );
     }
     return result;
 }
 
-/*Returns fitness of specific criteria*/
-double fitness_of_criteria(double time, double weight){
-    return (-4 * weight * pow(time,2)) + (4 * weight * time);
+/* Returns fitness of specific criteria */
+double fitness_of_criteria(double t, double weight){
+    return (-4 * weight * pow(t, 2)) + (4 * weight * t) ;
 }
 
-/*Finds average of one criteria*/
+/* Finds average of one criteria */
 double average_criteria(group *group, int i){
     double result = 0;
     int j;
