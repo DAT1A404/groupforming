@@ -1,24 +1,44 @@
-typedef struct person {
+
+/* ================= */
+/* Structs and enums */
+/* ================= */
+typedef struct {
     char name[40];
     int personID;
-    double criteria[5];
+    double criteria[10];
 } person;
 
-typedef struct group {
+typedef struct {
     person members[8];
+    int memberCount;
     int groupNumber;
     double fitnessValue;
 } group;
 
-typedef enum command {
-    seePerson;
-    seeGroup;
-    seeAll;
-    xport;
-    exit;
+typedef struct {
+    char name[40];
+    double weight;
+} criteria;
+
+typedef enum {
+    seePerson,
+    seeGroup,
+    seeAll,
+    xport,
+    quit
 } command;
 
-typedef enum fileType {
-    csv;
-    xlsx;
+typedef enum {
+    csv,
+    xlsx,
+    json
 } fileType;
+
+/* ================ */
+/* Global variables */
+/* ================ */
+person **_AllPersons;
+int _PersonCount;
+int _GroupCount;
+criteria **_Criteria;
+int _CriteriaCount;
