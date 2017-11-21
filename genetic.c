@@ -4,9 +4,10 @@
     - generations   : how many iterations the algorithm should run
     - murationrate  : how likely a mutations is to happen. Between [0..1]
 */
-void genetic_algorithm(int popsize, int generations, float mutationrate) {
+group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     int gen;
+    group *result;
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
@@ -56,6 +57,10 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
         population = nextGeneration;
         nextGeneration = temp;
     }
+    
+    /* Sort according to fitness, then make the BEST chromosome to groups */
+    qsort(population, popsize, sizeof(person**), genetic_q_compare);
+    result = genetic_chromosome_to_groups(population[0]);
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
@@ -63,7 +68,8 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
     free(*nextGeneration);
     free(nextGeneration);
     
-    /* TODO: Return the best chromosome? */
+    /* Return an array with groups */
+    return result;
 }
 
 /* Returns the average fitness of the population of chromosomes */
