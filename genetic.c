@@ -1,11 +1,13 @@
+#include <math.h>
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - murationrate  : how likely a mutations is to happen. Between [0..1]
 */
-void genetic_algorithm(int popsize, int generations, float mutationrate) {
+group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     int gen;
+    group *result;
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
@@ -23,10 +25,14 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
+        
+        /* Show how the algorithm is doing */
+        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population), population[0], population[popsize - 1]);
 
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
-
+            
+            
             person **par1, **par2, **chi1, **chi2;
 
             /* Selection */
@@ -51,6 +57,10 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
         population = nextGeneration;
         nextGeneration = temp;
     }
+    
+    /* Sort according to fitness, then make the BEST chromosome to groups */
+    qsort(population, popsize, sizeof(person**), genetic_q_compare);
+    result = genetic_chromosome_to_groups(population[0]);
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
@@ -58,7 +68,63 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
     free(*nextGeneration);
     free(nextGeneration);
     
-    /* TODO: Return the best chromosome? */
+    /* Return an array with groups */
+    return result;
+}
+
+/* Returns the average fitness of the population of chromosomes */
+double genetic_average_fitness(person ***population, int popsize) {
+    int i;
+    double total = 0;
+    for (i = 0; i < popsize; i++) {
+        total += fitness_chromosome(population[i]);
+    }
+    return total / popsize;
+}
+
+/* This function takes a chromosome from the genetic algorithm and splits
+    it into groups. It returns an array to the formed groups. Remember to free */
+group* genetic_chromosome_to_groups(person **chromosome) {
+    
+    int i, j, currentPerson;
+    
+    /* personPerGroup is the minimum size of each group. leftoverPerons
+        is the amount of groups, which have an extra member */
+    int personPerGroup = _PersonCount / _GroupCount;
+    int leftoverPersons = _PersonCount % personPerGroup;
+    
+    /* Allocate memory */
+    group *groups = (group*)malloc(_GroupCount * sizeof(group));
+    
+    currentPerson = 0;
+    for (i = 0; i < _GroupCount; i++) {
+        /* TODO: Optimize group memory use. Allocate memory to groups
+            members instead of fixed length which it currently is */
+        
+        /* Setup some data about the group */
+        groups[i].groupNumber = i;
+        groups[i].fitnessValue = -1;
+        
+        /* Add persons to group */
+        for (j = 0; j < personPerGroup; j++) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+        }
+        
+        /* Add another person if i < leftoverPersons.
+            Now that we know the size of the group let's set
+            the memberCount variable in the group struct */
+        if (i < leftoverPersons) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+            
+            groups[i].memberCount = personPerGroup + 1;
+        } else {
+            groups[i].memberCount = personPerGroup;
+        }
+    }
+    
+    return groups;
 }
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
@@ -70,17 +136,84 @@ int genetic_q_compare(const void * i, const void * j) {
 }
 
 /* Returns the fitness of a chromosome */
-double fitness_chromosome(person **a) {
+double fitness_chromosome(person **chromosome) {
     
-    /* TODO */
-    return 0;
+    /* Split chromosome into groups, then calculate fitness */
+    group *groups = genetic_chromosome_to_groups(chromosome);
+    double fitness = fitness_groups(groups);
+    
+    free (groups);
+    
+    return fitness;
 }
 
-/* Returns the fitness of a single group */
-double fitness_group(group *g) {
+/* Returns the total fitness of all groups */
+double fitness_groups(group *groups) {
+    double result = 0;
+    int i;
+    /* Calls the fitness_group function as many times as the number of groups */
+    for (i = 0; i <= _GroupCount; i++) {
+        result += fitness_group(groups[i])
+    }
+    return result;
+}
+
+/* Returns the total fitness of a single group */
+double fitness_group(group g) {
+    double result = 0, average, criteriaMin, criteriaMax, t;
+    int i, j;
     
-    /* TODO */
-    return 0;
+    /* Goes through all criteria */
+    for (i = 0; i <= _CriteriaCount; i++) {
+        
+        /*Finds the average value of specific criteria */
+        average = average_criteria(&g, i);
+        
+        /*Finds min and max values of specific criteria in group */
+        for (j = 0; <= g.memberCount; j++) {
+
+            double a = g.members[j].criteria[i];
+            
+            /* If min/max is not set yet, set them to a */
+            if (j == 0) {
+                criteriaMin = a;
+                criteriaMax = a;
+            } else {
+                
+                /* Calls min/max function and finds min/max */
+                criteriaMin = min(criteriaMin, a);
+                criteriaMax = max(criteriaMax, a);
+            }
+        }
+        
+        /* t is the average compared to min and max */
+        t = inverse_lerp(criteriaMin, criteriaMax, average);
+        
+        /* Adds the fitness of the specific criteria in the single group to result */
+        result += fitness_of_criteria(t, _Criteria[i].weight);
+    }
+    
+    /* Save fitness in the group struct */
+    g.fitnessValue = result;
+    
+    return result;
+}
+
+/* Returns fitness of specific criteria */
+double fitness_of_criteria(double t, double weight) {
+    return (-4 * weight * pow(t, 2)) + (4 * weight * t) ;
+}
+
+/* Finds average of one criteria */
+double average_criteria(group *g, int i) {
+    double result = 0;
+    int j;
+    
+    /* Find sum of group's criteria */
+    for (j = 0; j < g->memberCount; j++) {
+        result += g->members[j].criteria[i]
+    }
+    return result / g->memberCount; 
 }
 
 /* Selects two random parents from the upper half of population */

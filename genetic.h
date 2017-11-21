@@ -1,5 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <datastructs.h>
+#include <utility.h>
+#include <read.h>
 
 void genetic_algorithm(int popsize, int generations, float mutationrate);
+double genetic_average_fitness(person ***population, int popsize);
 int genetic_q_compare(const void * i, const void * j);
 double fitness_chromosome(person **a);
 double fitness_group(group *g);
