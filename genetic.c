@@ -19,6 +19,8 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     
     /* Similarly, allocate memory to generate a new population */
     person ***nextGeneration = genetic_get_memory_for_pop(popsize);
+    
+    printf("Population initialized...\n");
 
     for (gen = 0; gen < generations; gen++) {
         int i;
@@ -90,11 +92,16 @@ double genetic_average_fitness(person ***population, int popsize) {
 group* genetic_chromosome_to_groups(person **chromosome) {
     
     int i, j, currentPerson;
+    printf("Split chromosomes into groups...\n");
     
     /* personPerGroup is the minimum size of each group. leftoverPerons
         is the amount of groups, which have an extra member */
+    
+    printf("PC: %d, GC: %d\n", _PersonCount, _GroupCount);
     int personPerGroup = _PersonCount / _GroupCount;
     int leftoverPersons = _PersonCount % personPerGroup;
+    
+    printf("peoplePerGroup: %d, leftover: %d...\n", personPerGroup, leftoverPersons);
     
     /* Allocate memory */
     group *groups = (group*)malloc(_GroupCount * sizeof(group));
@@ -107,6 +114,8 @@ group* genetic_chromosome_to_groups(person **chromosome) {
         /* Setup some data about the group */
         groups[i].groupNumber = i;
         groups[i].fitnessValue = -1;
+        
+        printf("Adds members to group %d...\n", i);
         
         /* Add persons to group */
         for (j = 0; j < personPerGroup; j++) {
@@ -121,11 +130,15 @@ group* genetic_chromosome_to_groups(person **chromosome) {
             groups[i].members[j] = *(chromosome[currentPerson]);
             currentPerson++;
             
+            printf("Adds an extra member to group %d...\n", i);
+            
             groups[i].memberCount = personPerGroup + 1;
         } else {
             groups[i].memberCount = personPerGroup;
         }
     }
+    
+    printf("Split chromosomes into groups...\n");
     
     return groups;
 }
@@ -134,6 +147,8 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 int genetic_q_compare(const void * i, const void * j) {
     person **a = (person**)i;
     person **b = (person**)j;
+
+    printf("Makes comparison...\n");
 
     return fitness_chromosome(b) - fitness_chromosome(a);
 }
