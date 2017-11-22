@@ -1,5 +1,4 @@
 #include <windows.h>
-#include "datastructs.c"
 
 double lerp(double a, double b, double t);
 double _min(double a, double b);
