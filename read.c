@@ -53,6 +53,8 @@ int main(void) {
     extract_data(fp, _AllPersons, _PersonCount, _Criteria, _CriteriaCount);
     
     fclose(fp);
+	free(_AllPersons);
+	free(_Criteria);
     return 0;
 }
 
@@ -82,15 +84,17 @@ void extract_criteria(char *str, criteria *entry) {
     double weight;
     
     sscanf(str, " \"%[^\"]\" = %lf ", name, &weight);
-    
     printf("Criteria: %s| weight: %.1lf\n", name, weight);
+	
+	strcpy(entry->name, name);
+	entry->weight = weight;
 }
 
 void extract_person(char *str, person *entry, int criCount) {
     int i;
     char name[LINE_MAX_LEN];
     char *token;
-    double cri[2];
+    double cri[10];
     
     sscanf(str, " \"%[^\"]\" = ", name);
     
@@ -106,6 +110,11 @@ void extract_person(char *str, person *entry, int criCount) {
         printf("%.1lf%s", cri[i], i < criCount - 1 ? ", " : "");
     }
     printf("\n");
+	
+	strcpy(entry->name, name);
+	for (i = 0; i < criCount; i++) {
+		entry->criteria[i] = cri[i];
+	}
 }
 
 /* Count lines. Store values in lineCount, criteriaCount, and personCount */
