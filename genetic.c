@@ -1,3 +1,5 @@
+#include "datastructs.c"
+#include "utility.h"
 #include "genetic.h"
 
 /* Starts the genetic algorithm

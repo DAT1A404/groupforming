@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <windows.h>
 
+#include "datastructs.c"
+
 /* holds void read_control() and read_data(FILE *f) */
 #include "read.h"
 
@@ -33,7 +35,7 @@
 #define MUTATION_RATE_MIN 0
 #define MUTATION_RATE_MAX 1
 
-int genetic_setup();
+group* genetic_setup();
 
 int main(void) {
 
@@ -75,7 +77,7 @@ group* genetic_setup() {
         
         /* Continue if option = x. Abort if option = q */
         if (option == 'x') break;
-        if (option == 'q') return -1;
+        if (option == 'q') exit(0);
         
         /* Change a variable */
         if (option >= 'a' && option <= 'd') {

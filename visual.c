@@ -1,3 +1,4 @@
+#include "datastructs.c"
 #include "visual.h"
 
 /* Set the terminals printing colors. Remember to reset */
@@ -13,11 +14,11 @@ void reset_color() {
 }
 
 /* Prints all groups */
-void print_all_groups(group **groups, int groupCount) {
+void print_all_groups(group *groups, int groupCount) {
     int i;
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
-        print_group(groups[i]);
+        print_group(groups + i);
     }
 }
 

@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-#include "datastructs.c"
-#include "utility.h"
 
 group* genetic_algorithm(int popsize, int generations, float mutationrate);
 double genetic_average_fitness(person ***population, int popsize);
