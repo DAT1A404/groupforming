@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <windows.h>
 
+#include "datastruct.h"
+
 /* holds void read_control() and read_data(FILE *f) */
 #include "read.h"
 

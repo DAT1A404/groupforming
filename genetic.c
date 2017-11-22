@@ -182,8 +182,8 @@ double fitness_group(group g) {
             } else {
                 
                 /* Calls min/max function and finds min/max */
-                criteriaMin = min(criteriaMin, a);
-                criteriaMax = max(criteriaMax, a);
+                criteriaMin = _min(criteriaMin, a);
+                criteriaMax = _max(criteriaMax, a);
             }
         }
         

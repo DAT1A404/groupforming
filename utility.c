@@ -1,4 +1,3 @@
-
 #include "utility.h"
 
 /* Liniar lerp from a to b with time t */
@@ -7,12 +6,12 @@ double lerp(double a, double b, double t) {
 }
 
 /* Returns the lowest of a and b */
-double min(double a, double b) {
+double _min(double a, double b) {
     return a < b ? a : b;
 }
 
 /* Returns the greatest of a and b */
-double max(double a, double b) {
+double _max(double a, double b) {
     return a > b ? a : b;
 }
 

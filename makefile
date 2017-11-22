@@ -5,16 +5,16 @@ CFLAGS = -Wall -ansi
 program.exe: read.o utility.o genetic.o visual.o datastructs.o
 	gcc $(CFLAGS) -o program read.o utility.o genetic.o visual.o datastructs.o
 
-read.o: read.c read.h
+read.o: read.c read.h datastructs.c
 	gcc $(CFLAGS) -c read.c
 
-utility.o: utility.c utility.h
+utility.o: utility.c utility.h datastructs.c
 	gcc $(CFLAGS) -c utility.c
 
-genetic.o: genetic.c genetic.h
+genetic.o: genetic.c genetic.h datastructs.c
 	gcc $(CFLAGS) -c genetic.c
 
-visual.o: visual.c visual.h
+visual.o: visual.c visual.h datastructs.c
 	gcc $(CFLAGS) -c visual.c
 
 datastructs.o: datastructs.c

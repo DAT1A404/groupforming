@@ -1,3 +1,4 @@
+#include "datastructs.c"
 #include "visual.h"
 
 /* Set the terminals printing colors. Remember to reset */

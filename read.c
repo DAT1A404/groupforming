@@ -1,9 +1,9 @@
+#include "datastructs.c"
 #include "read.h"
 
 void read_data() {
     
     int lineCount;
-    char buffer[LINE_MAX_LEN];
     FILE *fp;
     
     fp = fopen("datafile.txt", "r");

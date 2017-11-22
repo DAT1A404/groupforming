@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "datastructs.h"
+#include "datastructs.c"
 #include "utility.h"
 
 void genetic_algorithm(int popsize, int generations, float mutationrate);
