@@ -74,7 +74,6 @@ void extract_data(FILE *fp, person *persons, int personCount, criteria *criteria
                 break;
             case '#': break;
             case '$': mode = 1; break;
-            default: printf("! Error in line %d. Unexpected character '%c'.\n", lineCount, buffer[0]);
         }
     }
 }
@@ -84,7 +83,7 @@ void extract_criteria(char *str, criteria *entry) {
     double weight;
     
     sscanf(str, " \"%[^\"]\" = %lf ", name, &weight);
-    printf("Criteria: %s| weight: %.1lf\n", name, weight);
+    printf("Criteria: %s = %.1lf\n", name, weight);
 	
 	strcpy(entry->name, name);
 	entry->weight = weight;

@@ -1,4 +1,4 @@
-#Kriterier og V�gte
+﻿#Kriterier og V�gte
 "Gender" = 1
 "Foreign" = 1
 $
@@ -63,4 +63,4 @@ $
 "Trine Lem" = 1,0
 "Pia Kjaersgaard" = 1,0
 #Test p� ekstra udefineret input
-!Ende
+#!Ende
