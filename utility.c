@@ -1,5 +1,5 @@
 
-#include <windows.h>
+#include "utility.h"
 
 /* Liniar lerp from a to b with time t */
 double lerp(double a, double b, double t) {

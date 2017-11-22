@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <datastructs.h>
-#include <utility.h>
-#include <read.h>
+#include "datastructs.h"
+#include "utility.h"
 
 void genetic_algorithm(int popsize, int generations, float mutationrate);
 double genetic_average_fitness(person ***population, int popsize);

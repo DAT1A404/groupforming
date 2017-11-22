@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <windows.h>
 
-#if 0
-/* holds structs for the whole program */
-#include "datastructs.h"
-
 /* holds void read_control() and read_data(FILE *f) */
 #include "read.h"
 
@@ -13,17 +9,16 @@
 #include "genetic.h"
 
 /* holds functions for print, export an exit-commands */
-#include "commands.h"
+/* #include "commands.h" */
 
 /* holds functions that print person, persons and groups nicely */
 #include "visual.h"
 
 /* holds functions that export generated data into different file-formats */
-#include "export.h"
+/* #include "export.h" */
 
 /* holds functions that aren't applicable to above categories */
 #include "utility.h"
-#endif
 
 #define GROUP_STD (_PersonCount / 6.)
 #define GROUP_MIN 2
@@ -38,23 +33,27 @@
 #define MUTATION_RATE_MIN 0
 #define MUTATION_RATE_MAX 1
 
-void clear_screen() {
-    system("@cls||clear");
-}
-
 int genetic_setup();
 
 int main(void) {
 
-    /* Read.read_datafile(); */
-    genetic_setup();
+    group *grps;
+
+    read_data();
+    grps = genetic_setup();
+    
+    print_all_groups(grps, _GroupCount);
+
+    free(_AllPersons);
+    free(_Criteria);
 
     return EXIT_SUCCESS;
 }
 
 /* Initializing genetic variables before running the algorithm */
-int genetic_setup() {
+group* genetic_setup() {
     
+    group *grps;
     int groups = GROUP_STD;
     int popsize = POPSIZE_STD;
     int generations = GENERATIONS_STD;
@@ -100,9 +99,7 @@ int genetic_setup() {
     
     /* Run algorithm */
     printf("Running algorithm...\n");
-#if 0
-    genetic_algorithm(popsize, generations, mutationrate);
-#endif
+    grps = genetic_algorithm(popsize, generations, mutationrate);
     
-    return 0;
+    return grps;
 }

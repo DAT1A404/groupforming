@@ -1,23 +1,4 @@
-
-#include <windows.h>
-
-/* Color constants */
-#define BLACK           0
-#define BLUE            1
-#define GREEN           2
-#define CYAN            3
-#define RED             4
-#define MAGENTA         5
-#define BROWN           6
-#define LIGHTGRAY       7
-#define DARKGRAY        8
-#define LIGHTBLUE       9
-#define LIGHTGREEN      10
-#define LIGHTCYAN       11
-#define LIGHTRED        12
-#define LIGHTMAGENTA    13
-#define YELLOW          14
-#define WHITE           15
+#include "visual.h"
 
 /* Set the terminals printing colors. Remember to reset */
 void set_color(int ForgC, int BackC)
@@ -32,7 +13,7 @@ void reset_color() {
 }
 
 /* Prints all groups */
-void print_all_groups(group **groups, int groupCount) {
+void print_all_groups(group *groups, int groupCount) {
     int i;
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
@@ -41,7 +22,7 @@ void print_all_groups(group **groups, int groupCount) {
 }
 
 /* Print a group and it's members */
-void print_group(group *g) {
+void print_group(group g) {
     int i;
     printf("Gruppe %d:\n");
     for (i = 0; i < g->memberCount; i++) {

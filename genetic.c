@@ -1,4 +1,5 @@
-#include <math.h>
+#include "genetic.h"
+
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
