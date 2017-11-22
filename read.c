@@ -6,30 +6,12 @@
 
 #define LINE_MAX_LEN 200
 
-typedef struct {
-    char name[40];
-    int personID;
-    double criteria[10];
-} person;
-
-typedef struct {
-    char name[40];
-    double weight;
-} criteria;
-
-person *_AllPersons;
-int _PersonCount;
-criteria *_Criteria;
-int _CriteriaCount;
-
-/* ///////////////////////////// */
-
 void count_lines_and_data(FILE *fp, int *lineCount, int *criteriaCount, int *personCount);
 void extract_data(FILE *fp, person *persons, int personCount, criteria *criterias, int criteriaCount);
 void extract_criteria(char *str, criteria *entry);
 void extract_person(char *str, person *entry, int criCount);
 
-int main(void) {
+void read_data() {
     
     int lineCount;
     char buffer[LINE_MAX_LEN];
@@ -53,9 +35,6 @@ int main(void) {
     extract_data(fp, _AllPersons, _PersonCount, _Criteria, _CriteriaCount);
     
     fclose(fp);
-	free(_AllPersons);
-	free(_Criteria);
-    return 0;
 }
 
 void extract_data(FILE *fp, person *persons, int personCount, criteria *criterias, int criteriaCount) {
