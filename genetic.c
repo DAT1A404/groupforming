@@ -1,6 +1,7 @@
 #include "datastructs.c"
 #include "utility.h"
 #include "genetic.h"
+#include "visual.h"
 
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
@@ -25,31 +26,36 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     for (gen = 0; gen < generations; gen++) {
         int i;
         person ***temp;
+        printf("#");
 
         /* Algorithm ... */
 
         /* Sort according to fitness */
-        qsort(population, popsize, sizeof(person**), genetic_q_compare);
+        qsort(*population, popsize, sizeof(person**), genetic_q_compare);
         
         /* Show how the algorithm is doing */
-        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);
-
+        /* printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);*/
+        printf(". ");
+        
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
             
-            
             person **par1, **par2, **chi1, **chi2;
 
+            printf("A");
             /* Selection */
             genetic_selection(population, popsize, par1, par2);
             
-            /* Crossover */
+            printf("B");
+            /* Crossover 
             genetic_crossover(par1, par2, chi1, chi2);
-            
+            */
+            printf("C");
             /* Mutation */
             genetic_mutation(chi1, mutationrate);
             genetic_mutation(chi2, mutationrate);
             
+            printf("D %d", i);
             /* Add children to next generation */
             nextGeneration[i] = chi1;
             nextGeneration[i + 1] = chi2;
@@ -57,10 +63,14 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
             /* TODO: Currently we assume popsize is an even number! */
         }
         
+        printf("E");
+        
         /* Set population to next generation, by swapping current and next */
         temp = population;
         population = nextGeneration;
         nextGeneration = temp;
+        
+        printf("F\n");
     }
     
     /* Sort according to fitness, then make the BEST chromosome to groups */
@@ -92,17 +102,12 @@ double genetic_average_fitness(person ***population, int popsize) {
 group* genetic_chromosome_to_groups(person **chromosome) {
     
     int i, j, currentPerson;
-    printf("Split chromosomes into groups...\n");
-    
+
     /* personPerGroup is the minimum size of each group. leftoverPerons
         is the amount of groups, which have an extra member */
-    
-    printf("PC: %d, GC: %d\n", _PersonCount, _GroupCount);
     int personPerGroup = _PersonCount / _GroupCount;
     int leftoverPersons = _PersonCount % personPerGroup;
-    
-    printf("peoplePerGroup: %d, leftover: %d...\n", personPerGroup, leftoverPersons);
-    
+
     /* Allocate memory */
     group *groups = (group*)malloc(_GroupCount * sizeof(group));
     
@@ -114,12 +119,10 @@ group* genetic_chromosome_to_groups(person **chromosome) {
         /* Setup some data about the group */
         groups[i].groupNumber = i;
         groups[i].fitnessValue = -1;
-        
-        printf("Adds members to group %d...\n", i);
-        
+
         /* Add persons to group */
         for (j = 0; j < personPerGroup; j++) {
-            groups[i].members[j] = *(chromosome[currentPerson]);
+            groups[i].members[j] = **(chromosome + currentPerson);
             currentPerson++;
         }
         
@@ -129,17 +132,13 @@ group* genetic_chromosome_to_groups(person **chromosome) {
         if (i < leftoverPersons) {
             groups[i].members[j] = *(chromosome[currentPerson]);
             currentPerson++;
-            
-            printf("Adds an extra member to group %d...\n", i);
-            
+
             groups[i].memberCount = personPerGroup + 1;
         } else {
             groups[i].memberCount = personPerGroup;
         }
     }
-    
-    printf("Split chromosomes into groups...\n");
-    
+
     return groups;
 }
 
@@ -147,8 +146,6 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 int genetic_q_compare(const void * i, const void * j) {
     person **a = (person**)i;
     person **b = (person**)j;
-
-    printf("Makes comparison...\n");
 
     return fitness_chromosome(b) - fitness_chromosome(a);
 }

@@ -30,3 +30,22 @@ void print_group(group *g) {
         printf("%s\n", g->members[i].name);
     }
 }
+
+/* Prints an array of persons */
+void print_all_persons(person *all, int count) {
+    int i, j;
+    for (i = 0; i < count; i++) {
+        printf("Person | n: %s c: ", all[i].name);
+        for (j = 0; j < _CriteriaCount; j++) {
+            printf("%.1lf, ", all[i].criteria[j]);
+        }
+        printf("\n");
+    }
+}
+
+void print_chromosome(person **chromosome) {
+    int i;
+    for (i = 0; i < _PersonCount; i++) {
+        printf("chromo person: %s\n", chromosome[i]->name);
+    }
+}

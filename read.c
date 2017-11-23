@@ -37,8 +37,14 @@ void extract_data(FILE *fp, person *persons, int personCount, criteria *criteria
         lineCount++;
         switch (buffer[0]) {
             case '"':
-                if (mode) extract_person(buffer, persons + p, criteriaCount);
-                else extract_criteria(buffer, criterias + c);
+                if (mode) {
+                    extract_person(buffer, persons + p, criteriaCount);
+                    p++;
+                }
+                else {
+                    extract_criteria(buffer, criterias + c);
+                    c++;
+                }
                 break;
             case '#': break;
             case '$': mode = 1; break;

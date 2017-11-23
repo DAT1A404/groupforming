@@ -23,3 +23,5 @@ void set_color(int ForgC, int BackC);
 void reset_color();
 void print_all_groups(group *groups, int groupCount);
 void print_group(group *g);
+void print_all_persons(person *all, int count);
+void print_chromosome(person **chromosome);
