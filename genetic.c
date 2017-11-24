@@ -42,25 +42,26 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
             
             person **par1, **par2, **chi1, **chi2;
             
+            /* Make child pointers point to the next positions in nextGeneration */
+            chi1 = nextGeneration[i];
+            chi2 = nextGeneration[i + 1];
+            
             printf("A");
             
             /* Selection */
             genetic_selection(population, popsize, &par1, &par2);
-            print_chromosome(par1);
             
             printf("B");
-            /* Crossover 
+            /* Crossover */
             genetic_crossover(par1, par2, chi1, chi2);
-            */
+            print_chromosome(chi1);
+            
             printf("C");
             /* Mutation */
             genetic_mutation(chi1, mutationrate);
             genetic_mutation(chi2, mutationrate);
             
             printf("D %d", i);
-            /* Add children to next generation */
-            nextGeneration[i] = chi1;
-            nextGeneration[i + 1] = chi2;
             
             /* TODO: Currently we assume popsize is an even number! */
         }
