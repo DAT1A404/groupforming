@@ -30,4 +30,5 @@ double inverse_lerp(double a, double b, double v) {
 /* Clears the terminal */
 void clear_screen() {
     system("@cls||clear");
+    printf("\033c");
 }
