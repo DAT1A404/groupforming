@@ -41,10 +41,12 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         for (i = 0; i < popsize; i += 2) {
             
             person **par1, **par2, **chi1, **chi2;
-
+            
             printf("A");
+            
             /* Selection */
-            genetic_selection(population, popsize, par1, par2);
+            genetic_selection(population, popsize, &par1, &par2);
+            print_chromosome(par1);
             
             printf("B");
             /* Crossover 
@@ -232,13 +234,13 @@ double average_criteria(group *g, int i) {
 }
 
 /* Selects two random parents from the upper half of population */
-void genetic_selection(person ***population, int popsize, person **par1, person **par2) {
+void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
 
     int a = rand() % (popsize / 2);
     int b = rand() % (popsize / 2);
 
-    par1 = population[a];
-    par2 = population[b];
+    *par1 = population[a];
+    *par2 = population[b];
 }
 
 /* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */

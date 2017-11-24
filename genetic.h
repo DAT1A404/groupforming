@@ -11,7 +11,7 @@ double fitness_groups(group *g);
 double fitness_group(group g);
 double average_criteria(group *g, int i);
 double fitness_of_criteria(double t, double weight);
-void genetic_selection(person ***population, int popsize, person **par1, person **par2);
+void genetic_selection(person ***population, int popsize, person ***par1, person ***par2);
 void genetic_crossover(person **par1, person **par2, person **child1, person **child2);
 void genetic_reset_chromosome(person **chromosome);
 void genetic_mutation(person **child, float mutationrate);
