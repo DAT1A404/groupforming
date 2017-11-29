@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -16,7 +17,6 @@
 #define POSTREADPRINT 0
 #define GENSETUP 1
 #define GEN 1
-#define GENPRINT 1
 
 #define GROUP_STD (_PersonCount / 6.)
 #define GROUP_MIN 2
@@ -36,6 +36,8 @@ group* genetic_setup();
 int main(void) {
 
     group *grps;
+
+    srand(time(NULL));
 
     read_data();
 #if POSTREADPRINT
