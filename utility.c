@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 #include "utility.h"
 
 /* Liniar lerp from a to b with time t */

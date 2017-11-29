@@ -1,3 +1,9 @@
+#include <stdio.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 /* Color constants */
 #define BLACK           0
 #define BLUE            1

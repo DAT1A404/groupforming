@@ -6,23 +6,11 @@
 #endif
 
 #include "datastructs.c"
-
-/* holds void read_control() and read_data(FILE *f) */
 #include "read.h"
-
-/* holds functions for genetic algorithm */
 #include "genetic.h"
-
-/* holds functions for print, export an exit-commands */
 /* #include "commands.h" */
-
-/* holds functions that print person, persons and groups nicely */
 #include "visual.h"
-
-/* holds functions that export generated data into different file-formats */
 /* #include "export.h" */
-
-/* holds functions that aren't applicable to above categories */
 #include "utility.h"
 
 #define POSTREADPRINT 0
@@ -116,8 +104,9 @@ group* genetic_setup() {
 
     /* Run algorithm */
     printf("Running algorithm...\n");
-#if GEN && GENSETUP
+#if GEN
     grps = genetic_algorithm(popsize, generations, mutationrate);
+    printf("IT WORKED!\n");
 #endif
 
     return grps;

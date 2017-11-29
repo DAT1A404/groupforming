@@ -1,6 +1,5 @@
 #include "datastructs.c"
 #include "visual.h"
-#include <windows.h>
 
 /* Set the terminals printing colors. Remember to reset */
 #ifdef _WIN32
