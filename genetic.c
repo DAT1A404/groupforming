@@ -31,7 +31,7 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         /* Algorithm ... */
 
         /* Sort according to fitness */
-        qsort(*population, popsize, sizeof(person**), genetic_q_compare);
+        qsort(population, popsize, sizeof(person**), genetic_q_compare);
         
         /* Show how the algorithm is doing */
         printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n",
@@ -66,7 +66,7 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     }
     
     /* Sort according to fitness, then make the BEST chromosome into groups */
-    qsort(*population, popsize, sizeof(person**), genetic_q_compare);
+    qsort(population, popsize, sizeof(person**), genetic_q_compare);
     result = genetic_chromosome_to_groups(population[0]);
 
     free(*population); /* Pointer to the array of memberpointers */
@@ -136,10 +136,10 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
 int genetic_q_compare(const void * i, const void * j) {
-    person **a = (person**)i;
-    person **b = (person**)j;
+    person ***a = (person***)i;
+    person ***b = (person***)j;
 
-    return fitness_chromosome(b) - fitness_chromosome(a);
+    return fitness_chromosome(*b) - fitness_chromosome(*a);
 }
 
 /* Returns the fitness of a chromosome */
