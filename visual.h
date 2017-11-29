@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <windows.h>
-
 /* Color constants */
 #define BLACK           0
 #define BLUE            1

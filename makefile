@@ -21,4 +21,4 @@ datastructs.o: datastructs.c
 	gcc $(CFLAGS) -c datastructs.c
 
 clean:
-	rm *.o program.exe
+	rm *.o program.*

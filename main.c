@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include "datastructs.c"
 
@@ -51,7 +54,7 @@ int main(void) {
     print_all_persons(_AllPersons, _PersonCount);
 #endif
 #if GENSETUP
-    grps = genetic_setup();    
+    grps = genetic_setup();
 #endif
     /*
     print_all_groups(grps, _GroupCount);
@@ -64,7 +67,7 @@ int main(void) {
 
 /* Initializing genetic variables before running the algorithm */
 group* genetic_setup() {
-    
+
     group *grps;
     int groups = GROUP_STD;
     int popsize = POPSIZE_STD;
@@ -74,28 +77,28 @@ group* genetic_setup() {
     do {
         float newValue = 0;
         char option = '0';
-        
+
         /* clear_screen(); */
-        
+
         /* Show current settings */
         printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d (%.1f in each)\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %f\n",
             groups, _PersonCount / (float)groups,  popsize, generations, mutationrate);
-        
+
         /* Instruct how to change */
         printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
         scanf(" %c", &option);
-        
+
         /* Continue if option = x. Abort if option = q */
         if (option == 'x') break;
         if (option == 'q') exit(0);
-        
+
         /* Change a variable */
         if (option >= 'a' && option <= 'd') {
-            
+
             /* Read new value */
             printf("New value: \n");
             scanf(" %f", &newValue);
-            
+
             /* Save new value */
             switch (option) {
                 case 'a': groups = (int)clamp(newValue, GROUP_MIN, GROUP_MAX); break;
@@ -104,13 +107,13 @@ group* genetic_setup() {
                 case 'd': mutationrate = clamp(newValue, MUTATION_RATE_MIN, MUTATION_RATE_MAX); break;
             }
         }
-        
+
     } while (1);
-    
+
     /* clear_screen(); */
-    
+
     _GroupCount = groups;
-    
+
     /* Run algorithm */
     printf("Running algorithm...\n");
 #if GEN && GENSETUP
