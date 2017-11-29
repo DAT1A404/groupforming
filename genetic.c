@@ -34,8 +34,7 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         qsort(*population, popsize, sizeof(person**), genetic_q_compare);
         
         /* Show how the algorithm is doing */
-        /* printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);*/
-        printf(". ");
+        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);
         
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
@@ -46,34 +45,23 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
             chi1 = nextGeneration[i];
             chi2 = nextGeneration[i + 1];
             
-            printf("A");
-            
-            /* Selection */
+            /* Selection. Make par1 and par2 point to two chromosomes */
             genetic_selection(population, popsize, &par1, &par2);
             
-            printf("B");
-            /* Crossover */
+            /* Crossover. Merge par1 and par2 into two children */
             genetic_crossover(par1, par2, chi1, chi2);
-            print_chromosome(chi1);
             
-            printf("C");
             /* Mutation */
             genetic_mutation(chi1, mutationrate);
             genetic_mutation(chi2, mutationrate);
             
-            printf("D %d", i);
-            
             /* TODO: Currently we assume popsize is an even number! */
         }
-        
-        printf("E");
         
         /* Set population to next generation, by swapping current and next */
         temp = population;
         population = nextGeneration;
         nextGeneration = temp;
-        
-        printf("F\n");
     }
     
     /* Sort according to fitness, then make the BEST chromosome to groups */
@@ -258,16 +246,16 @@ void genetic_crossover(person **par1, person **par2, person **child1, person **c
     /* Do cycle */
     i = 0;
     do {
-        int indexInPar2, j;
+        int indexInPar2;
         
         /* Mark index i */
         bitstring[i] = 1;
         
-        /* Find index j of element par1[i] in par2 */
-        for (j = 0; j < _PersonCount; j++) {
+        /* Find index of element par1[i] in par2 */
+        for (indexInPar2 = 0; indexInPar2 < _PersonCount; indexInPar2++) {
             if (par1[i] == par2[indexInPar2]) {
-                /* Set index i to j */
-                i = j;
+                /* Set index i to indexInPar2 */
+                i = indexInPar2;
                 break;
             }
         }
