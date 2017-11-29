@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "utility.h"
 
+#define CLEARSCREENALLOWED 1
+
 /* Liniar lerp from a to b with time t */
 double lerp(double a, double b, double t) {
     return t * (b - a) + a;
@@ -31,6 +33,8 @@ double inverse_lerp(double a, double b, double v) {
 
 /* Clears the terminal */
 void clear_screen() {
+#if CLEARSCREENALLOWED
     system("@cls||clear");
     printf("\033c");
+#endif
 }

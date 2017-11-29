@@ -1,6 +1,8 @@
 #include "datastructs.c"
 #include "read.h"
 
+#define READPRINT 0
+
 void read_data() {
     
     int lineCount;
@@ -11,9 +13,11 @@ void read_data() {
 
     /* Count lines */
     count_lines_and_data(fp, &lineCount, &_CriteriaCount, &_PersonCount);
-    
+
+#if READPRINT
     /* Print status */
     printf("Line count: %d\nPerson count: %d\nCriteria count: %d\n", lineCount, _PersonCount, _CriteriaCount);
+#endif
     
     /* Allocate memory */
     _AllPersons = (person*)malloc(_PersonCount * sizeof(person));
@@ -57,8 +61,10 @@ void extract_criteria(char *str, criteria *entry) {
     double weight;
     
     sscanf(str, " \"%[^\"]\" = %lf ", name, &weight);
+#if READPRINT
     printf("Criteria: %s = %.1lf\n", name, weight);
-	
+#endif
+
 	strcpy(entry->name, name);
 	entry->weight = weight;
 }
@@ -77,13 +83,15 @@ void extract_person(char *str, person *entry, int criCount) {
         sscanf(token, " %lf ", cri + i);
         token = strtok(NULL, ",");
     }
-    
+
+#if READPRINT
     printf("Name: %s = ", name);
     for (i = 0; i < criCount; i++) {
         printf("%.1lf%s", cri[i], i < criCount - 1 ? ", " : "");
     }
     printf("\n");
-	
+#endif
+
 	strcpy(entry->name, name);
 	for (i = 0; i < criCount; i++) {
 		entry->criteria[i] = cri[i];

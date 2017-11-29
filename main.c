@@ -15,8 +15,8 @@
 #include "utility.h"
 
 #define POSTREADPRINT 0
-#define GENSETUP 1
-#define GEN 1
+#define GENETIC_SETUP_DIALOG 1
+#define DO_GENETIC_ALGORITHM 1
 
 #define GROUP_STD (_PersonCount / 6.)
 #define GROUP_MIN 2
@@ -40,12 +40,13 @@ int main(void) {
     srand(time(NULL));
 
     read_data();
+
 #if POSTREADPRINT
     print_all_persons(_AllPersons, _PersonCount);
 #endif
-#if GENSETUP
-    grps = genetic_setup();
     
+#if GENETIC_SETUP_DIALOG
+    grps = genetic_setup();
     print_all_groups(grps, _GroupCount);
 #endif
     
@@ -68,10 +69,10 @@ group* genetic_setup() {
         float newValue = 0;
         char option = '0';
 
-        /* clear_screen(); */
+        clear_screen();
 
         /* Show current settings */
-        printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d (%.1f in each)\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %f\n",
+        printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d (%.1f in each)\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %.3f\n",
             groups, _PersonCount / (float)groups,  popsize, generations, mutationrate);
 
         /* Instruct how to change */
@@ -100,15 +101,15 @@ group* genetic_setup() {
 
     } while (1);
 
-    /* clear_screen(); */
+    clear_screen();
 
     _GroupCount = groups;
 
     /* Run algorithm */
     printf("Running algorithm...\n");
-#if GEN
+#if DO_GENETIC_ALGORITHM
     grps = genetic_algorithm(popsize, generations, mutationrate);
-    printf("IT WORKED!\n");
+    printf("Complete!\n\n\n");
 #endif
 
     return grps;
