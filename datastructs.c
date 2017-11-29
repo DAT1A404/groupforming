@@ -5,11 +5,11 @@
 typedef struct {
     char name[40];
     int personID;
-    double criteria[10];
+    double criteria[20];
 } person;
 
 typedef struct {
-    person members[8];
+    person members[20];
     int memberCount;
     int groupNumber;
     double fitnessValue;
