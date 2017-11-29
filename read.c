@@ -1,20 +1,11 @@
+#include "datastructs.c"
+#include "read.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
-
-#define LINE_MAX_LEN 200
-
-void count_lines_and_data(FILE *fp, int *lineCount, int *criteriaCount, int *personCount);
-void extract_data(FILE *fp, person *persons, int personCount, criteria *criterias, int criteriaCount);
-void extract_criteria(char *str, criteria *entry);
-void extract_person(char *str, person *entry, int criCount);
+#define READPRINT 0
 
 void read_data() {
     
     int lineCount;
-    char buffer[LINE_MAX_LEN];
     FILE *fp;
     
     fp = fopen("datafile.txt", "r");
@@ -22,9 +13,11 @@ void read_data() {
 
     /* Count lines */
     count_lines_and_data(fp, &lineCount, &_CriteriaCount, &_PersonCount);
-    
+
+#if READPRINT
     /* Print status */
     printf("Line count: %d\nPerson count: %d\nCriteria count: %d\n", lineCount, _PersonCount, _CriteriaCount);
+#endif
     
     /* Allocate memory */
     _AllPersons = (person*)malloc(_PersonCount * sizeof(person));
@@ -48,8 +41,14 @@ void extract_data(FILE *fp, person *persons, int personCount, criteria *criteria
         lineCount++;
         switch (buffer[0]) {
             case '"':
-                if (mode) extract_person(buffer, persons + p, criteriaCount);
-                else extract_criteria(buffer, criterias + c);
+                if (mode) {
+                    extract_person(buffer, persons + p, criteriaCount);
+                    p++;
+                }
+                else {
+                    extract_criteria(buffer, criterias + c);
+                    c++;
+                }
                 break;
             case '#': break;
             case '$': mode = 1; break;
@@ -62,8 +61,10 @@ void extract_criteria(char *str, criteria *entry) {
     double weight;
     
     sscanf(str, " \"%[^\"]\" = %lf ", name, &weight);
+#if READPRINT
     printf("Criteria: %s = %.1lf\n", name, weight);
-	
+#endif
+
 	strcpy(entry->name, name);
 	entry->weight = weight;
 }
@@ -82,13 +83,15 @@ void extract_person(char *str, person *entry, int criCount) {
         sscanf(token, " %lf ", cri + i);
         token = strtok(NULL, ",");
     }
-    
+
+#if READPRINT
     printf("Name: %s = ", name);
     for (i = 0; i < criCount; i++) {
         printf("%.1lf%s", cri[i], i < criCount - 1 ? ", " : "");
     }
     printf("\n");
-	
+#endif
+
 	strcpy(entry->name, name);
 	for (i = 0; i < criCount; i++) {
 		entry->criteria[i] = cri[i];

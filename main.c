@@ -1,29 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+#ifdef _WIN32
 #include <windows.h>
-
-#if 0
-/* holds structs for the whole program */
-#include "datastructs.h"
-
-/* holds void read_control() and read_data(FILE *f) */
-#include "read.h"
-
-/* holds functions for genetic algorithm */
-#include "genetic.h"
-
-/* holds functions for print, export an exit-commands */
-#include "commands.h"
-
-/* holds functions that print person, persons and groups nicely */
-#include "visual.h"
-
-/* holds functions that export generated data into different file-formats */
-#include "export.h"
-
-/* holds functions that aren't applicable to above categories */
-#include "utility.h"
 #endif
+
+#include "datastructs.c"
+#include "read.h"
+#include "genetic.h"
+/* #include "commands.h" */
+#include "visual.h"
+/* #include "export.h" */
+#include "utility.h"
+
+#define POSTREADPRINT 0
+#define GENETIC_SETUP_DIALOG 1
+#define DO_GENETIC_ALGORITHM 1
 
 #define GROUP_STD (_PersonCount / 6.)
 #define GROUP_MIN 2
@@ -38,23 +31,35 @@
 #define MUTATION_RATE_MIN 0
 #define MUTATION_RATE_MAX 1
 
-void clear_screen() {
-    system("@cls||clear");
-}
-
-int genetic_setup();
+group* genetic_setup();
 
 int main(void) {
 
-    /* Read.read_datafile(); */
-    genetic_setup();
+    group *grps;
+
+    srand(time(NULL));
+
+    read_data();
+
+#if POSTREADPRINT
+    print_all_persons(_AllPersons, _PersonCount);
+#endif
+    
+#if GENETIC_SETUP_DIALOG
+    grps = genetic_setup();
+    print_all_groups(grps, _GroupCount);
+#endif
+    
+    free(_AllPersons);
+    free(_Criteria);
 
     return EXIT_SUCCESS;
 }
 
 /* Initializing genetic variables before running the algorithm */
-int genetic_setup() {
-    
+group* genetic_setup() {
+
+    group *grps;
     int groups = GROUP_STD;
     int popsize = POPSIZE_STD;
     int generations = GENERATIONS_STD;
@@ -63,28 +68,28 @@ int genetic_setup() {
     do {
         float newValue = 0;
         char option = '0';
-        
+
         clear_screen();
-        
+
         /* Show current settings */
-        printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %f\n",
-            groups, popsize, generations, mutationrate);
-        
+        printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d (%.1f in each)\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %.3f\n",
+            groups, _PersonCount / (float)groups,  popsize, generations, mutationrate);
+
         /* Instruct how to change */
         printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
         scanf(" %c", &option);
-        
+
         /* Continue if option = x. Abort if option = q */
         if (option == 'x') break;
-        if (option == 'q') return -1;
-        
+        if (option == 'q') exit(0);
+
         /* Change a variable */
         if (option >= 'a' && option <= 'd') {
-            
+
             /* Read new value */
             printf("New value: \n");
             scanf(" %f", &newValue);
-            
+
             /* Save new value */
             switch (option) {
                 case 'a': groups = (int)clamp(newValue, GROUP_MIN, GROUP_MAX); break;
@@ -93,16 +98,19 @@ int genetic_setup() {
                 case 'd': mutationrate = clamp(newValue, MUTATION_RATE_MIN, MUTATION_RATE_MAX); break;
             }
         }
-        
+
     } while (1);
-    
+
     clear_screen();
-    
+
+    _GroupCount = groups;
+
     /* Run algorithm */
     printf("Running algorithm...\n");
-#if 0
-    genetic_algorithm(popsize, generations, mutationrate);
+#if DO_GENETIC_ALGORITHM
+    grps = genetic_algorithm(popsize, generations, mutationrate);
+    printf("Complete!\n\n\n");
 #endif
-    
-    return 0;
+
+    return grps;
 }
