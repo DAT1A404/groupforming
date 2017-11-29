@@ -43,10 +43,10 @@ int main(void) {
 #endif
 #if GENSETUP
     grps = genetic_setup();
-#endif
-    /*
+    
     print_all_groups(grps, _GroupCount);
-    */
+#endif
+    
     free(_AllPersons);
     free(_Criteria);
 

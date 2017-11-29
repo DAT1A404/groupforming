@@ -34,7 +34,7 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         qsort(*population, popsize, sizeof(person**), genetic_q_compare);
         
         /* Show how the algorithm is doing */
-        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);
+        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen + 1, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);
         
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
@@ -64,9 +64,12 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         nextGeneration = temp;
     }
     
-    /* Sort according to fitness, then make the BEST chromosome to groups */
-    qsort(population, popsize, sizeof(person**), genetic_q_compare);
+    /* Sort according to fitness, then make the BEST chromosome into groups */
+    printf("A\n");
+    qsort(*population, popsize, sizeof(person**), genetic_q_compare);
+    printf("B\n");
     result = genetic_chromosome_to_groups(population[0]);
+    printf("C\n");
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
