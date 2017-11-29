@@ -34,7 +34,8 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         qsort(*population, popsize, sizeof(person**), genetic_q_compare);
         
         /* Show how the algorithm is doing */
-        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n", gen + 1, genetic_average_fitness(population, popsize), population[0], population[popsize - 1]);
+        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n",
+            gen + 1, genetic_average_fitness(population, popsize), fitness_chromosome(population[0]), fitness_chromosome(population[popsize - 1]));
         
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
@@ -65,11 +66,8 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     }
     
     /* Sort according to fitness, then make the BEST chromosome into groups */
-    printf("A\n");
     qsort(*population, popsize, sizeof(person**), genetic_q_compare);
-    printf("B\n");
     result = genetic_chromosome_to_groups(population[0]);
-    printf("C\n");
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
@@ -162,13 +160,13 @@ double fitness_groups(group *groups) {
     int i;
     /* Calls the fitness_group function as many times as the number of groups */
     for (i = 0; i < _GroupCount; i++) {
-        result += fitness_group(groups[i]);
+        result += fitness_group(groups + i);
     }
     return result;
 }
 
 /* Returns the total fitness of a single group */
-double fitness_group(group g) {
+double fitness_group(group *g) {
     double result = 0, average, criteriaMin, criteriaMax, t;
     int i, j;
     
@@ -176,12 +174,12 @@ double fitness_group(group g) {
     for (i = 0; i < _CriteriaCount; i++) {
         
         /*Finds the average value of specific criteria */
-        average = average_criteria(&g, i);
+        average = average_criteria(g, i);
         
         /*Finds min and max values of specific criteria in group */
-        for (j = 0; j < g.memberCount; j++) {
+        for (j = 0; j < g->memberCount; j++) {
 
-            double a = g.members[j].criteria[i];
+            double a = g->members[j].criteria[i];
             
             /* If min/max is not set yet, set them to a */
             if (j == 0) {
@@ -203,7 +201,7 @@ double fitness_group(group g) {
     }
     
     /* Save fitness in the group struct */
-    g.fitnessValue = result;
+    g->fitnessValue = result;
     
     return result;
 }

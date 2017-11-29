@@ -8,7 +8,7 @@ double genetic_average_fitness(person ***population, int popsize);
 int genetic_q_compare(const void * i, const void * j);
 double fitness_chromosome(person **a);
 double fitness_groups(group *g);
-double fitness_group(group g);
+double fitness_group(group *g);
 double average_criteria(group *g, int i);
 double fitness_of_criteria(double t, double weight);
 void genetic_selection(person ***population, int popsize, person ***par1, person ***par2);

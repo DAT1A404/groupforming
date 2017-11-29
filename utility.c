@@ -25,6 +25,7 @@ double clamp(double v, double a, double b) {
 
 /* Returns value v as a time between a to b */
 double inverse_lerp(double a, double b, double v) {
+    if (a == b) return a;
     return (v - a) / (b - a);
 }
 
