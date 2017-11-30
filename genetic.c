@@ -68,6 +68,8 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     /* Sort according to fitness, then make the BEST chromosome into groups */
     qsort(population, popsize, sizeof(person**), genetic_q_compare);
     result = genetic_chromosome_to_groups(population[0]);
+    
+    fitness_groups(result);
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
