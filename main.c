@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -13,6 +14,7 @@
 #include "visual.h"
 /* #include "export.h" */
 #include "utility.h"
+#include "ctest.h"
 
 #define POSTREADPRINT 0
 #define GENETIC_SETUP_DIALOG 1
@@ -33,9 +35,12 @@
 
 group* genetic_setup();
 
-int main(void) {
+int main(int argc, char *argv[]) {
 
     group *grps;
+    int debug = 0;
+    
+    if (argc >= 2 && strequal(argv[1], "--test")) debug = 1;
 
     srand(time(NULL));
 
@@ -46,8 +51,10 @@ int main(void) {
 #endif
     
 #if GENETIC_SETUP_DIALOG
-    grps = genetic_setup();
-    print_all_groups(grps, _GroupCount);
+    grps = genetic_setup(debug);
+    if (!debug) {
+        print_all_groups(grps, _GroupCount);
+    }
 #endif
     
     free(_AllPersons);
@@ -57,7 +64,7 @@ int main(void) {
 }
 
 /* Initializing genetic variables before running the algorithm */
-group* genetic_setup() {
+group* genetic_setup(int debug) {
 
     group *grps;
     int groups = GROUP_STD;
@@ -105,12 +112,16 @@ group* genetic_setup() {
 
     _GroupCount = groups;
 
-    /* Run algorithm */
-    printf("Running algorithm...\n");
+    if (debug) {
+        run_tests();
+    } else {
+        /* Run algorithm */
+        printf("Running algorithm...\n");
 #if DO_GENETIC_ALGORITHM
-    grps = genetic_algorithm(popsize, generations, mutationrate);
-    printf("Complete!\n\n\n");
+        grps = genetic_algorithm(popsize, generations, mutationrate);
+        printf("Complete!\n\n\n");
 #endif
+    }
 
     return grps;
 }

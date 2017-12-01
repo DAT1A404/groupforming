@@ -140,8 +140,14 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 int genetic_q_compare(const void * i, const void * j) {
     person ***a = (person***)i;
     person ***b = (person***)j;
-
-    return fitness_chromosome(*b) - fitness_chromosome(*a);
+    
+    double fa = fitness_chromosome(*a);
+    double fb = fitness_chromosome(*b);
+    
+    if (fa > fb) return -1;
+    if (fb > fa) return 1;
+    return 0;
+    /* return fitness_chromosome(*b) - fitness_chromosome(*a); */
 }
 
 /* Returns the fitness of a chromosome */
