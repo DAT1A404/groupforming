@@ -3,15 +3,18 @@
 
 #define READPRINT 0 /*Debug variable decides if importent info is printet*/
 
+#define MAX 40
+
 void read_data() {
     
     int lineCount; /* Variablen lineCount is used to know how many lines there is in the file*/
+	
 	/*Open file and create a pointer to it*/
-    FILE *fp;
+    FILE *fp = filename_input();
     
 	/* fp = fopen("datafile.txt", "r"); */
-	filename_input(fp);
-	/*Might not be neded*/ /*assert(fp != NULL); /*assert tells the user that something is wrong, in this case if the file cant be opened*/
+	
+	/*Might not be neded*/ /*assert(fp != NULL); assert tells the user that something is wrong, in this case if the file cant be opened*/
 
     /* Count lines */
     count_lines_and_data(fp, &lineCount, &_CriteriaCount, &_PersonCount);
@@ -34,7 +37,8 @@ void read_data() {
 }
 
 /* Ask user for file name */
-void filename_input(FILE *fp) {
+FILE* filename_input() {
+	FILE *fp;
     char filename[MAX];
 
     do {
@@ -57,6 +61,7 @@ void filename_input(FILE *fp) {
 		else printf("Succes ! :D \n");
     } while (fp == NULL); /*???*/
 	
+	return fp;
 }
 
 /* Count lines and store in lineCount. Count criteria and store in criteriaCount. Count person's and store in personCount. */
