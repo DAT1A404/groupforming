@@ -67,7 +67,7 @@ void print_chromosome(person **chromosome) {
 /* Prints details about a generation */
 void print_generation(int gen, person ***population, int popsize) {
     
-    /* Keeps track of last printed avg */
+    /* Keeps track of last printed */
     static double prevAgv = 0;
     static double prevBest = 0;
     static double prevWorst = 0;

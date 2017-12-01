@@ -12,7 +12,6 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     int gen;
     group *result;
-    double prevAvg = 0;
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
