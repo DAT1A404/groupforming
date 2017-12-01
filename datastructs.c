@@ -5,14 +5,20 @@
 typedef struct {
     char name[40];
     int personID;
-    double criteria[10];
+    double criteria[20];
 } person;
 
 typedef struct {
-    person members[8];
+    person members[20];
+    int memberCount;
     int groupNumber;
     double fitnessValue;
 } group;
+
+typedef struct {
+    char name[40];
+    double weight;
+} criteria;
 
 typedef enum {
     seePerson,
@@ -31,6 +37,8 @@ typedef enum {
 /* ================ */
 /* Global variables */
 /* ================ */
-person **_AllPersons;
+person *_AllPersons;
 int _PersonCount;
 int _GroupCount;
+criteria *_Criteria;
+int _CriteriaCount;

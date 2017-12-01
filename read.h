@@ -1,8 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define LINE_MAX_SIZE 50
 
-int count_lines(FILE * file_pointer);
-void input_buffer(char *buffer, FILE * file_pointer);
-int check_line(char *buffer, char Hashtag, char Quotation, char Dollar, int *xp);
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
+#define LINE_MAX_LEN 200
+
+void read_data();
+void count_lines_and_data(FILE *fp, int *lineCount, int *criteriaCount, int *personCount);
+void extract_data(FILE *fp, person *persons, int personCount, criteria *criterias, int criteriaCount);
+void extract_criteria(char *str, criteria *entry);
+void extract_person(char *str, person *entry, int criCount);
