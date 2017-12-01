@@ -12,7 +12,7 @@ void set_color(int ForgC, int BackC)
 
 /* Reset terminals printing colors */
 void reset_color() {
-  set_color(WHITE, BLACK);
+  set_color(LIGHTGRAY, BLACK);
 }
 #endif
 

@@ -8,8 +8,16 @@
 #define BLUE            1
 #define GREEN           2
 #define CYAN            3
-#define RED             12
+#define RED             4
 #define MAGENTA         5
+#define BROWN           6
+#define LIGHTGRAY       7
+#define DARKGRAY        8
+#define LIGHTBLUE       9
+#define LIGHTGREEN      10
+#define LIGHTCYAN       11
+#define LIGHTRED        12
+#define LIGHTMAGENTA    13
 #define YELLOW          14
 #define WHITE           15
 #endif
@@ -17,12 +25,20 @@
 #ifdef linux
 /* Color ANSI escape sequences */
 #define BLACK           "\x1b[30m"
-#define RED             "\x1b[31m"
-#define GREEN           "\x1b[32m"
-#define YELLOW          "\x1b[33m"
 #define BLUE            "\x1b[34m"
-#define MAGENTA         "\x1b[35m"
+#define GREEN           "\x1b[32m"
 #define CYAN            "\x1b[36m"
+#define RED             "\x1b[31m"
+#define MAGENTA         "\x1b[35m"
+#define BROWN           "\x1b[31m" /* RED fallback */
+#define LIGHTGRAY       "\x1b[37m" /* WHITE fallback */
+#define DARKGRAY        "\x1b[37m" /* WHITE fallback */
+#define LIGHTBLUE       "\x1b[34m" /* BLUE fallback */
+#define LIGHTGREEN      "\x1b[32m" /* GREEN fallback */
+#define LIGHTCYAN       "\x1b[36m" /* CYAN fallback */
+#define LIGHTRED        "\x1b[31m" /* RED fallback */
+#define LIGHTMAGENTA    "\x1b[35m" /* MAGENTA fallback */
+#define YELLOW          "\x1b[33m"
 #define WHITE           "\x1b[37m"
 #define RESET           "\x1b[0m"
 #endif
