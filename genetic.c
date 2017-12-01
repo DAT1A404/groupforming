@@ -32,9 +32,6 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
-        for (i = 0; i < popsize; i++) {
-            printf("fitness o' chromo %d: %lf\n", i, fitness_chromosome(population[i]));
-        }
         
         /* Show how the algorithm is doing */
         printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n",
