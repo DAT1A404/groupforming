@@ -8,16 +8,8 @@
 #define BLUE            1
 #define GREEN           2
 #define CYAN            3
-#define RED             4
+#define RED             12
 #define MAGENTA         5
-#define BROWN           6
-#define LIGHTGRAY       7
-#define DARKGRAY        8
-#define LIGHTBLUE       9
-#define LIGHTGREEN      10
-#define LIGHTCYAN       11
-#define LIGHTRED        12
-#define LIGHTMAGENTA    13
 #define YELLOW          14
 #define WHITE           15
 #endif
@@ -35,6 +27,10 @@
 #define RESET           "\x1b[0m"
 #endif
 
+#define COLOR_INFO BLUE
+#define COLOR_WARN YELLOW
+#define COLOR_ERROR RED
+
 #ifdef _WIN32
 void set_color(int ForgC, int BackC);
 #endif
@@ -47,3 +43,4 @@ void print_all_groups(group *groups, int groupCount);
 void print_group(group *g);
 void print_all_persons(person *all, int count);
 void print_chromosome(person **chromosome);
+void print_generation(int gen, person ***population, int popsize);
