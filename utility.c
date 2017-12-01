@@ -1,4 +1,3 @@
-#include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include "utility.h"
@@ -22,8 +21,8 @@ double _max(double a, double b) {
 
 /* Clamps value v so it is between a and b */
 double clamp(double v, double a, double b) {
-    double low = min(a, b), high = max(a, b);
-    return min(max(low, v), high);
+    double low = _min(a, b), high = _max(a, b);
+    return _min(_max(low, v), high);
 }
 
 /* Returns value v as a time between a to b */
@@ -35,7 +34,6 @@ double inverse_lerp(double a, double b, double v) {
 /* Clears the terminal */
 void clear_screen() {
 #if CLEARSCREENALLOWED
-    system("@cls||clear");
     printf("\033c");
 #endif
 }
@@ -44,3 +42,4 @@ void clear_screen() {
 int strequal(const char * a, const char * b) {
     return strcmp(a, b) == 0;
 }
+

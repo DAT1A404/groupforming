@@ -1,22 +1,31 @@
 #include "datastructs.c"
+#include "genetic.h"
 #include "visual.h"
 
-/* Set the terminals printing colors. Remember to reset */
+/* Set the terminals printing colors for Windows-platform. Remember to reset */
 #ifdef _WIN32
 void set_color(int ForgC, int BackC)
 {
     WORD wColor = ((BackC & 0x0F) << 4) + (ForgC & 0x0F);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);
 }
-#endif
 
-#ifdef linux
-void set_textcolor() {}
-#endif
 /* Reset terminals printing colors */
 void reset_color() {
-    set_color(LIGHTGRAY, BLACK);
+  set_color(WHITE, BLACK);
 }
+#endif
+
+/* Set the terminal printing colors for Linux-platform. Remember to reset */
+#ifdef linux
+void set_color(char *ForgC, char *BackC) {
+  printf(ForgC);
+}
+
+void reset_color() {
+  printf(RESET);
+}
+#endif
 
 /* Prints all groups */
 void print_all_groups(group *groups, int groupCount) {
@@ -53,4 +62,49 @@ void print_chromosome(person **chromosome) {
     for (i = 0; i < _PersonCount; i++) {
         printf("chromo person: %s\n", chromosome[i]->name);
     }
+}
+
+/* Prints details about a generation */
+void print_generation(int gen, person ***population, int popsize) {
+    
+    /* Keeps track of last printed */
+    static double prevAgv = 0;
+    static double prevBest = 0;
+    static double prevWorst = 0;
+    
+    double avg = genetic_average_fitness(population, popsize);
+    double best = fitness_chromosome(population[0]);
+    double worst = fitness_chromosome(population[popsize - 1]);
+    
+    /* Print status of generation */
+    printf("GA generation %04d fitness|:\t", gen);
+    
+    /* Set color for avg and print */
+    if (avg >= prevAgv)
+        set_color(GREEN, BLACK);
+    else
+        set_color(RED, BLACK);
+    printf("avg: %.2lf\t", avg);
+
+    /* Set color for best and print */
+    if (best >= prevBest)
+        set_color(GREEN, BLACK);
+    else
+        set_color(RED, BLACK);
+    printf("best: %.2lf\t", best);
+
+    /* Set color for avg and print */
+    if (worst >= prevWorst)
+        set_color(GREEN, BLACK);
+    else
+        set_color(RED, BLACK);
+    printf("worst: %.2lf\n", worst);
+
+    /* Reset color */
+    reset_color();
+    
+    /* Save this average as prev average */
+    prevAgv = avg;
+    prevBest = best;
+    prevWorst = worst;
 }
