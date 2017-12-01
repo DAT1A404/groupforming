@@ -34,6 +34,7 @@
 #define MUTATION_RATE_MAX 1
 
 group* genetic_setup();
+void print_setup_settings(int groups, int popsize, int generations, float mutationrate);
 
 int main(int argc, char *argv[]) {
 
@@ -80,11 +81,12 @@ group* genetic_setup(int debug) {
         clear_screen();
 
         /* Show current settings */
-        printf("== Current settings for genetic algorithm:\n(a) Number of groups: %d (%.1f in each)\n(b) Population size: %d\n(c) Generations: %d\n(d) Mutation rate: %.3f\n",
-            groups, _PersonCount / (float)groups,  popsize, generations, mutationrate);
+        print_setup_settings(groups, popsize, generations, mutationrate);
 
         /* Instruct how to change */
+        set_color(COLOR_INFO, BLACK);
         printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
+        reset_color();
         scanf(" %c", &option);
 
         /* Continue if option = x. Abort if option = q */
@@ -125,4 +127,46 @@ group* genetic_setup(int debug) {
     }
 
     return grps;
+}
+
+/* Prints the users options nicely formatted */
+void print_setup_settings(int groups, int popsize, int generations, float mutationrate) {
+    
+    /* Header */
+    set_color(LIGHTGREEN, BLACK);
+    printf("== Current settings for genetic algorithm:\n");
+    
+    /* print group count setting */
+    set_color(YELLOW, BLACK);
+    printf("(a)");
+    reset_color();
+    printf(" Number of groups: ");
+    set_color(LIGHTMAGENTA, BLACK);
+    printf("%d (%.1f in each)\n", groups, _PersonCount / (float)groups);
+    
+    /* print population size setting */
+    set_color(YELLOW, BLACK);
+    printf("(b)");
+    reset_color();
+    printf(" Population size: ");
+    set_color(LIGHTMAGENTA, BLACK);
+    printf("%d\n", popsize);
+    
+    /* print generation count setting */
+    set_color(YELLOW, BLACK);
+    printf("(c)");
+    reset_color();
+    printf(" Generations: ");
+    set_color(LIGHTMAGENTA, BLACK);
+    printf("%d\n", generations);
+    
+    /* print mutation rate setting */
+    set_color(YELLOW, BLACK);
+    printf("(d)");
+    reset_color();
+    printf(" Mutation rate: ");
+    set_color(LIGHTMAGENTA, BLACK);
+    printf("%.3f\n", mutationrate);
+    
+    reset_color();
 }

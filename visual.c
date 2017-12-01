@@ -12,7 +12,7 @@ void set_color(int ForgC, int BackC)
 
 /* Reset terminals printing colors */
 void reset_color() {
-  set_color(WHITE, BLACK);
+  set_color(LIGHTGRAY, BLACK);
 }
 #endif
 
@@ -77,27 +77,29 @@ void print_generation(int gen, person ***population, int popsize) {
     double worst = fitness_chromosome(population[popsize - 1]);
     
     /* Print status of generation */
-    printf("GA generation %04d fitness|:\t", gen);
+    printf("GA generation ");
+    set_color(CYAN, BLACK); printf("%04d", gen);
+    reset_color(); printf(" fitness:\t");
     
     /* Set color for avg and print */
     if (avg >= prevAgv)
-        set_color(GREEN, BLACK);
+        set_color(LIGHTGREEN, BLACK);
     else
-        set_color(RED, BLACK);
+        set_color(LIGHTRED, BLACK);
     printf("avg: %.2lf\t", avg);
 
     /* Set color for best and print */
     if (best >= prevBest)
-        set_color(GREEN, BLACK);
+        set_color(LIGHTGREEN, BLACK);
     else
-        set_color(RED, BLACK);
+        set_color(LIGHTRED, BLACK);
     printf("best: %.2lf\t", best);
 
     /* Set color for avg and print */
     if (worst >= prevWorst)
-        set_color(GREEN, BLACK);
+        set_color(LIGHTGREEN, BLACK);
     else
-        set_color(RED, BLACK);
+        set_color(LIGHTRED, BLACK);
     printf("worst: %.2lf\n", worst);
 
     /* Reset color */
