@@ -17,7 +17,7 @@ void reset_color() {
 #endif
 
 /* Set the terminal printing colors for Linux-platform. Remember to reset */
-#ifdef linux
+#ifdef __unix__
 void set_color(char *ForgC, char *BackC) {
   printf(ForgC);
 }
@@ -66,16 +66,16 @@ void print_chromosome(person **chromosome) {
 
 /* Prints details about a generation */
 void print_generation(int gen, person ***population, int popsize) {
-    
+
     /* Keeps track of last printed */
-    static double prevAgv = 0;
+    static double prevAvg = 0;
     static double prevBest = 0;
     static double prevWorst = 0;
-    
+
     double avg = genetic_average_fitness(population, popsize);
     double best = fitness_chromosome(population[0]);
     double worst = fitness_chromosome(population[popsize - 1]);
-    
+
     /* Print status of generation */
     printf("GA generation ");
     set_color(CYAN, BLACK); printf("%04d", gen);
@@ -104,9 +104,9 @@ void print_generation(int gen, person ***population, int popsize) {
 
     /* Reset color */
     reset_color();
-    
+
     /* Save this average as prev average */
-    prevAgv = avg;
+    prevAvg = avg;
     prevBest = best;
     prevWorst = worst;
 }
