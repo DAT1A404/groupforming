@@ -43,9 +43,9 @@
 #define RESET           "\x1b[0m"
 #endif
 
-#define COLOR_INFO BLUE
+#define COLOR_INFO LIGHTCYAN
 #define COLOR_WARN YELLOW
-#define COLOR_ERROR RED
+#define COLOR_ERROR LIGHTRED
 
 #ifdef _WIN32
 void set_color(int ForgC, int BackC);
