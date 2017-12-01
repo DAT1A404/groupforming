@@ -80,9 +80,9 @@ void print_generation(int gen, person ***population, int popsize) {
     printf("GA generation ");
     set_color(CYAN, BLACK); printf("%04d", gen);
     reset_color(); printf(" fitness:\t");
-    
+
     /* Set color for avg and print */
-    if (avg >= prevAgv)
+    if (avg >= prevAvg)
         set_color(LIGHTGREEN, BLACK);
     else
         set_color(LIGHTRED, BLACK);
