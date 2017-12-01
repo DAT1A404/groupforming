@@ -25,6 +25,19 @@
 #include "utility.h"
 #endif
 
+#define GROUP_STD (_PersonCount / 6.)
+#define GROUP_MIN 2
+#define GROUP_MAX (_PersonCount / 2.)
+#define POPSIZE_STD 50
+#define POPSIZE_MIN 10
+#define POPSIZE_MAX 500
+#define GENERATIONS_STD 200
+#define GENERATIONS_MIN 1
+#define GENERATIONS_MAX 10000
+#define MUTATION_RATE_STD 0.04f
+#define MUTATION_RATE_MIN 0
+#define MUTATION_RATE_MAX 1
+
 void clear_screen() {
     system("@cls||clear");
 }
@@ -42,10 +55,10 @@ int main(void) {
 /* Initializing genetic variables before running the algorithm */
 int genetic_setup() {
     
-    int groups = 10;
-    int popsize = 50;
-    int generations = 200;
-    float mutationrate = 0.04f;
+    int groups = GROUP_STD;
+    int popsize = POPSIZE_STD;
+    int generations = GENERATIONS_STD;
+    float mutationrate = MUTATION_RATE_STD;
 
     do {
         float newValue = 0;
@@ -61,7 +74,7 @@ int genetic_setup() {
         printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
         scanf(" %c", &option);
         
-        /* Continue if option = 0 */
+        /* Continue if option = x. Abort if option = q */
         if (option == 'x') break;
         if (option == 'q') return -1;
         
@@ -74,10 +87,10 @@ int genetic_setup() {
             
             /* Save new value */
             switch (option) {
-                case 'a': groups = (int)newValue; break;
-                case 'b': popsize = (int)newValue; break;
-                case 'c': generations = (int)newValue; break;
-                case 'd': mutationrate = newValue; break;
+                case 'a': groups = (int)clamp(newValue, GROUP_MIN, GROUP_MAX); break;
+                case 'b': popsize = (int)clamp(newValue, POPSIZE_MIN, POPSIZE_MAX); break;
+                case 'c': generations = (int)clamp(newValue, GENERATIONS_MIN, GENERATIONS_MAX); break;
+                case 'd': mutationrate = clamp(newValue, MUTATION_RATE_MIN, MUTATION_RATE_MAX); break;
             }
         }
         
