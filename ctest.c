@@ -3,6 +3,7 @@
 #include "visual.h"
 #include "ctest.h"
 
+/* Runs all test */
 void run_tests() {
     
     person **chromosome;
@@ -22,6 +23,7 @@ void run_tests() {
     printf("Test complete!\n");
 }
 
+/* Test fitness functions */
 void test_fitness(person** chromosome) {
     
     int i;

@@ -1,6 +1,6 @@
 #makefile
 
-CFLAGS = -Wall -ansi
+CFLAGS = -Wall -ansi -lm
 
 program.exe: read.o utility.o genetic.o visual.o datastructs.o ctest.o main.c
 	gcc $(CFLAGS) -o program read.o utility.o genetic.o visual.o datastructs.o ctest.o main.c
