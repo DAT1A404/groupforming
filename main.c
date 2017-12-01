@@ -23,13 +23,13 @@
 #define GROUP_STD (_PersonCount / 6.)
 #define GROUP_MIN 2
 #define GROUP_MAX (_PersonCount / 2.)
-#define POPSIZE_STD 50
+#define POPSIZE_STD 60
 #define POPSIZE_MIN 10
 #define POPSIZE_MAX 500
-#define GENERATIONS_STD 200
+#define GENERATIONS_STD 400
 #define GENERATIONS_MIN 1
 #define GENERATIONS_MAX 10000
-#define MUTATION_RATE_STD 0.04f
+#define MUTATION_RATE_STD 0.05f
 #define MUTATION_RATE_MIN 0
 #define MUTATION_RATE_MAX 1
 
