@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "utility.h"
 
 #define CLEARSCREENALLOWED 1
@@ -36,3 +37,9 @@ void clear_screen() {
     printf("\033c");
 #endif
 }
+
+/* Compare if strings are equal */
+int strequal(const char * a, const char * b) {
+    return strcmp(a, b) == 0;
+}
+
