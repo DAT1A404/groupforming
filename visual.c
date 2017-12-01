@@ -1,22 +1,30 @@
 #include "datastructs.c"
 #include "visual.h"
 
-/* Set the terminals printing colors. Remember to reset */
+/* Set the terminals printing colors for Windows-platform. Remember to reset */
 #ifdef _WIN32
 void set_color(int ForgC, int BackC)
 {
     WORD wColor = ((BackC & 0x0F) << 4) + (ForgC & 0x0F);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);
 }
-#endif
 
-#ifdef linux
-void set_textcolor() {}
-#endif
 /* Reset terminals printing colors */
 void reset_color() {
-    set_color(LIGHTGRAY, BLACK);
+  set_color(LIGHTGRAY, BLACK);
 }
+#endif
+
+/* Set the terminal printing colors for Linux-platform. Remember to reset */
+#ifdef linux
+void set_color(char *ForgC, char *BackC) {
+  printf(ForgC);
+}
+
+void reset_color() {
+  printf(RESET);
+}
+#endif
 
 /* Prints all groups */
 void print_all_groups(group *groups, int groupCount) {

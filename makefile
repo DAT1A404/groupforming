@@ -2,7 +2,7 @@
 
 CFLAGS = -Wall -ansi -lm
 
-program.exe: read.o utility.o genetic.o visual.o datastructs.o main.c
+program: read.o utility.o genetic.o visual.o datastructs.o main.c
 	gcc $(CFLAGS) -o program read.o utility.o genetic.o visual.o datastructs.o main.c
 
 read.o: read.c read.h datastructs.c
