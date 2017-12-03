@@ -1,11 +1,17 @@
+#include "datastructs.c"
+#include "utility.h"
+#include "genetic.h"
+#include "visual.h"
+
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
-    - murationrate  : how likely a mutations is to happen. Between [0..1]
+    - mutationrate  : how likely a mutations is to happen. Between [0..1]
 */
-void genetic_algorithm(int popsize, int generations, float mutationrate) {
+group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     int gen;
+    group *result;
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
@@ -14,34 +20,40 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
     
     /* Similarly, allocate memory to generate a new population */
     person ***nextGeneration = genetic_get_memory_for_pop(popsize);
+    
+    printf("Population initialized...\n");
 
     for (gen = 0; gen < generations; gen++) {
         int i;
         person ***temp;
+        printf("#");
 
         /* Algorithm ... */
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
-
+                
+        /* Show how the algorithm is doing */
+        print_generation(gen + 1, population, popsize);
+        
         /* Create new population */
         for (i = 0; i < popsize; i += 2) {
-
+            
             person **par1, **par2, **chi1, **chi2;
-
-            /* Selection */
+            
+            /* Make child pointers point to the next positions in nextGeneration */
+            chi1 = nextGeneration[i];
+            chi2 = nextGeneration[i + 1];
+            
+            /* Selection. Make par1 and par2 point to two chromosomes */
             genetic_selection(population, popsize, &par1, &par2);
             
-            /* Crossover */
+            /* Crossover. Merge par1 and par2 into two children */
             genetic_crossover(par1, par2, chi1, chi2);
             
             /* Mutation */
-            genetic_mutation(chi1, murationrate);
-            genetic_mutation(chi2, murationrate);
-            
-            /* Add children to next generation */
-            nextGeneration[i] = chi1;
-            nextGeneration[i + 1] = chi2;
+            genetic_mutation(chi1, mutationrate);
+            genetic_mutation(chi2, mutationrate);
             
             /* TODO: Currently we assume popsize is an even number! */
         }
@@ -51,6 +63,12 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
         population = nextGeneration;
         nextGeneration = temp;
     }
+    
+    /* Sort according to fitness, then make the BEST chromosome into groups */
+    qsort(population, popsize, sizeof(person**), genetic_q_compare);
+    result = genetic_chromosome_to_groups(population[0]);
+    
+    fitness_groups(result);
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
@@ -58,39 +76,168 @@ void genetic_algorithm(int popsize, int generations, float mutationrate) {
     free(*nextGeneration);
     free(nextGeneration);
     
-    /* TODO: Return the best chromosome? */
+    /* Return an array with groups */
+    return result;
+}
+
+/* Returns the average fitness of the population of chromosomes */
+double genetic_average_fitness(person ***population, int popsize) {
+    int i;
+    double total = 0;
+    for (i = 0; i < popsize; i++) {
+        total += fitness_chromosome(population[i]);
+    }
+    return total / popsize;
+}
+
+/* This function takes a chromosome from the genetic algorithm and splits
+    it into groups. It returns an array to the formed groups. Remember to free */
+group* genetic_chromosome_to_groups(person **chromosome) {
+    
+    int i, j, currentPerson;
+
+    /* personPerGroup is the minimum size of each group. leftoverPerons
+        is the amount of groups, which have an extra member */
+    int personPerGroup = _PersonCount / _GroupCount;
+    int leftoverPersons = _PersonCount % personPerGroup;
+
+    /* Allocate memory */
+    group *groups = (group*)malloc(_GroupCount * sizeof(group));
+    
+    currentPerson = 0;
+    for (i = 0; i < _GroupCount; i++) {
+        /* TODO: Optimize group memory use. Allocate memory to groups
+            members instead of fixed length which it currently is */
+        
+        /* Setup some data about the group */
+        groups[i].groupNumber = i;
+        groups[i].fitnessValue = -1;
+
+        /* Add persons to group */
+        for (j = 0; j < personPerGroup; j++) {
+            groups[i].members[j] = **(chromosome + currentPerson);
+            currentPerson++;
+        }
+        
+        /* Add another person if i < leftoverPersons.
+            Now that we know the size of the group let's set
+            the memberCount variable in the group struct */
+        if (i < leftoverPersons) {
+            groups[i].members[j] = *(chromosome[currentPerson]);
+            currentPerson++;
+
+            groups[i].memberCount = personPerGroup + 1;
+        } else {
+            groups[i].memberCount = personPerGroup;
+        }
+    }
+
+    return groups;
 }
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
 int genetic_q_compare(const void * i, const void * j) {
-    person **a = (person**)i;
-    person **b = (person**)j;
-
-    return fitness_chromosome(b) - fitness_chromosome(a);
+    person ***a = (person***)i;
+    person ***b = (person***)j;
+    
+    double fa = fitness_chromosome(*a);
+    double fb = fitness_chromosome(*b);
+    
+    if (fa > fb) return -1;
+    if (fb > fa) return 1;
+    return 0;
+    /* return fitness_chromosome(*b) - fitness_chromosome(*a); */
 }
 
 /* Returns the fitness of a chromosome */
-double fitness_chromosome(person **a) {
+double fitness_chromosome(person **chromosome) {
     
-    /* TODO */
-    return 0;
+    /* Split chromosome into groups, then calculate fitness */
+    group *groups = genetic_chromosome_to_groups(chromosome);
+    double fitness = fitness_groups(groups);
+    
+    free (groups);
+    
+    return fitness;
 }
 
-/* Returns the fitness of a single group */
+/* Returns the total fitness of all groups */
+double fitness_groups(group *groups) {
+    double result = 0;
+    int i;
+    /* Calls the fitness_group function as many times as the number of groups */
+    for (i = 0; i < _GroupCount; i++) {
+        result += fitness_group(groups + i);
+    }
+    return result;
+}
+
+/* Returns the total fitness of a single group */
 double fitness_group(group *g) {
+    double result = 0, average, criteriaMin, criteriaMax, t;
+    int i, j;
     
-    /* TODO */
-    return 0;
+    /* Goes through all criteria */
+    for (i = 0; i < _CriteriaCount; i++) {
+        
+        /*Finds the average value of specific criteria */
+        average = average_criteria(g, i);
+        
+        /*Finds min and max values of specific criteria in group */
+        for (j = 0; j < g->memberCount; j++) {
+
+            double a = g->members[j].criteria[i];
+            
+            /* If min/max is not set yet, set them to a */
+            if (j == 0) {
+                criteriaMin = a;
+                criteriaMax = a;
+            } else {
+                
+                /* Calls min/max function and finds min/max */
+                criteriaMin = _min(criteriaMin, a);
+                criteriaMax = _max(criteriaMax, a);
+            }
+        }
+        
+        /* t is the average compared to min and max */
+        t = inverse_lerp(criteriaMin, criteriaMax, average);
+        
+        /* Adds the fitness of the specific criteria in the single group to result */
+        result += fitness_of_criteria(t, _Criteria[i].weight);
+    }
+    
+    /* Save fitness in the group struct */
+    g->fitnessValue = result;
+    
+    return result;
+}
+
+/* Returns fitness of specific criteria */
+double fitness_of_criteria(double t, double weight) {
+    return (-4 * weight * pow(t, 2)) + (4 * weight * t) ;
+}
+
+/* Finds average of one criteria */
+double average_criteria(group *g, int i) {
+    double result = 0;
+    int j;
+    
+    /* Find sum of group's criteria */
+    for (j = 0; j < g->memberCount; j++) {
+        result += g->members[j].criteria[i];
+    }
+    return result / g->memberCount; 
 }
 
 /* Selects two random parents from the upper half of population */
-void genetic_selection(person ***population, int popsize, person **par1, person **par2) {
+void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
 
     int a = rand() % (popsize / 2);
     int b = rand() % (popsize / 2);
 
-    par1 = population[a];
-    par2 = population[b];
+    *par1 = population[a];
+    *par2 = population[b];
 }
 
 /* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */
@@ -107,17 +254,16 @@ void genetic_crossover(person **par1, person **par2, person **child1, person **c
     /* Do cycle */
     i = 0;
     do {
-        int indexInPar2, j;
-        person* p = par1[i]
+        int indexInPar2;
         
         /* Mark index i */
         bitstring[i] = 1;
         
-        /* Find index j of element par1[i] in par2 */
-        for (j = 0; j < _PersonCount; j++) {
+        /* Find index of element par1[i] in par2 */
+        for (indexInPar2 = 0; indexInPar2 < _PersonCount; indexInPar2++) {
             if (par1[i] == par2[indexInPar2]) {
-                /* Set index i to j */
-                i = j;
+                /* Set index i to indexInPar2 */
+                i = indexInPar2;
                 break;
             }
         }
@@ -153,9 +299,9 @@ void genetic_mutation(person **child, float mutationrate) {
     
     /* Small chance of mutation */
     float rn = (rand() % 1000) / 1000.;
-    if (rn <= murationrate) {
+    if (rn <= mutationrate) {
         
-        person **temp;
+        person *temp;
         
         /* Find two random indexes */
         int i = 0, j = 0;
@@ -176,8 +322,8 @@ person*** genetic_get_memory_for_pop(int popsize) {
 
     /* Create an array of pointers to persons,
         AND an array of pointers to parts of that other array */
-    person *chromosomes = (person*)malloc(_PersonCount * popsize * sizeof(person));
-    person **population = (person**)malloc(popsize * sizeof(person*));
+    person **chromosomes = (person**)malloc(_PersonCount * popsize * sizeof(person*));
+    person ***population = (person***)malloc(popsize * sizeof(person**));
 
     for (i = 0; i < popsize; i++) {
         /* Setup populations pointers to the right spots.
@@ -205,15 +351,13 @@ person*** genetic_generate_initial_population(int popsize) {
 
 /* Put members randomly into the chromosome array */
 void genetic_generate_chromosome(person **chromosome) {
-
-    int i;
-
+    
     person *temp;
     int i, n;
 
     /* Fill chromosome with all persons systematically */
     for (i = 0; i < _PersonCount; i++) {
-        chromosome[i] = _AllPersons[i];
+        chromosome[i] = _AllPersons + i;
     }
 
     /* Do Fisher Yates-algorithm for shuffling array */
