@@ -7,6 +7,7 @@
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - mutationrate  : how likely a mutations is to happen. Between [0..1]
+    Returns a pointer to an array of groups
 */
 group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
@@ -15,7 +16,7 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
-        Also generates the some random chromosomes */
+        Also generates first generation of random chromosomes */
     person ***population = genetic_generate_initial_population(popsize);
     
     /* Similarly, allocate memory to generate a new population */
@@ -48,7 +49,7 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
             /* Crossover. Merge par1 and par2 into two children */
             genetic_crossover(par1, par2, chi1, chi2);
             
-            /* Mutation */
+            /* Mutation. A small chance to make a small change in the chromosomes */
             genetic_mutation(chi1, mutationrate);
             genetic_mutation(chi2, mutationrate);
         }
@@ -153,10 +154,10 @@ int genetic_q_compare(const void * i, const void * j) {
     double fa = fitness_chromosome(*a);
     double fb = fitness_chromosome(*b);
     
+    /* Return -1 if A is best, returns 1 if B is best */
     if (fa > fb) return -1;
     if (fb > fa) return 1;
     return 0;
-    /* return fitness_chromosome(*b) - fitness_chromosome(*a); */
 }
 
 /* Returns the fitness of a chromosome */
@@ -344,6 +345,8 @@ person*** genetic_get_memory_for_pop(int popsize) {
     return population;
 }
 
+/* Generates initial population by allocating memory and 
+    setting chromosomes to random permutations */
 person*** genetic_generate_initial_population(int popsize) {
 
     int i;
