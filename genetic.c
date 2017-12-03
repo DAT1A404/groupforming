@@ -31,8 +31,9 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
                 
-        /* Show how the algorithm is doing */
-        print_generation(gen + 1, population, popsize);
+        /* Show how the algorithm is doing every 10'th generation */
+        if (gen % 10 == 0)
+            print_generation(gen, population, popsize);
         
         /* Create new population */
         for (i = 0; i < popsize / 2; i++) {
