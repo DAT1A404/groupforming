@@ -12,12 +12,14 @@ void show_commands(group *grps) {
         
         /* Ask user about what they wanna do next */
         set_color(LIGHTGREEN, BLACK);
-        printf("What do you wanna do now?\n");
+        printf("What do you want to do now?\n");
         reset_color();
         
         /* Print options */
         printf("(a) Inspect final groups.\n");
-        printf("(b) Export groups.\n");
+        printf("(b) Debug final groups.\n");
+        printf("(c) Export groups clean.\n");
+        printf("(d) Export groups CSV.\n");
         printf("(q) Quit program.\n");
         
         /* Scan for input */
@@ -28,13 +30,18 @@ void show_commands(group *grps) {
         /* Switch over options */
         switch (option) {
             case 'a': print_all_groups(grps, _GroupCount); break;
-            case 'b':
-                set_color(COLOR_ERROR, BLACK);
-                printf("Not implemented yet :(\n");
-                reset_color();
-                break;
+            case 'b': print_not_implemented(); break;
+            case 'c': print_not_implemented(); break;
+            case 'd': print_not_implemented(); break;
             case 'q': return;
         }
         
     } while (1);
+}
+
+/* Prints an error message if options is not implemented yet */
+void print_not_implemented() {
+    set_color(COLOR_ERROR, BLACK);
+    printf("Not implemented yet :(\n");
+    reset_color();
 }
