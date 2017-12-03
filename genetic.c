@@ -26,9 +26,6 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     for (gen = 0; gen < generations; gen++) {
         int i;
         person ***temp;
-        printf("#");
-
-        /* Algorithm ... */
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
@@ -37,13 +34,13 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
         print_generation(gen + 1, population, popsize);
         
         /* Create new population */
-        for (i = 0; i < popsize; i += 2) {
+        for (i = 0; i < popsize / 2; i++) {
             
             person **par1, **par2, **chi1, **chi2;
             
             /* Make child pointers point to the next positions in nextGeneration */
-            chi1 = nextGeneration[i];
-            chi2 = nextGeneration[i + 1];
+            chi1 = nextGeneration[2 * i];
+            chi2 = nextGeneration[2 * i + 1];
             
             /* Selection. Make par1 and par2 point to two chromosomes */
             genetic_selection(population, popsize, &par1, &par2);
@@ -54,8 +51,12 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
             /* Mutation */
             genetic_mutation(chi1, mutationrate);
             genetic_mutation(chi2, mutationrate);
-            
-            /* TODO: Currently we assume popsize is an even number! */
+        }
+        
+        /* If popsize is odd, we have to add another chromosome. We just
+            copy the one with highest fitness */
+        if (popsize % 2 == 1) {
+            genetic_copy_chromosome(nextGeneration[popsize - 1], population[0]);
         }
         
         /* Set population to next generation, by swapping current and next */
@@ -68,16 +69,25 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     qsort(population, popsize, sizeof(person**), genetic_q_compare);
     result = genetic_chromosome_to_groups(population[0]);
     
+    /* Calc the fitness in the final groups */
     fitness_groups(result);
 
     free(*population); /* Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
     
-    free(*nextGeneration);
-    free(nextGeneration);
+    free(*nextGeneration); /* Pointer to the array of memberpointers */
+    free(nextGeneration); /* Pointer to the array of pointers, that points at array of memberpointers */
     
     /* Return an array with groups */
     return result;
+}
+
+/* Copy the content of one chromosome to another */
+void genetic_copy_chromosome(person **to, person **from) {
+    int i;
+    for (i = 0; i < _PersonCount; i++) {
+        to[i] = from[i];
+    }
 }
 
 /* Returns the average fitness of the population of chromosomes */
