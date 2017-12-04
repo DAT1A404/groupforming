@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#ifdef _WIN32 || _WIN64
+#ifdef _WIN32
 #include <windows.h>
 
 /* Color constants for Windows */
@@ -22,7 +22,7 @@
 #define WHITE           15
 #endif
 
-#ifdef __unix__ || __APPLE__
+#ifdef __unix__
 /* Color ANSI escape sequences */
 #define BLACK           "\x1b[30m"
 #define BLUE            "\x1b[34m"
@@ -47,10 +47,10 @@
 #define COLOR_WARN YELLOW
 #define COLOR_ERROR LIGHTRED
 
-#ifdef _WIN32 || _WIN64
+#ifdef _WIN32
 void set_color(int ForgC, int BackC);
 #endif
-#ifdef __unix__ || __APPLE__
+#ifdef __unix__
 void set_color(char *ForgC, char *BackC);
 #endif
 
