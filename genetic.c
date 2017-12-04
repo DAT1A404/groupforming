@@ -99,7 +99,7 @@ void log_make_header(FILE *lgf, int popsize, int generations, float mutationrate
     fprintf(lgf, "Population size:;%d\n", popsize);
     fprintf(lgf, "Generations:;%d\n", generations);
     fprintf(lgf, "Mutation rate:;%f\n", mutationrate);
-    fprintf(lgf, "Genration;Avg;Best;worst\n");
+    fprintf(lgf, "Generation;Avg;Best;worst\n");
 }
 
 /* Analyse a generation. Calculates interesting numbers, prints some of them
