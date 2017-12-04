@@ -1,3 +1,6 @@
+#include "datastructs.c"
+#include "export.h"
+
 void export_plain(group *grps, int _GroupCount)
 {
     /* opening/creatign the txt file that the data is getting printeted to*/
@@ -9,7 +12,7 @@ void export_plain(group *grps, int _GroupCount)
          exit(1);
     }
     /* printing/creatingthe finale file, with the given info*/
-    fprintf(fptr, "%d\n",*grps,_GroupCount);
+    fprintf(fptr, "%d\n", _GroupCount);
     /*close the created fiel */
     fclose(fptr);
 }
