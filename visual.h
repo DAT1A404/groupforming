@@ -59,4 +59,4 @@ void print_all_groups(group *groups, int groupCount);
 void print_group(group *g);
 void print_all_persons(person *all, int count);
 void print_chromosome(person **chromosome);
-void print_generation(int gen, double avg, double best, double worst);
+void print_generation(int gen, double avg, double med, double best, double worst);

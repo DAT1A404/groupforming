@@ -99,24 +99,25 @@ void log_make_header(FILE *lgf, int popsize, int generations, float mutationrate
     fprintf(lgf, "Population size:;%d\n", popsize);
     fprintf(lgf, "Generations:;%d\n", generations);
     fprintf(lgf, "Mutation rate:;%f\n", mutationrate);
-    fprintf(lgf, "Generation;Avg;Best;worst\n");
+    fprintf(lgf, "Generation;Avg;Median;Best;worst\n");
 }
 
 /* Analyse a generation. Calculates interesting numbers, prints some of them
-    but stores everything in the log file */
+    but stores everything in the log file. Population must be sorted */
 void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize) {
     
     /* Calculate interesting numbers */
     double avg = genetic_average_fitness(population, popsize);
+    double med = genetic_median_fitness(population, popsize);
     double best = fitness_chromosome(population[0]);
     double worst = fitness_chromosome(population[popsize - 1]);
     
     /* Write the numbers into the log file */
-    fprintf(lgf, "%d;%lf;%lf;%lf\n", gen, avg, best, worst);
+    fprintf(lgf, "%d;%lf;%lf;%lf;%lf\n", gen, avg, med, best, worst);
     
     /* Show how the algorithm is doing every 10'th generation */
     if (gen % 10 == 0)
-        print_generation(gen, avg, best, worst);
+        print_generation(gen, avg, med, best, worst);
 }
 
 /* Copy the content of one chromosome to another */
@@ -135,6 +136,12 @@ double genetic_average_fitness(person ***population, int popsize) {
         total += fitness_chromosome(population[i]);
     }
     return total / popsize;
+}
+
+/* Returns the median fitness of the population */
+double genetic_median_fitness(person ***population, int popsize) {
+    int median = popsize / 2;
+    return fitness_chromosome(population[median]);
 }
 
 /* This function takes a chromosome from the genetic algorithm and splits
