@@ -3,7 +3,7 @@
 #include "visual.h"
 
 /* Set the terminals printing colors for Windows-platform. Remember to reset */
-#ifdef _WIN32
+#ifdef _WIN32 || _WIN64
 void set_color(int ForgC, int BackC)
 {
     WORD wColor = ((BackC & 0x0F) << 4) + (ForgC & 0x0F);
@@ -17,7 +17,7 @@ void reset_color() {
 #endif
 
 /* Set the terminal printing colors for Linux-platform. Remember to reset */
-#ifdef __unix__
+#ifdef __unix__ || __APPLE__
 void set_color(char *ForgC, char *BackC) {
   printf(ForgC);
 }

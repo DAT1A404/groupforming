@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string.h>
 
-#ifdef _WIN32
+#ifdef _WIN32 || _WIN64
 #include <windows.h>
 #endif
 
