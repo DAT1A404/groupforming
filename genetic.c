@@ -11,8 +11,14 @@
 */
 group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
+    FILE *lgf; /* Log file */
     int gen;
     group *result;
+
+    /* Open log file */
+    lgf = fopen("genlog.csv", "w");
+    assert(lgf != NULL);
+    log_make_header(lgf, popsize, generations, mutationrate);
 
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
@@ -30,10 +36,9 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
-                
-        /* Show how the algorithm is doing every 10'th generation */
-        if (gen % 10 == 0)
-            print_generation(gen, population, popsize);
+        
+        /* Analyse how the algorithm is doing */
+        genetic_analyse(lgf, gen, population, popsize);
         
         /* Create new population */
         for (i = 0; i < popsize / 2; i++) {
@@ -80,8 +85,38 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     free(*nextGeneration); /* Pointer to the array of memberpointers */
     free(nextGeneration); /* Pointer to the array of pointers, that points at array of memberpointers */
     
+    /* Close log file */
+    fclose(lgf);
+    
     /* Return an array with groups */
     return result;
+}
+
+/* Make the header of the log file */
+void log_make_header(FILE *lgf, int popsize, int generations, float mutationrate) {
+    fprintf(lgf, "Person Count:;%d\n", _PersonCount);
+    fprintf(lgf, "Group Count:;%d\n", _GroupCount);
+    fprintf(lgf, "Population size:;%d\n", popsize);
+    fprintf(lgf, "Generations:;%d\n", generations);
+    fprintf(lgf, "Mutation rate:;%f\n", mutationrate);
+    fprintf(lgf, "Genration;Avg;Best;worst\n");
+}
+
+/* Analyse a generation. Calculates interesting numbers, prints some of them
+    but stores everything in the log file */
+void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize) {
+    
+    /* Calculate interesting numbers */
+    double avg = genetic_average_fitness(population, popsize);
+    double best = fitness_chromosome(population[0]);
+    double worst = fitness_chromosome(population[popsize - 1]);
+    
+    /* Write the numbers into the log file */
+    fprintf(lgf, "%d;%lf;%lf;%lf\n", gen, avg, best, worst);
+    
+    /* Show how the algorithm is doing every 10'th generation */
+    if (gen % 10 == 0)
+        print_generation(gen, avg, best, worst);
 }
 
 /* Copy the content of one chromosome to another */

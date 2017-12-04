@@ -65,16 +65,12 @@ void print_chromosome(person **chromosome) {
 }
 
 /* Prints details about a generation */
-void print_generation(int gen, person ***population, int popsize) {
+void print_generation(int gen, double avg, double best, double worst) {
 
     /* Keeps track of last printed */
     static double prevAvg = 0;
     static double prevBest = 0;
     static double prevWorst = 0;
-
-    double avg = genetic_average_fitness(population, popsize);
-    double best = fitness_chromosome(population[0]);
-    double worst = fitness_chromosome(population[popsize - 1]);
 
     /* Print status of generation */
     printf("GA generation ");
