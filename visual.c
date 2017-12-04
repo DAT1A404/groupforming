@@ -65,16 +65,13 @@ void print_chromosome(person **chromosome) {
 }
 
 /* Prints details about a generation */
-void print_generation(int gen, person ***population, int popsize) {
+void print_generation(int gen, double avg, double med, double best, double worst) {
 
     /* Keeps track of last printed */
     static double prevAvg = 0;
+    static double prevMed = 0;
     static double prevBest = 0;
     static double prevWorst = 0;
-
-    double avg = genetic_average_fitness(population, popsize);
-    double best = fitness_chromosome(population[0]);
-    double worst = fitness_chromosome(population[popsize - 1]);
 
     /* Print status of generation */
     printf("GA generation ");
@@ -88,6 +85,13 @@ void print_generation(int gen, person ***population, int popsize) {
         set_color(LIGHTRED, BLACK);
     printf("avg: %.2lf\t", avg);
 
+    /* Set color for median and print */
+    if (med >= prevMed)
+        set_color(LIGHTGREEN, BLACK);
+    else
+        set_color(LIGHTRED, BLACK);
+    printf("med: %.2lf\t", med);
+
     /* Set color for best and print */
     if (best >= prevBest)
         set_color(LIGHTGREEN, BLACK);
@@ -95,7 +99,7 @@ void print_generation(int gen, person ***population, int popsize) {
         set_color(LIGHTRED, BLACK);
     printf("best: %.2lf\t", best);
 
-    /* Set color for avg and print */
+    /* Set color for worst and print */
     if (worst >= prevWorst)
         set_color(LIGHTGREEN, BLACK);
     else
