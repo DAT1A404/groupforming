@@ -1,16 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-void printOutput();
-
-int main(void)
-
-{
-    
-    printOutput();
-      return 0;
-}
-
 void printOutput()
 {
     /* opening/creatign the txt file that the data is getting printeted to*/
@@ -22,7 +9,9 @@ void printOutput()
          exit(1);
     }
     /* printing/creatingthe finale file, with the given info*/
-    fprintf(fptr, "Put the output here\n");
+    fprintf(fptr, "%d\n",group);
     /*close the created fiel */
     fclose(fptr);
 }
+
+/*group pointer og group count*/
