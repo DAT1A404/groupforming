@@ -1,4 +1,4 @@
-void printOutput()
+void export_plain(group *grps, int _GroupCount)
 {
     /* opening/creatign the txt file that the data is getting printeted to*/
     FILE* fptr = fopen("Formed_Groups.txt", "w");
@@ -9,7 +9,7 @@ void printOutput()
          exit(1);
     }
     /* printing/creatingthe finale file, with the given info*/
-    fprintf(fptr, "%d\n",group);
+    fprintf(fptr, "%d\n",*grps,_GroupCount);
     /*close the created fiel */
     fclose(fptr);
 }
