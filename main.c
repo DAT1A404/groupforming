@@ -12,7 +12,7 @@
 #include "genetic.h"
 #include "commands.h"
 #include "visual.h"
-/* #include "export.h" */
+#include "export.h"
 #include "utility.h"
 #include "ctest.h"
 

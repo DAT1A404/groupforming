@@ -2,8 +2,8 @@
 
 CFLAGS = -Wall -ansi -lm
 
-program: read.o utility.o genetic.o visual.o datastructs.o commands.o ctest.o main.c
-	gcc $(CFLAGS) -o program read.o utility.o genetic.o visual.o datastructs.o commands.o ctest.o main.c
+program: read.o utility.o genetic.o visual.o datastructs.o commands.o export.o ctest.o main.c
+	gcc $(CFLAGS) -o program read.o utility.o genetic.o visual.o datastructs.o commands.o export.o ctest.o main.c
 
 read.o: read.c read.h datastructs.c
 	gcc $(CFLAGS) -c read.c
@@ -22,6 +22,9 @@ datastructs.o: datastructs.c
 
 commands.o: commands.c commands.h
 	gcc $(CFLAGS) -c commands.c
+
+export.o: export.c export.h
+	gcc $(CFLAGS) -c export.c
 
 ctest.o: ctest.c
 	gcc $(CFLAGS) -c ctest.c
