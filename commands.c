@@ -20,6 +20,7 @@ void show_commands(group *grps) {
         printf("(b) Debug final groups.\n");
         printf("(c) Export groups clean.\n");
         printf("(d) Export groups CSV.\n");
+        printf("(e) To see specific group.\n");
         printf("(q) Quit program.\n");
         
         /* Scan for input */
@@ -33,6 +34,7 @@ void show_commands(group *grps) {
             case 'b': print_not_implemented(); break;
             case 'c': print_not_implemented(); break;
             case 'd': print_not_implemented(); break;
+            case 'e': see_group(grps); break;
             case 'q': return;
         }
         
@@ -44,4 +46,11 @@ void print_not_implemented() {
     set_color(COLOR_ERROR, BLACK);
     printf("Not implemented yet :(\n");
     reset_color();
+}
+
+void see_group(group *grps){
+    int groupID, i;
+    printf("Type the ID of a group");
+    scanf("%d", &groupID);
+    print_group(&(grps[groupID]));
 }
