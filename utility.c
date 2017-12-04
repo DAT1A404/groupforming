@@ -2,6 +2,10 @@
 #include <string.h>
 #include "utility.h"
 
+#if _WIN32
+#include <windows.h>
+#endif
+
 #define CLEARSCREENALLOWED 1
 
 /* Liniar lerp from a to b with time t */
@@ -35,6 +39,9 @@ double inverse_lerp(double a, double b, double v) {
 void clear_screen() {
 #if CLEARSCREENALLOWED
     printf("\033c");
+#if _WIN32
+    system("cls||clear");
+#endif
 #endif
 }
 
