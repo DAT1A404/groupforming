@@ -22,7 +22,7 @@
 #define WHITE           15
 #endif
 
-#ifdef linux
+#ifdef __unix__
 /* Color ANSI escape sequences */
 #define BLACK           "\x1b[30m"
 #define BLUE            "\x1b[34m"
@@ -50,7 +50,7 @@
 #ifdef _WIN32
 void set_color(int ForgC, int BackC);
 #endif
-#ifdef linux
+#ifdef __unix__
 void set_color(char *ForgC, char *BackC);
 #endif
 

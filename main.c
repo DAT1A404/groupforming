@@ -10,7 +10,7 @@
 #include "datastructs.c"
 #include "read.h"
 #include "genetic.h"
-/* #include "commands.h" */
+#include "commands.h"
 #include "visual.h"
 /* #include "export.h" */
 #include "utility.h"
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 #if GENETIC_SETUP_DIALOG
     grps = genetic_setup(debug);
     if (!debug) {
-        print_all_groups(grps, _GroupCount);
+        show_commands(grps);
     }
 #endif
     
