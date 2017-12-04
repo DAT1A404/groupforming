@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "datastructs.c"
 #include "utility.h"
 
 #if _WIN32
@@ -50,3 +51,23 @@ int strequal(const char * a, const char * b) {
     return strcmp(a, b) == 0;
 }
 
+/* Returns the max posible fitness a solution can have.
+    Only works if criteria is [0..1] */
+double get_max_fitness_overall() {
+    return get_max_fitness_group() * _GroupCount;
+}
+
+/* Returns the max posible fitness a group can have.
+    Only works if criteria is [0..1] */
+double get_max_fitness_group() {
+    int i;
+    double maxFit = 0;
+    
+    /* Assuming all criteria is binary for each person, max
+        fitness will be equal to the sum of all weights or
+        0 if 0 is greater */
+    for (i = 0; i < _CriteriaCount; i++) {
+        maxFit = _max(0, _Criteria[i].weight);
+    }
+    return maxFit;
+}
