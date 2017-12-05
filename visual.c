@@ -27,21 +27,51 @@ void reset_color() {
 }
 #endif
 
-/* Prints all groups */
-void print_all_groups(group *groups, int groupCount) {
+/* Prints all groups
+
+criteria *_Criteria;
+
+typedef struct {
+    char name[40];
+    double weight;
+} criteria;
+*/
+void print_all_groups(group *groups, int groupCount, int debug) {
     int i;
+    /* print criteria-info for group generation if debug-flag is set */
+    if (debug) {
+      printf("%-30s", "Criteria defined:");
+      for (i = 0; i < _CriteriaCount; i++) {
+        printf("C%d: %10s = %.2f %s\t", i+1, _Criteria[i].name, _Criteria[i].weight, (i<_CriteriaCount-1)?"|":"");
+      } printf("\n");
+    }
+
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
-        print_group(groups + i);
+        print_group(groups + i, debug);
     }
 }
 
 /* Print a group and it's members */
-void print_group(group *g) {
-    int i;
-    printf("Gruppe %d (f = %.2lf):\n", g->groupNumber, g->fitnessValue);
-    for (i = 0; i < g->memberCount; i++) {
-        printf("%s\n", g->members[i].name);
+void print_group(group *g, int debug) {
+    int i, n;
+
+    if (debug) {
+      printf("Group %d has %d members (fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      for (i = 0; i < g->memberCount; i++) {
+          printf("%-30s", g->members[i].name);
+          for (n = 0; n < _CriteriaCount; n++) {
+            printf("C%d: %17.2f %s\t", n+1, g->members[i].criteria[n], (n<_CriteriaCount-1)?"|":"");
+
+          }
+          printf("\n");
+      }
+
+    } else {
+      printf("Group %d (fitness = %.2lf):\n", g->groupNumber + 1, g->fitnessValue);
+      for (i = 0; i < g->memberCount; i++) {
+          printf("%s\n", g->members[i].name);
+      }
     }
 }
 

@@ -55,8 +55,8 @@ void set_color(char *ForgC, char *BackC);
 #endif
 
 void reset_color();
-void print_all_groups(group *groups, int groupCount);
-void print_group(group *g);
+void print_all_groups(group *groups, int groupCount, int debug);
+void print_group(group *g, int debug);
 void print_all_persons(person *all, int count);
 void print_chromosome(person **chromosome);
 void print_generation(int gen, person ***population, int popsize);
