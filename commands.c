@@ -68,7 +68,8 @@ void see_group(group *grps, int _GroupCount) {
 
     /*print requested group*/
     printf("\n");
-    print_group(&(grps[groupID]));
+    /* TODO; implement debug here */
+    print_group(&(grps[groupID]), 0);
     printf("\n");
 }
 
@@ -85,12 +86,12 @@ void see_person(group *grps, int _GroupCount) {
         /*searches all members' names in the groups*/
         for (j=0; j<grps[i].memberCount; j++) {
             /*if the person is found, save the location as match*/
-            if (strcmp(grps[i].members[j].name, needle) == 0) {
+            if (strequal(grps[i].members[j].name, needle)) {
                 match = i;
                 break;
             }
         }
-        if (strcmp(grps[i].members[j].name, needle) == 0) {
+        if (strequal(grps[i].members[j].name, needle)) {
             break;
         }
     }
@@ -98,8 +99,9 @@ void see_person(group *grps, int _GroupCount) {
     /*if a match is found, print group*/
     if (match <= _GroupCount) {
         printf("\n%s is in group %d \n",needle, i);
-        print_group(&(grps[i]));
+        /* TODO; implement debug here */
+        print_group(&(grps[i]), 0);
         printf("\n");
-    } 
+    }
     else printf("\nPerson not found \n\n");
 }
