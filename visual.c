@@ -122,9 +122,9 @@ void print_generation(int gen, double avg, double med, double best, double worst
 
     /* Set color for median and print */
     if (med >= prevMed)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("med: %.2lf\t", med);
 
     /* Set color for best and print */
