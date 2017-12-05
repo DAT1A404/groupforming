@@ -32,7 +32,7 @@ void show_commands(group *grps) {
         switch (option) {
             case 'a': print_all_groups(grps, _GroupCount); break;
             case 'b': print_not_implemented(); break;
-            case 'c': export_plain(grps,_GroupCount); break;
+            case 'c': export_plain(grps, _GroupCount); break;
             case 'd': print_not_implemented(); break;
             case 'q': return;
         }
