@@ -1,6 +1,7 @@
 #include "datastructs.c"
 #include "visual.h"
 #include "utility.h"
+#include "export.h"
 #include "commands.h"
 
 /* Dialog with user post algorithm. Allows user to print and export in various ways */
@@ -18,7 +19,7 @@ void show_commands(group *grps) {
         /* Print options */
         printf("(a) Inspect final groups.\n");
         printf("(b) Debug final groups.\n");
-        printf("(c) Export groups clean.\n");
+        printf("(c) Export groups plain.\n");
         printf("(d) Export groups CSV.\n");
         printf("(q) Quit program.\n");
         
@@ -31,7 +32,7 @@ void show_commands(group *grps) {
         switch (option) {
             case 'a': print_all_groups(grps, _GroupCount); break;
             case 'b': print_not_implemented(); break;
-            case 'c': print_not_implemented(); break;
+            case 'c': export_plain(grps, _GroupCount); break;
             case 'd': print_not_implemented(); break;
             case 'q': return;
         }
