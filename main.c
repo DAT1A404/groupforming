@@ -12,7 +12,7 @@
 #include "genetic.h"
 #include "commands.h"
 #include "visual.h"
-/* #include "export.h" */
+#include "export.h"
 #include "utility.h"
 #include "ctest.h"
 
@@ -39,9 +39,12 @@ void print_setup_settings(int groups, int popsize, int generations, float mutati
 int main(int argc, char *argv[]) {
 
     group *grps;
-    int debug = 0;
 
-    if (argc >= 2 && strequal(argv[1], "--test")) debug = 1;
+    int test = 0, debug = 0;
+
+
+    if (argc >= 2 && strequal(argv[1], "--test")) test = 1;
+    else if (argc >= 2 && strequal(argv[1], "-v")) debug =1;
 
     srand(time(NULL));
 
@@ -52,9 +55,9 @@ int main(int argc, char *argv[]) {
 #endif
 
 #if GENETIC_SETUP_DIALOG
-    grps = genetic_setup(debug);
-    if (!debug) {
-        show_commands(grps);
+    grps = genetic_setup(test);
+    if (!test) {
+        show_commands(grps, debug);
     }
 #endif
 
@@ -66,7 +69,7 @@ int main(int argc, char *argv[]) {
 }
 
 /* Initializing genetic variables before running the algorithm */
-group* genetic_setup(int debug) {
+group* genetic_setup(int test) {
 
     group *grps;
     int groups = GROUP_STD;
@@ -115,7 +118,7 @@ group* genetic_setup(int debug) {
 
     _GroupCount = groups;
 
-    if (debug) {
+    if (test) {
         run_tests();
     } else {
         /* Run algorithm */
@@ -133,7 +136,7 @@ group* genetic_setup(int debug) {
 void print_setup_settings(int groups, int popsize, int generations, float mutationrate) {
 
     /* Header */
-    set_color(LIGHTGREEN, BLACK);
+    set_color(GREEN, BLACK);
     printf("== Current settings for genetic algorithm:\n");
 
     /* print group count setting */
@@ -141,7 +144,7 @@ void print_setup_settings(int groups, int popsize, int generations, float mutati
     printf("(a)");
     reset_color();
     printf(" Number of groups: ");
-    set_color(LIGHTMAGENTA, BLACK);
+    set_color(MAGENTA, BLACK);
     printf("%d (%.1f in each)\n", groups, _PersonCount / (float)groups);
 
     /* print population size setting */
@@ -149,7 +152,7 @@ void print_setup_settings(int groups, int popsize, int generations, float mutati
     printf("(b)");
     reset_color();
     printf(" Population size: ");
-    set_color(LIGHTMAGENTA, BLACK);
+    set_color(MAGENTA, BLACK);
     printf("%d\n", popsize);
 
     /* print generation count setting */
@@ -157,7 +160,7 @@ void print_setup_settings(int groups, int popsize, int generations, float mutati
     printf("(c)");
     reset_color();
     printf(" Generations: ");
-    set_color(LIGHTMAGENTA, BLACK);
+    set_color(MAGENTA, BLACK);
     printf("%d\n", generations);
 
     /* print mutation rate setting */
@@ -165,7 +168,7 @@ void print_setup_settings(int groups, int popsize, int generations, float mutati
     printf("(d)");
     reset_color();
     printf(" Mutation rate: ");
-    set_color(LIGHTMAGENTA, BLACK);
+    set_color(MAGENTA, BLACK);
     printf("%.3f\n", mutationrate);
 
     reset_color();

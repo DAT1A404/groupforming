@@ -79,10 +79,10 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     /* Calc the fitness in the final groups */
     fitness_groups(result);
 
-    free(*population); /* Pointer to the array of memberpointers */
+    /*free(*population);  Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
     
-    free(*nextGeneration); /* Pointer to the array of memberpointers */
+    /*free(*nextGeneration);  Pointer to the array of memberpointers */
     free(nextGeneration); /* Pointer to the array of pointers, that points at array of memberpointers */
     
     /* Close log file */
