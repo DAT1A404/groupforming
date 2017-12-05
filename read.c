@@ -34,7 +34,7 @@ DataSet read_data() {
     
     /* Reset pointer and extract data */
     fseek(fp, 0, SEEK_SET);
-    extract_data(fp, *data);
+    extract_data(fp, &data);
     
 	/* Close file */
     fclose(fp);
@@ -106,7 +106,7 @@ void extract_data(FILE *fp, DataSet *data) {
         switch (buffer[0]) {
             case '"': /* If a '"' is read then depending on the value of mode either take data of a person or take data of a criteria */
                 if (mode) {
-                    extract_person(buffer, data->allPerons + p, data->criteriaCount);
+                    extract_person(buffer, data->allPersons + p, data->criteriaCount);
                     p++;
                 }
                 else {

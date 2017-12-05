@@ -28,7 +28,7 @@ void reset_color() {
 #endif
 
 /* Prints all groups */
-void print_all_groups(group *groups, int groupCount) {
+void print_all_groups(Group *groups, int groupCount) {
     int i;
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
@@ -37,7 +37,7 @@ void print_all_groups(group *groups, int groupCount) {
 }
 
 /* Print a group and it's members */
-void print_group(group *g) {
+void print_group(Group *g) {
     int i;
     printf("Gruppe %d (f = %.2lf):\n", g->groupNumber, g->fitnessValue);
     for (i = 0; i < g->memberCount; i++) {
@@ -46,20 +46,20 @@ void print_group(group *g) {
 }
 
 /* Prints an array of persons */
-void print_all_persons(person *all, int count) {
+void print_all_persons(Person *all, int personCount, int criteriaCount) {
     int i, j;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < personCount; i++) {
         printf("Person | n: %s c: ", all[i].name);
-        for (j = 0; j < _CriteriaCount; j++) {
+        for (j = 0; j < criteriaCount; j++) {
             printf("%.1lf, ", all[i].criteria[j]);
         }
         printf("\n");
     }
 }
 
-void print_chromosome(person **chromosome) {
+void print_chromosome(Person **chromosome, int count) {
     int i;
-    for (i = 0; i < _PersonCount; i++) {
+    for (i = 0; i < count; i++) {
         printf("chromo person: %s\n", chromosome[i]->name);
     }
 }

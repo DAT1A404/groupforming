@@ -23,7 +23,7 @@ typedef struct {
 typedef struct {
     Person *allPersons;
     int personCount;
-    Criteria allCriteria;
+    Criteria *allCriteria;
     int criteriaCount;
 } DataSet;
 
