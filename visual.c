@@ -27,25 +27,19 @@ void reset_color() {
 }
 #endif
 
-/* Prints all groups
-
-criteria *_Criteria;
-
-typedef struct {
-    char name[40];
-    double weight;
-} criteria;
-*/
 void print_all_groups(group *groups, int groupCount, int debug) {
     int i;
-    /* print criteria-info for group generation if debug-flag is set */
+    /* print criteria-header for group generation if debug-flag is set */
     if (debug) {
+      set_color(YELLOW, BLACK);
       printf("%-30s", "Criteria defined:");
+      /* printing criteria name, weight and separator if not last criteria */
       for (i = 0; i < _CriteriaCount; i++) {
         printf("C%d: %10s = %.2f %s\t", i+1, _Criteria[i].name, _Criteria[i].weight, (i<_CriteriaCount-1)?"|":"");
       } printf("\n");
+      reset_color();
     }
-
+    /* invoking group-print function for i group */
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
         print_group(groups + i, debug);
@@ -56,13 +50,24 @@ void print_all_groups(group *groups, int groupCount, int debug) {
 void print_group(group *g, int debug) {
     int i, n;
 
+    /* if debug-flag is set, print groups verbosely with all criteria for each member */
     if (debug) {
-      printf("Group %d has %d members (fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      printf("Group %d has %d members with collective fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
       for (i = 0; i < g->memberCount; i++) {
           printf("%-30s", g->members[i].name);
           for (n = 0; n < _CriteriaCount; n++) {
-            printf("C%d: %17.2f %s\t", n+1, g->members[i].criteria[n], (n<_CriteriaCount-1)?"|":"");
+            printf("C%d:", n+1);
 
+            /* printing criteria colorized for an easier overview */
+            if (g->members[i].criteria[n] == 0) {
+              set_color(RED, BLACK);
+            } else {
+              set_color(LIGHTBLUE, BLACK);
+            }
+            printf("%18.2f", g->members[i].criteria[n]);
+            reset_color();
+            /* printing separator */
+            printf(" %s\t", (n<_CriteriaCount-1)?"|":"");
           }
           printf("\n");
       }
