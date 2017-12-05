@@ -11,11 +11,7 @@ void read_data() {
 	
 	/*Open file and create a pointer to it*/
     FILE *fp = filename_input();
-    
-	/* fp = fopen("datafile.txt", "r"); */
 	
-	/*Might not be neded*/ /*assert(fp != NULL); assert tells the user that something is wrong, in this case if the file cant be opened*/
-
     /* Count lines */
     count_lines_and_data(fp, &lineCount, &_CriteriaCount, &_PersonCount);
 
@@ -43,7 +39,7 @@ FILE* filename_input() {
 
     do {
 		/* Prompt for input */
-		printf("Enter filename: ");
+		printf("Default name is \"datafile\" \n Enter filename: "); /*Default name is datafile*/
 		scanf(" %s", filename);
 		
 		/* Make sure that the file format is .txt */
@@ -137,10 +133,10 @@ void extract_person(char *str, person *entry, int criCount) {
     sscanf(str, " \"%[^\"]\" = ", name);
     
     token = strchr(str, '=') + 1; /* Sets the pointer token to after the '=' sign */
-    token = strtok(token, ","); /* Go trough string 'token' and find the first ',' sign and replace it with a null character */
+    strtok(token, ","); /* Go trough the file from pointer 'token' placement, find the first ',' sign and replace it with a null character */
     for (i = 0; i < criCount; i++) {
-        sscanf(token, " %lf ", cri + i); /* Save data from string 'token' */
-        token = strtok(NULL, ","); /* Go trough string 'token' and find the next ',' sign and replace it with a null character */
+        sscanf(token, " %lf ", cri + i); /* Save data that comes after the pointer token */
+        token = strtok(NULL, ","); /* Go trough the file from last placement, find the next ',' sign and replace it with a null character */
     }
 
 #if READPRINT
