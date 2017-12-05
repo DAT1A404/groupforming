@@ -12,7 +12,7 @@ void set_color(int ForgC, int BackC)
 
 /* Reset terminals printing colors */
 void reset_color() {
-  set_color(LIGHTGRAY, BLACK);
+  set_color(GRAY, BLACK);
 }
 #endif
 
@@ -62,7 +62,7 @@ void print_group(group *g, int debug) {
             if (g->members[i].criteria[n] == 0) {
               set_color(RED, BLACK);
             } else {
-              set_color(LIGHTBLUE, BLACK);
+              set_color(BLUE, BLACK);
             }
             printf("%18.2f", g->members[i].criteria[n]);
             reset_color();
@@ -118,23 +118,23 @@ void print_generation(int gen, person ***population, int popsize) {
 
     /* Set color for avg and print */
     if (avg >= prevAvg)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("avg: %.2lf\t", avg);
 
     /* Set color for best and print */
     if (best >= prevBest)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("best: %.2lf\t", best);
 
     /* Set color for avg and print */
     if (worst >= prevWorst)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("worst: %.2lf\n", worst);
 
     /* Reset color */

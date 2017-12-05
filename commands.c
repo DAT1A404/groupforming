@@ -11,7 +11,7 @@ void show_commands(group *grps, int debug) {
         char option;
 
         /* Ask user about what they wanna do next */
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
         printf("What do you want to do now?\n");
         reset_color();
 
