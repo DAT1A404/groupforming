@@ -3,6 +3,7 @@
 #include "utility.h"
 #include "export.h"
 #include "commands.h"
+#include "export.h"
 
 /* Dialog with user post algorithm. Allows user to print and export in various ways */
 void show_commands(group *grps, int debug) {
@@ -33,7 +34,7 @@ void show_commands(group *grps, int debug) {
             case 'a': print_all_groups(grps, _GroupCount, debug); break;
             case 'b': print_not_implemented(); break;
             case 'c': export_plain(grps, _GroupCount); break;
-            case 'd': print_not_implemented(); break;
+            case 'd': export_to_csv(grps, _GroupCount); break;
             case 'q': return;
         }
 
