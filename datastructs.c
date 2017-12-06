@@ -32,3 +32,11 @@ typedef struct {
     int generations;
     float mutationrate;    
 } GASettings;
+
+typedef struct {
+    Person *persons;
+    int personCount;
+    Criteria *criteria;
+    int criteriaCount;
+    int groupCount;
+} Chromosome;

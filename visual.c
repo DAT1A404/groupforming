@@ -57,10 +57,10 @@ void print_all_persons(Person *all, int personCount, int criteriaCount) {
     }
 }
 
-void print_chromosome(Person **chromosome, int count) {
+void print_chromosome(Chromosome chromosome) {
     int i;
-    for (i = 0; i < count; i++) {
-        printf("chromo person: %s\n", chromosome[i]->name);
+    for (i = 0; i < chromosome.personCount; i++) {
+        printf("chromo person: %s\n", chromosome.persons[i].name);
     }
 }
 

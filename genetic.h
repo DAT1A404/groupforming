@@ -3,17 +3,6 @@
 #include <math.h>
 #include <assert.h>
 
-/* Local struct containing data about chromosomes.
-    personCount and groupCount are nessary when sending
-    a Chromosome to a function like qsort */
-typedef struct {
-    Person *persons;
-    int personCount;
-    Criteria *criteria;
-    int criteriaCount;
-    int groupCount;
-} Chromosome;
-
 Group* genetic_algorithm(GASettings settings, DataSet data, int groupCount);
 void log_make_header(FILE *lgf, DataSet data, GASettings settings, int groupCount);
 void genetic_analyse(FILE *lgf, int gen, Chromosome *population, int popsize);

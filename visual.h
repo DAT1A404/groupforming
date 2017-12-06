@@ -58,5 +58,5 @@ void reset_color();
 void print_all_groups(Group *groups, int groupCount);
 void print_group(Group *g);
 void print_all_persons(Person *all, int personCount, int criteriaCount);
-void print_chromosome(Person **chromosome);
+void print_chromosome(Chromosome chromosome);
 void print_generation(int gen, double avg, double med, double best, double worst);

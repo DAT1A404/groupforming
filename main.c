@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 #if GENETIC_SETUP_DIALOG
     grps = genetic_setup(data, &groupCount, debug);
     if (!debug) {
-        show_commands(grps);
+        show_commands(grps, groupCount);
     }
 #endif
 
@@ -83,7 +83,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int debug) {
     settings.generations = GENERATIONS_STD;
     settings.mutationrate = MUTATION_RATE_STD;
 
-    *groupCount = personCount / GROUP_MEMBERS_STD;
+    *groupCount = data.personCount / GROUP_MEMBERS_STD;
 
     do {
         float newValue = 0;
@@ -125,7 +125,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int debug) {
     clear_screen();
 
     if (debug) {
-        run_tests(data, settings);
+        run_tests(settings, data, *groupCount);
     } else {
         /* Run algorithm */
         printf("Running algorithm...\n");
