@@ -54,38 +54,40 @@ void print_not_implemented() {
 
 /*prints a requested group*/
 void see_group(group *grps, int _GroupCount) {
-    int groupID;
+    int groupID, debug=0;
 
     do {
-        printf("%d groups. Type the ID of a group you wish to inspect: ",_GroupCount );
-        /*if an int is not input, terminate program*/
-        if (scanf("%d",&groupID) != 1) {
+        printf("%d groups present. Type the ID of the group you wish to inspect: ", _GroupCount );
+        /* if an int is not input, terminate program */
+        if (scanf(" %d", &groupID) != 1) {
         printf("Input not recognised as an integer. Terminating program\n");
         exit (0);
         }
-        /*checks if the input is a valid group ID*/
-    } while ( groupID < 0 || groupID > _GroupCount );
+        printf("Would you like extra debug-information for the group? (1/0)");
+        scanf(" %d", &debug);
 
-    /*print requested group*/
+        /* checks if the input is a valid group ID */
+    } while ( groupID <= 0 || groupID > _GroupCount );
+    groupID--;
+    /* print requested group */
     printf("\n");
-    /* TODO; implement debug here */
-    print_group(&(grps[groupID]), 0);
+    print_group(&(grps[groupID]), debug);
     printf("\n");
 }
 
-/*prints the group, which a person is in*/
+/* prints the group, which a person is in */
 void see_person(group *grps, int _GroupCount) {
-    int i, j, match = (_GroupCount+1);
+    int i, j, match = -1;
     char needle[40];
 
     printf("Which person do you want to search for?\n");
-    scanf(" %[^\n]s",needle);
+    scanf(" %[^\n]s", needle);
 
-    /*searches all groups*/
+    /* searches all groups */
     for (i=0; i<_GroupCount; i++) {
-        /*searches all members' names in the groups*/
+        /* searches all members' names in the groups */
         for (j=0; j<grps[i].memberCount; j++) {
-            /*if the person is found, save the location as match*/
+            /* if the person is found, save the location as match */
             if (strequal(grps[i].members[j].name, needle)) {
                 match = i;
                 break;
@@ -96,10 +98,9 @@ void see_person(group *grps, int _GroupCount) {
         }
     }
 
-    /*if a match is found, print group*/
-    if (match <= _GroupCount) {
-        printf("\n%s is in group %d \n",needle, i);
-        /* TODO; implement debug here */
+    /* if a match is found, print group */
+    if (match != -1) {
+        printf("\n\"%s\" found in group %d \n",needle, i + 1);
         print_group(&(grps[i]), 0);
         printf("\n");
     }
