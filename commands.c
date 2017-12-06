@@ -1,7 +1,9 @@
 #include "datastructs.c"
 #include "visual.h"
 #include "utility.h"
+#include "export.h"
 #include "commands.h"
+#include "export.h"
 
 /* Dialog with user post algorithm. Allows user to print and export in various ways */
 void show_commands(group *grps, int debug) {
@@ -18,8 +20,10 @@ void show_commands(group *grps, int debug) {
         /* Print options */
         printf("(a) Inspect final groups.\n");
         printf("(b) Debug final groups.\n");
-        printf("(c) Export groups clean.\n");
+        printf("(c) Export groups plain.\n");
         printf("(d) Export groups CSV.\n");
+        printf("(e) See specific group.\n");
+        printf("(f) See specific person.\n");
         printf("(q) Quit program.\n");
 
         /* Scan for input */
@@ -31,8 +35,10 @@ void show_commands(group *grps, int debug) {
         switch (option) {
             case 'a': print_all_groups(grps, _GroupCount, debug); break;
             case 'b': print_not_implemented(); break;
-            case 'c': print_not_implemented(); break;
-            case 'd': print_not_implemented(); break;
+            case 'c': export_plain(grps, _GroupCount); break;
+            case 'd': export_to_csv(grps, _GroupCount); break;
+            case 'e': see_group(grps, _GroupCount); break;
+            case 'f': see_person(grps, _GroupCount); break;
             case 'q': return;
         }
 
@@ -44,4 +50,59 @@ void print_not_implemented() {
     set_color(COLOR_ERROR, BLACK);
     printf("Not implemented yet :(\n");
     reset_color();
+}
+
+/*prints a requested group*/
+void see_group(group *grps, int _GroupCount) {
+    int groupID, debug=0;
+
+    do {
+        printf("%d groups present. Type the ID of the group you wish to inspect: ", _GroupCount );
+        /* if an int is not input, terminate program */
+        if (scanf(" %d", &groupID) != 1) {
+        printf("Input not recognised as an integer. Terminating program\n");
+        exit (0);
+        }
+        printf("Would you like extra debug-information for the group? (1/0)");
+        scanf(" %d", &debug);
+
+        /* checks if the input is a valid group ID */
+    } while ( groupID <= 0 || groupID > _GroupCount );
+    groupID--;
+    /* print requested group */
+    printf("\n");
+    print_group(&(grps[groupID]), debug);
+    printf("\n");
+}
+
+/* prints the group, which a person is in */
+void see_person(group *grps, int _GroupCount) {
+    int i, j, match = -1;
+    char needle[40];
+
+    printf("Which person do you want to search for?\n");
+    scanf(" %[^\n]s", needle);
+
+    /* searches all groups */
+    for (i=0; i<_GroupCount; i++) {
+        /* searches all members' names in the groups */
+        for (j=0; j<grps[i].memberCount; j++) {
+            /* if the person is found, save the location as match */
+            if (strequal(grps[i].members[j].name, needle)) {
+                match = i;
+                break;
+            }
+        }
+        if (strequal(grps[i].members[j].name, needle)) {
+            break;
+        }
+    }
+
+    /* if a match is found, print group */
+    if (match != -1) {
+        printf("\n\"%s\" found in group %d \n",needle, i + 1);
+        print_group(&(grps[i]), 0);
+        printf("\n");
+    }
+    else printf("\nPerson not found \n\n");
 }

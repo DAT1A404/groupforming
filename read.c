@@ -59,7 +59,7 @@ FILE* filename_input() {
 		}
 		
 		else printf("Succes ! :D \n");
-    } while (fp == NULL); /*???*/
+    } while (fp == NULL); /*As long as the pointer fp dosen't point to a file*/
 	
 	return fp;
 }

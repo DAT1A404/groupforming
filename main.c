@@ -12,7 +12,7 @@
 #include "genetic.h"
 #include "commands.h"
 #include "visual.h"
-/* #include "export.h" */
+#include "export.h"
 #include "utility.h"
 #include "ctest.h"
 
@@ -39,6 +39,7 @@ void print_setup_settings(int groups, int popsize, int generations, float mutati
 int main(int argc, char *argv[]) {
 
     group *grps;
+
     int test = 0, debug = 0;
 
 
