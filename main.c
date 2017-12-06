@@ -44,7 +44,8 @@ int main(int argc, char *argv[]) {
     int groupCount;
 
     /* Debug flags */
-    int test = 0, debug = 0, dummy;
+    int test = 0, debug = 0;
+    char dummy[40];
 
     srand(time(NULL));
 
@@ -63,7 +64,7 @@ int main(int argc, char *argv[]) {
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
         printf("Press ANY key to continue, screen will be cleared.");
-        scanf(" %d", &dummy);
+        scanf(" %s", dummy);
         clear_screen();
         show_commands(grps, groupCount, data, debug);
     }
