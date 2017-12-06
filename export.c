@@ -5,10 +5,10 @@
 void export_plain(group *grps, int groupCount) {
     int i, e;
     /* opening/creating the txt file that the data is getting printeted to*/
-    FILE* fptr = fopen("generatedGroups.txt", "w");
+    FILE* fptr = fopen("generated-groups.txt", "w");
     /*if the file can't open/create the txt file this error vil be printed, maybe create possibility for looping */
     if(fptr == NULL) {
-        printf("Error: could not open 'generatedGroups.txt'\n");
+        printf("Error: could not open 'generated-groups.txt'\n");
         return;
     }
     /* printing data to the finale file, with the given info*/
@@ -20,7 +20,7 @@ void export_plain(group *grps, int groupCount) {
           fprintf(fptr,"%s\n", grps[i].members[e].name);
         }
     }
-    printf("Exported generated groups to human readable textfile \"generatedGroups.txt\"\n\n");
+    printf("Exported generated groups to human readable textfile \"generated-groups.txt\"\n\n");
     /* close the created file pointer */
     fclose(fptr);
 }
