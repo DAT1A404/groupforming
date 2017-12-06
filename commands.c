@@ -19,7 +19,7 @@ void show_commands(group *grps, int debug) {
 
         /* Print options */
         printf("(a) Inspect final groups.\n");
-        printf("(b) Debug final groups.\n");
+        printf("(b) Toggle debug flag. Currently %s.\n", debug?"ON":"OFF");
         printf("(c) Export groups plain.\n");
         printf("(d) Export groups CSV.\n");
         printf("(e) See specific group.\n");
@@ -34,7 +34,7 @@ void show_commands(group *grps, int debug) {
         /* Switch over options */
         switch (option) {
             case 'a': print_all_groups(grps, _GroupCount, debug); break;
-            case 'b': print_not_implemented(); break;
+            case 'b': debug = !debug; break;
             case 'c': export_plain(grps, _GroupCount); break;
             case 'd': export_to_csv(grps, _GroupCount); break;
             case 'e': see_group(grps, _GroupCount); break;
