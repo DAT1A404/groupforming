@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 #if GENETIC_SETUP_DIALOG
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
-        show_commands(grps, groupCount, debug);
+        show_commands(grps, groupCount, data, debug);
     }
 #endif
 
