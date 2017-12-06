@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -42,12 +42,12 @@ int main(int argc, char *argv[]) {
     DataSet data;
     Group *grps;
     int groupCount;
-    
+
     /* Debug flags */
-    int test = 0, debug = 0;
-    
+    int test = 0, debug = 0, dummy;
+
     srand(time(NULL));
-    
+
     /* Test for arguments */
     if (argc >= 2 && strequal(argv[1], "--test")) test = 1;
     else if (argc >= 2 && strequal(argv[1], "-v")) debug = 1;
@@ -62,6 +62,9 @@ int main(int argc, char *argv[]) {
 #if GENETIC_SETUP_DIALOG
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
+        printf("Press ANY key to continue, screen will be cleared.");
+        scanf(" %d", &dummy);
+        clear_screen();
         show_commands(grps, groupCount, data, debug);
     }
 #endif
@@ -78,7 +81,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
 
     Group *grps;
     GASettings settings;
-    
+
     /* Set settings to default values */
     settings.popsize = POPSIZE_STD;
     settings.generations = GENERATIONS_STD;
@@ -153,7 +156,7 @@ void print_setup_settings(int groupCount, GASettings settings, int personCount) 
     printf(" Number of groups: ");
     set_color(MAGENTA, BLACK);
     printf("%d (%.1f in each)\n", groupCount, personCount / (float)groupCount);
-    
+
     /* print population size setting */
     set_color(YELLOW, BLACK);
     printf("(b)");

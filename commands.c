@@ -18,7 +18,7 @@ void show_commands(Group *grps, int groupCount, DataSet data, int debug) {
 
         /* Print options */
         printf("(a) Inspect final groups.\n");
-        printf("(b) Debug final groups.\n");
+        printf("(b) Toggle debug flag. Currently %s.\n", debug?"ON":"OFF");
         printf("(c) Export groups plain.\n");
         printf("(d) Export groups CSV.\n");
         printf("(e) See specific group.\n");
@@ -33,11 +33,11 @@ void show_commands(Group *grps, int groupCount, DataSet data, int debug) {
         /* Switch over options */
         switch (option) {
             case 'a': print_all_groups(grps, groupCount, data.allCriteria, data.criteriaCount, debug); break;
-            case 'b': print_not_implemented(); break;
+            case 'b': debug = !debug; break;
             case 'c': export_plain(grps, groupCount); break;
             case 'd': export_to_csv(grps, groupCount); break;
-            case 'e': see_group(grps, groupCount, data.criteriaCount); break;
-            case 'f': see_person(grps, groupCount, data.criteriaCount); break;
+            case 'e': see_group(grps, groupCount, data.criteriaCount, debug); break;
+            case 'f': see_person(grps, groupCount, data.criteriaCount, debug); break;
             case 'q': return;
         }
 
@@ -52,30 +52,27 @@ void print_not_implemented() {
 }
 
 /*prints a requested group*/
-void see_group(Group *grps, int groupCount, int criteriaCount) {
-    int groupID, debug=0;
+void see_group(Group *grps, int groupCount, int criteriaCount, int debug) {
+  int groupID;
 
-    do {
-        printf("%d groups present. Type the ID of the group you wish to inspect: ", groupCount);
-        /* if an int is not input, terminate program */
-        if (scanf(" %d", &groupID) != 1) {
-        printf("Input not recognised as an integer. Terminating program\n");
-        exit (0);
-        }
-        printf("Would you like extra debug-information for the group? (1/0)");
-        scanf(" %d", &debug);
-
-        /* checks if the input is a valid group ID */
-    } while ( groupID <= 0 || groupID > groupCount);
-    groupID--;
-    /* print requested group */
-    printf("\n");
-    print_group(&(grps[groupID]), criteriaCount, debug);
-    printf("\n");
+  do {
+    printf("%d groups present. Type the ID of the group you wish to inspect: ", groupCount );
+    /* if an int is not input, terminate program, however if "f" or "q" is used, program switches in function-dialogue */
+    if (scanf(" %d", &groupID) != 1) {
+      printf("Input not recognised as an integer.\n");
+      return;
+    }
+      /* checks if the input is a valid group ID */
+    } while ( groupID <= 0 || groupID > groupCount );
+      groupID--;
+      /* print requested group */
+      printf("\n");
+      print_group(&(grps[groupID]), criteriaCount, debug);
+      printf("\n");
 }
 
 /* prints the group, which a person is in */
-void see_person(Group *grps, int groupCount, int criteriaCount) {
+void see_person(Group *grps, int groupCount, int criteriaCount, int debug) {
     int i, j, match = -1;
     char needle[40];
 
@@ -100,7 +97,7 @@ void see_person(Group *grps, int groupCount, int criteriaCount) {
     /* if a match is found, print group */
     if (match != -1) {
         printf("\n\"%s\" found in group %d \n",needle, i + 1);
-        print_group(&(grps[i]), criteriaCount, 0);
+        print_group(&(grps[i]), criteriaCount, debug);
         printf("\n");
     }
     else printf("\nPerson not found \n\n");
