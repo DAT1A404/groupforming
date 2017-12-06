@@ -1,3 +1,5 @@
 *.o
 *.exe
 program
+genlog.csv
+generatedGroups.txt
