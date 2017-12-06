@@ -2,29 +2,61 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#endif
 
-/* Color constants */
+/* Color constants for Windows */
 #define BLACK           0
-#define BLUE            1
-#define GREEN           2
-#define CYAN            3
-#define RED             4
-#define MAGENTA         5
+#define DARKBLUE        1
+#define DARKGREEN       2
+#define DARKCYAN        3
+#define DARKRED         4
+#define DARKMAGENTA     5
 #define BROWN           6
-#define LIGHTGRAY       7
+#define GRAY            7
 #define DARKGRAY        8
-#define LIGHTBLUE       9
-#define LIGHTGREEN      10
-#define LIGHTCYAN       11
-#define LIGHTRED        12
-#define LIGHTMAGENTA    13
+#define BLUE            9
+#define GREEN           10
+#define CYAN            11
+#define RED             12
+#define MAGENTA         13
 #define YELLOW          14
 #define WHITE           15
+#endif
 
+#ifdef __unix__
+/* Color ANSI escape sequences */
+#define BLACK           "\x1b[30m"
+#define DARKBLUE        "\x1b[34m"
+#define DARKGREEN       "\x1b[32m"
+#define DARKCYAN        "\x1b[36m"
+#define DARKRED         "\x1b[31m"
+#define DARKMAGENTA     "\x1b[35m"
+#define BROWN           "\x1b[31m" /* RED fallback */
+#define GRAY            "\x1b[37m" /* WHITE fallback */
+#define DARKGRAY        "\x1b[37m" /* WHITE fallback */
+#define BLUE            "\x1b[34m" /* BLUE fallback */
+#define GREEN           "\x1b[32m" /* GREEN fallback */
+#define CYAN            "\x1b[36m" /* CYAN fallback */
+#define RED             "\x1b[31m" /* RED fallback */
+#define MAGENTA         "\x1b[35m" /* MAGENTA fallback */
+#define YELLOW          "\x1b[33m"
+#define WHITE           "\x1b[37m"
+#define RESET           "\x1b[0m"
+#endif
+
+#define COLOR_INFO CYAN
+#define COLOR_WARN YELLOW
+#define COLOR_ERROR RED
+
+#ifdef _WIN32
 void set_color(int ForgC, int BackC);
+#endif
+#ifdef __unix__
+void set_color(char *ForgC, char *BackC);
+#endif
+
 void reset_color();
-void print_all_groups(group *groups, int groupCount);
-void print_group(group *g);
+void print_all_groups(group *groups, int groupCount, int debug);
+void print_group(group *g, int debug);
 void print_all_persons(person *all, int count);
 void print_chromosome(person **chromosome);
+void print_generation(int gen, double avg, double med, double best, double worst);
