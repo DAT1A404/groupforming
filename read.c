@@ -60,12 +60,12 @@ FILE* filename_input() {
 		fp = fopen(filename, "r"); /* Set pointer to file */
 		
 		/* If the file can't be opened*/
-		if (fp == NULL) {
+		if (fp == NULL)
 			printf("Could not open file. Check file name and location of the file and try again\n");
-		}
-		
-		else printf("Succes!\n");
-    } while (fp == NULL);
+		else
+            printf("Succes!\n");
+        
+    } while (fp == NULL); /*As long as the pointer fp dosen't point to a file*/
 	
 	return fp;
 }

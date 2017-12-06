@@ -12,7 +12,7 @@ void set_color(int ForgC, int BackC)
 
 /* Reset terminals printing colors */
 void reset_color() {
-  set_color(LIGHTGRAY, BLACK);
+  set_color(GRAY, BLACK);
 }
 #endif
 
@@ -28,20 +28,60 @@ void reset_color() {
 #endif
 
 /* Prints all groups */
-void print_all_groups(Group *groups, int groupCount) {
+void print_all_groups(Group *groups, int groupCount, Criteria *allCriteria, int criteriaCount, int debug) {
     int i;
+    
+    /* print criteria-header for group generation if debug-flag is set */
+    if (debug) {
+      set_color(YELLOW, BLACK);
+      printf("%-30s", "Criteria defined:");
+      
+      /* printing criteria name, weight and separator if not last criteria */
+      for (i = 0; i < criteriaCount; i++) {
+        printf("C%d: %10s = %.2f %s\t", i + 1, allCriteria[i].name, allCriteria[i].weight, (i < criteriaCount - 1) ? "|" : "");
+      } printf("\n");
+      
+      reset_color();
+    }
+    
+    /* invoking group-print function for i group */
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
-        print_group(groups + i);
+        print_group(groups + i, criteriaCount, debug);
     }
 }
 
 /* Print a group and it's members */
-void print_group(Group *g) {
-    int i;
-    printf("Gruppe %d (f = %.2lf):\n", g->groupNumber, g->fitnessValue);
-    for (i = 0; i < g->memberCount; i++) {
-        printf("%s\n", g->members[i].name);
+void print_group(Group *g, int criteriaCount, int debug) {
+    int i, n;
+
+    /* if debug-flag is set, print groups verbosely with all criteria for each member */
+    if (debug) {
+      printf("Group %d has %d members with collective fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      for (i = 0; i < g->memberCount; i++) {
+          printf("%-30s", g->members[i].name);
+          for (n = 0; n < criteriaCount; n++) {
+            printf("C%d:", n+1);
+
+            /* printing criteria colorized for an easier overview */
+            if (g->members[i].criteria[n] == 0) {
+              set_color(RED, BLACK);
+            } else {
+              set_color(BLUE, BLACK);
+            }
+            printf("%18.2f", g->members[i].criteria[n]);
+            reset_color();
+            /* printing separator */
+            printf(" %s\t", (n < criteriaCount - 1) ? "|" : "");
+          }
+          printf("\n");
+      }
+
+    } else {
+      printf("Group %d (fitness = %.2lf):\n", g->groupNumber + 1, g->fitnessValue);
+      for (i = 0; i < g->memberCount; i++) {
+          printf("%s\n", g->members[i].name);
+      }
     }
 }
 
@@ -80,30 +120,30 @@ void print_generation(int gen, double avg, double med, double best, double worst
 
     /* Set color for avg and print */
     if (avg >= prevAvg)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("avg: %.2lf\t", avg);
 
     /* Set color for median and print */
     if (med >= prevMed)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("med: %.2lf\t", med);
 
     /* Set color for best and print */
     if (best >= prevBest)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("best: %.2lf\t", best);
 
     /* Set color for worst and print */
     if (worst >= prevWorst)
-        set_color(LIGHTGREEN, BLACK);
+        set_color(GREEN, BLACK);
     else
-        set_color(LIGHTRED, BLACK);
+        set_color(RED, BLACK);
     printf("worst: %.2lf\n", worst);
 
     /* Reset color */
