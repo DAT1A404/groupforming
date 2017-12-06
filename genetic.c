@@ -48,32 +48,32 @@ group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
         qsort(population, settings.popsize, sizeof(Chromosome), genetic_q_compare);
         
         /* Analyse how the algorithm is doing */
-        genetic_analyse(lgf, gen, population, popsize);
+        genetic_analyse(lgf, gen, population, settings.popsize);
         
         /* Create new population */
         for (i = 0; i < popsize / 2; i++) {
             
-            person **par1, **par2, **chi1, **chi2;
+            Chromosome parent1, parent2, *child1, *child2;
             
             /* Make child pointers point to the next positions in nextGeneration */
-            chi1 = nextGeneration[2 * i];
-            chi2 = nextGeneration[2 * i + 1];
+            child1 = &(nextGeneration[2 * i]);
+            child2 = &(nextGeneration[2 * i + 1]);
             
-            /* Selection. Make par1 and par2 point to two chromosomes */
-            genetic_selection(population, popsize, &par1, &par2);
+            /* Selection. Make parent1 and parent2 point to two chromosomes */
+            genetic_selection(population, settings.popsize, &parent1, &parent2);
             
-            /* Crossover. Merge par1 and par2 into two children */
-            genetic_crossover(par1, par2, chi1, chi2);
+            /* Crossover. Merge parent1 and parent2 into two children */
+            genetic_crossover(parent1, parent2, child1, child2);
             
             /* Mutation. A small chance to make a small change in the chromosomes */
-            genetic_mutation(chi1, mutationrate);
-            genetic_mutation(chi2, mutationrate);
+            genetic_mutation(chi1, settings.mutationrate);
+            genetic_mutation(chi2, settings.mutationrate);
         }
         
         /* If popsize is odd, we have to add another chromosome. We just
             copy the one with highest fitness */
         if (popsize % 2 == 1) {
-            genetic_copy_chromosome(nextGeneration[popsize - 1], population[0]);
+            nextGeneration[popsize - 1] = population[0];
         }
         
         /* Set population to next generation, by swapping current and next */
@@ -128,14 +128,6 @@ void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize) {
     /* Show how the algorithm is doing every 10'th generation */
     if (gen % 10 == 0)
         print_generation(gen, avg, med, best, worst);
-}
-
-/* Copy the content of one chromosome to another */
-void genetic_copy_chromosome(person **to, person **from) {
-    int i;
-    for (i = 0; i < _PersonCount; i++) {
-        to[i] = from[i];
-    }
 }
 
 /* Returns the average fitness of the population of chromosomes */
@@ -293,7 +285,7 @@ double average_criteria(group *g, int i) {
 }
 
 /* Selects two random parents from the upper half of population */
-void genetic_selection(person ***population, int popsize, person ***par1, person ***par2) {
+void genetic_selection(Chromosome *population, int popsize, Chromosome *par1, Chromosome *par2) {
 
     int a = rand() % (popsize / 2);
     int b = rand() % (popsize / 2);
@@ -302,16 +294,14 @@ void genetic_selection(person ***population, int popsize, person ***par1, person
     *par2 = population[b];
 }
 
-/* Takes two pointers to parent chromosome and creates two children, which are stored at child pointers */
-void genetic_crossover(person **par1, person **par2, person **child1, person **child2) {
+/* Takes two parent chromosome and creates two children, which are stored at child pointers */
+void genetic_crossover(Chromosome parent1, Chromosome parent2, Chromosome *child1, Chromosome *child2) {
+    
+    int personCount = parent1.personCount;
     
     /* The bitstring is used to determine which parent genes is taken from */
-    int *bitstring = (int*) calloc(_PersonCount, sizeof(int));
-    int i, limit = _PersonCount + 1;
-    
-    /* Reset children */
-    genetic_reset_chromosome(child1);
-    genetic_reset_chromosome(child2);
+    int *bitstring = (int*) calloc(personCount, sizeof(int));
+    int i, limit = personCount + 1;
     
     /* Do cycle */
     i = 0;
@@ -321,9 +311,9 @@ void genetic_crossover(person **par1, person **par2, person **child1, person **c
         /* Mark index i */
         bitstring[i] = 1;
         
-        /* Find index of element par1[i] in par2 */
-        for (indexInPar2 = 0; indexInPar2 < _PersonCount; indexInPar2++) {
-            if (par1[i] == par2[indexInPar2]) {
+        /* Find index of element parent1.person[i] in parent2 */
+        for (indexInPar2 = 0; indexInPar2 < personCount; indexInPar2++) {
+            if (parent1.person[i].personID == parent2.persons[indexInPar2].personID) {
                 /* Set index i to indexInPar2 */
                 i = indexInPar2;
                 break;
@@ -335,13 +325,13 @@ void genetic_crossover(person **par1, person **par2, person **child1, person **c
     assert(limit > 0);
     
     /* Copy flagged genes from the other chromosome */
-    for (i = 0; i < _PersonCount; i++) {
+    for (i = 0; i < personCount; i++) {
         if (bitstring[i]) {
-            child1[i] = par1[i];
-            child2[i] = par2[i];
+            child1->persons[i] = parent1.persons[i];
+            child2->persons[i] = parent2.persons[i];
         } else {
-            child1[i] = par2[i];
-            child2[i] = par1[i];
+            child1->persons[i] = parent2.persons[i];
+            child2->persons[i] = parent1.persons[i];
         }
     }
     
@@ -357,25 +347,25 @@ void genetic_reset_chromosome(person **chromosome) {
 }
 
 /* Takes a pointer to chromosome and slighty alter it */
-void genetic_mutation(person **child, float mutationrate) {
+void genetic_mutation(Chromosome *chromo, float mutationrate) {
     
     /* Small chance of mutation */
     float rn = (rand() % 1000) / 1000.;
     if (rn <= mutationrate) {
         
-        person *temp;
+        Person temp;
         
         /* Find two random indexes */
         int i = 0, j = 0;
-        while (i == j && _PersonCount > 0) {
-            i = rand() % _PersonCount;
-            j = rand() % _PersonCount;
+        while (i == j && chromo->personCount > 0) {
+            i = rand() % chromo->personCount;
+            j = rand() % chromo->personCount;
         }
         
         /* Swaps two random elements */
-        temp = child[i];
-        child[i] = child[j];
-        child[j] = temp;
+        temp = chromo->persons[i];
+        chromo->persons[i] = chromo->persons[j];
+        chromo->persons[j] = temp;
     }
 }
 

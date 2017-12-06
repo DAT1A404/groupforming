@@ -106,7 +106,7 @@ void extract_data(FILE *fp, DataSet *data) {
         switch (buffer[0]) {
             case '"': /* If a '"' is read then depending on the value of mode either take data of a person or take data of a criteria */
                 if (mode) {
-                    extract_person(buffer, data->allPersons + p, data->criteriaCount);
+                    extract_person(buffer, data->allPersons + p, p, data->criteriaCount);
                     p++;
                 }
                 else {
@@ -137,7 +137,7 @@ void extract_criteria(char *str, Criteria *cri) {
 	cri->weight = weight;
 }
 
-void extract_person(char *str, Person *per, int criCount) {
+void extract_person(char *str, Person *per, int index, int criCount) {
     int i;
     char name[LINE_MAX_LEN];
     char *token;
@@ -167,4 +167,5 @@ void extract_person(char *str, Person *per, int criCount) {
 	for (i = 0; i < criCount; i++) {
 		per->criteria[i] = cri[i];
 	}
+    per->personID = index;
 }
