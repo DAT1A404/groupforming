@@ -54,22 +54,23 @@ void print_not_implemented() {
 
 /*prints a requested group*/
 void see_group(group *grps, int _GroupCount, int debug) {
-    int groupID;
+  int groupID;
 
-    do {
-        printf("%d groups present. Type the ID of the group you wish to inspect: ", _GroupCount );
-        /* if an int is not input, terminate program */
-        if (scanf(" %d", &groupID) != 1) {
-        printf("Input not recognised as an integer.\n");
-        return;
-        }
-    /* checks if the input is a valid group ID */
+  do {
+    printf("%d groups present. Type the ID of the group you wish to inspect: ", _GroupCount );
+    /* if an int is not input, terminate program, however if "f" or "q" is used, program switches in function-dialogue */
+    if (scanf(" %d", &groupID) != 1) {
+      printf("Input not recognised as an integer.\n");
+      return;
+    }
+      /* checks if the input is a valid group ID */
     } while ( groupID <= 0 || groupID > _GroupCount );
-    groupID--;
-    /* print requested group */
-    printf("\n");
-    print_group(&(grps[groupID]), debug);
-    printf("\n");
+      groupID--;
+      /* print requested group */
+      printf("\n");
+      print_group(&(grps[groupID]), debug);
+      printf("\n");
+
 }
 
 /* prints the group, which a person is in */
