@@ -53,6 +53,11 @@ int main(int argc, char *argv[]) {
     if (argc >= 2 && strequal(argv[1], "--test")) test = 1;
     else if (argc >= 2 && strequal(argv[1], "-v")) debug = 1;
 
+    /* Printing welcome-message for user */
+    set_color(COLOR_INFO, BLACK);
+    printf("GroupForming-project, please follow on-screen instructions when prompted.\n");
+    reset_color();
+
     /* Read datafile */
     data = read_data();
 

@@ -1,5 +1,6 @@
 #include "datastructs.c"
 #include "visual.h"
+#include "utility.h"
 #include "read.h"
 
 #define LINE_MAX_LEN 200
@@ -9,15 +10,15 @@
 #define MAX 40
 
 DataSet read_data() {
-    
+
     DataSet data;
     int lineCount; /* Variablen lineCount is used to know how many lines there is in the file*/
-	
+
 	/*Open file and create a pointer to it*/
     FILE *fp = filename_input();
-    
+
 	/* fp = fopen("datafile.txt", "r"); */
-	
+
 	/*Might not be neded*/ /*assert(fp != NULL); assert tells the user that something is wrong, in this case if the file cant be opened*/
 
     /* Count lines */
@@ -27,18 +28,18 @@ DataSet read_data() {
     /* Print status */
     printf("Line count: %d\nPerson count: %d\nCriteria count: %d\n", lineCount, data.personCount, data.criteriaCount);
 #endif
-    
+
     /* Allocate memory */
     data.allPersons = (Person*)malloc(data.personCount * sizeof(Person));
     data.allCriteria = (Criteria*)malloc(data.criteriaCount * sizeof(Criteria));
-    
+
     /* Reset pointer and extract data */
     fseek(fp, 0, SEEK_SET);
     extract_data(fp, &data);
-    
+
 	/* Close file */
     fclose(fp);
-    
+
     return data;
 }
 
@@ -49,24 +50,28 @@ FILE* filename_input() {
 
     do {
 		/* Prompt for input */
-		printf("Enter filename: ");
+		printf("Enter filename of data-file, if not ready yet, exit with \"q\": ");
 		scanf(" %s", filename);
-		
+    /* if "q" written, exit program */
+    if (strequal(filename, "q")) exit(EXIT_SUCCESS);
+
 		/* Make sure that the file format is .txt */
 		if ( (strstr(filename,".txt") == NULL) ) {
 			strcat(filename,".txt");
 		}
-		
+
 		fp = fopen(filename, "r"); /* Set pointer to file */
-		
+
 		/* If the file can't be opened*/
-		if (fp == NULL)
+		if (fp == NULL) {
+      set_color(COLOR_ERROR, BLACK);
 			printf("Could not open file. Check file name and location of the file and try again\n");
-		else
+      reset_color();
+		} else
             printf("Succes!\n");
-        
+
     } while (fp == NULL); /*As long as the pointer fp dosen't point to a file*/
-	
+
 	return fp;
 }
 
@@ -77,7 +82,7 @@ void count_lines_and_data(FILE *fp, int *lineCount, int *personCount, int *crite
     *lineCount = 0;
     *personCount = 0;
     *criteriaCount = 0;
-    
+
     /* Save a line in 'buffer' until end of file */
     while(fgets(buffer, LINE_MAX_LEN, fp) != NULL) {
         (*lineCount)++;
@@ -100,7 +105,7 @@ void extract_data(FILE *fp, DataSet *data) {
         lineCount = 0,
         p = 0,
         c = 0;
-    
+
     while(fgets(buffer, LINE_MAX_LEN, fp) != NULL) {
         lineCount++;
         switch (buffer[0]) {
@@ -123,10 +128,10 @@ void extract_data(FILE *fp, DataSet *data) {
 void extract_criteria(char *str, Criteria *cri) {
     char name[LINE_MAX_LEN];
     double weight;
-    
+
 	/* Scan for data and store in temporary variables */
     sscanf(str, " \"%[^\"]\" = %lf ", name, &weight);
-	
+
 #if READPRINT
     /* Print status on criteria*/
     printf("Criteria: %s = %.1lf\n", name, weight);
@@ -142,10 +147,10 @@ void extract_person(char *str, Person *per, int index, int criCount) {
     char name[LINE_MAX_LEN];
     char *token;
     double cri[20];
-    
+
 	/* Scan for data and store in temporary variables */
     sscanf(str, " \"%[^\"]\" = ", name);
-    
+
     token = strchr(str, '=') + 1; /* Sets the pointer token to after the '=' sign */
     token = strtok(token, ","); /* Go trough string 'token' and find the first ',' sign and replace it with a null character */
     for (i = 0; i < criCount; i++) {
