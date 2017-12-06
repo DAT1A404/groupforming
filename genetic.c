@@ -114,7 +114,7 @@ void log_make_header(FILE *lgf, DataSet data, GASettings settings, int groupCoun
 
 /* Analyse a generation. Calculates interesting numbers, prints some of them
     but stores everything in the log file. Population must be sorted */
-void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize) {
+void genetic_analyse(FILE *lgf, int gen, Chromosome *population, int popsize) {
     
     /* Calculate interesting numbers */
     double avg = genetic_average_fitness(population, popsize);
@@ -131,7 +131,7 @@ void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize) {
 }
 
 /* Returns the average fitness of the population of chromosomes */
-double genetic_average_fitness(person ***population, int popsize) {
+double genetic_average_fitness(Chromosome *population, int popsize) {
     int i;
     double total = 0;
     for (i = 0; i < popsize; i++) {
@@ -141,7 +141,7 @@ double genetic_average_fitness(person ***population, int popsize) {
 }
 
 /* Returns the median fitness of the population */
-double genetic_median_fitness(person ***population, int popsize) {
+double genetic_median_fitness(Chromosome *population, int popsize) {
     int median = popsize / 2;
     return fitness_chromosome(population[median]);
 }
