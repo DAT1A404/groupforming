@@ -2,7 +2,6 @@
 #include "export.h"
 #include "genetic.h"
 
-
 void export_plain(group *grps, int groupCount) {
     int i, e;
     /* opening/creating the txt file that the data is getting printeted to*/
@@ -32,7 +31,7 @@ void export_to_csv (group *groups, int groupCount) {
     FILE *fp;
 
     /*create output file*/
-    fp = fopen("result.csv","w+");
+    fp = fopen("result.csv","w");
     assert(fp != NULL);
 
     /*find max number of members amongst the groups*/
@@ -44,7 +43,7 @@ void export_to_csv (group *groups, int groupCount) {
     /*prints all other rows (members)*/
     print_members(groups, groupCount, max_members, fp);
 
-    printf("Created file: result.csv \n\n");
+    printf("Created and wrote file: result.csv \n\n");
     fclose(fp);
 }
 
