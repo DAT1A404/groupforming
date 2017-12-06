@@ -37,8 +37,8 @@ void show_commands(group *grps, int debug) {
             case 'b': debug = !debug; break;
             case 'c': export_plain(grps, _GroupCount); break;
             case 'd': export_to_csv(grps, _GroupCount); break;
-            case 'e': see_group(grps, _GroupCount); break;
-            case 'f': see_person(grps, _GroupCount); break;
+            case 'e': see_group(grps, _GroupCount, debug); break;
+            case 'f': see_person(grps, _GroupCount, debug); break;
             case 'q': return;
         }
 
@@ -53,20 +53,17 @@ void print_not_implemented() {
 }
 
 /*prints a requested group*/
-void see_group(group *grps, int _GroupCount) {
-    int groupID, debug=0;
+void see_group(group *grps, int _GroupCount, int debug) {
+    int groupID;
 
     do {
         printf("%d groups present. Type the ID of the group you wish to inspect: ", _GroupCount );
         /* if an int is not input, terminate program */
         if (scanf(" %d", &groupID) != 1) {
-        printf("Input not recognised as an integer. Terminating program\n");
-        exit (0);
+        printf("Input not recognised as an integer.\n");
+        return;
         }
-        printf("Would you like extra debug-information for the group? (1/0)");
-        scanf(" %d", &debug);
-
-        /* checks if the input is a valid group ID */
+    /* checks if the input is a valid group ID */
     } while ( groupID <= 0 || groupID > _GroupCount );
     groupID--;
     /* print requested group */
@@ -76,7 +73,7 @@ void see_group(group *grps, int _GroupCount) {
 }
 
 /* prints the group, which a person is in */
-void see_person(group *grps, int _GroupCount) {
+void see_person(group *grps, int _GroupCount, int debug) {
     int i, j, match = -1;
     char needle[40];
 
@@ -101,7 +98,7 @@ void see_person(group *grps, int _GroupCount) {
     /* if a match is found, print group */
     if (match != -1) {
         printf("\n\"%s\" found in group %d \n",needle, i + 1);
-        print_group(&(grps[i]), 0);
+        print_group(&(grps[i]), debug);
         printf("\n");
     }
     else printf("\nPerson not found \n\n");
