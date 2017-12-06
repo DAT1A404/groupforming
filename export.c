@@ -5,24 +5,24 @@
 void export_plain(group *grps, int groupCount) {
     int i, e;
     /* opening/creating the txt file that the data is getting printeted to*/
-    FILE* fptr = fopen("generated-groups.txt", "w");
+    FILE* fp = fopen("generated-groups.txt", "w");
     /*if the file can't open/create the txt file this error vil be printed, maybe create possibility for looping */
-    if(fptr == NULL) {
+    if(fp == NULL) {
         printf("Error: could not open 'generated-groups.txt'\n");
         return;
     }
     /* printing data to the finale file, with the given info*/
-    fprintf(fptr,"Groups generated: %d\n", groupCount);
+    fprintf(fp,"Groups generated: %d\n", groupCount);
     for (i = 0; i < groupCount; i++) {
-        if (i != 0) fprintf(fptr,"\n");
-        fprintf(fptr,"Gruppe %d \n", grps[i].groupNumber +1);
+        if (i != 0) fprintf(fp,"\n");
+        fprintf(fp,"Gruppe %d \n", grps[i].groupNumber +1);
         for (e = 0; e < grps[i].memberCount; e++) {
-          fprintf(fptr,"%s\n", grps[i].members[e].name);
+          fprintf(fp,"%s\n", grps[i].members[e].name);
         }
     }
     printf("Exported generated groups to human readable textfile \"generated-groups.txt\"\n\n");
     /* close the created file pointer */
-    fclose(fptr);
+    fclose(fp);
 }
 
 /*exports data to csv file*/
