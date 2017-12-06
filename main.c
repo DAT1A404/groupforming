@@ -113,7 +113,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int debug) {
 
             /* Save new value */
             switch (option) {
-                case 'a': *groupCount = (int)clamp(newValue, GROUP_MIN, personCount / GROUP_MEMBERS_MIN); break;
+                case 'a': *groupCount = (int)clamp(newValue, GROUP_MIN, data.personCount / GROUP_MEMBERS_MIN); break;
                 case 'b': settings.popsize = (int)clamp(newValue, POPSIZE_MIN, POPSIZE_MAX); break;
                 case 'c': settings.generations = (int)clamp(newValue, GENERATIONS_MIN, GENERATIONS_MAX); break;
                 case 'd': settings.mutationrate = clamp(newValue, MUTATION_RATE_MIN, MUTATION_RATE_MAX); break;
@@ -125,12 +125,12 @@ Group* genetic_setup(DataSet data, int *groupCount, int debug) {
     clear_screen();
 
     if (debug) {
-        run_tests(settings, data, *groupCount);
+        /* run_tests(settings, data, *groupCount); */
     } else {
         /* Run algorithm */
         printf("Running algorithm...\n");
 #if DO_GENETIC_ALGORITHM
-        grps = genetic_algorithm(data, settings);
+        grps = genetic_algorithm(settings, data, *groupCount);
         printf("Complete!\n\n");
 #endif
     }
