@@ -8,7 +8,9 @@
     a Chromosome to a function like qsort */
 typedef struct {
     Person *persons;
-    int personCount
+    int personCount;
+    Criteria *criteria;
+    int criteriaCount;
     int groupCount;
 } Chromosome;
 
@@ -31,19 +33,19 @@ group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
 
     /* Setting up array of Chromosomes by allocating memory.
         Also generates first generation of random chromosomes */
-    Chromosome *population = genetic_generate_initial_population(popsize, data, groupCount);
+    Chromosome *population = genetic_generate_initial_population(settings.popsize, data, groupCount);
     
     /* Similarly, allocate memory to generate a new population */
-    Chromosome *nextGeneration = genetic_get_empty_population(popsize, data, groupCount);
+    Chromosome *nextGeneration = genetic_get_empty_population(settings.popsize, data, groupCount);
     
     printf("Population initialized...\n");
 
-    for (gen = 0; gen < generations; gen++) {
+    for (gen = 0; gen < settings.generations; gen++) {
         int i;
-        person ***temp;
+        Chromosome *tempPop;
 
         /* Sort according to fitness */
-        qsort(population, popsize, sizeof(person**), genetic_q_compare);
+        qsort(population, settings.popsize, sizeof(Chromosome), genetic_q_compare);
         
         /* Analyse how the algorithm is doing */
         genetic_analyse(lgf, gen, population, popsize);
@@ -154,22 +156,20 @@ double genetic_median_fitness(person ***population, int popsize) {
 
 /* This function takes a chromosome from the genetic algorithm and splits
     it into groups. It returns an array to the formed groups. Remember to free */
-group* genetic_chromosome_to_groups(person **chromosome) {
+Group* genetic_chromosome_to_groups(Chromosome chromo) {
     
     int i, j, currentPerson;
 
     /* personPerGroup is the minimum size of each group. leftoverPerons
         is the amount of groups, which have an extra member */
-    int personPerGroup = _PersonCount / _GroupCount;
-    int leftoverPersons = _PersonCount % personPerGroup;
+    int personPerGroup = chromo.personCount / chromo.groupCount;
+    int leftoverPersons = chromo.personCount % personPerGroup;
 
     /* Allocate memory */
-    group *groups = (group*)malloc(_GroupCount * sizeof(group));
+    Group *groups = (Group*)malloc(chromo.groupCount * sizeof(Group));
     
     currentPerson = 0;
-    for (i = 0; i < _GroupCount; i++) {
-        /* TODO: Optimize group memory use. Allocate memory to groups
-            members instead of fixed length which it currently is */
+    for (i = 0; i < chromo.groupCount; i++) {
         
         /* Setup some data about the group */
         groups[i].groupNumber = i;
@@ -177,15 +177,14 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 
         /* Add persons to group */
         for (j = 0; j < personPerGroup; j++) {
-            groups[i].members[j] = **(chromosome + currentPerson);
+            groups[i].members[j] = chromo[currentPerson];
             currentPerson++;
         }
         
         /* Add another person if i < leftoverPersons.
-            Now that we know the size of the group let's set
-            the memberCount variable in the group struct */
+            set the memberCount variable in the group struct */
         if (i < leftoverPersons) {
-            groups[i].members[j] = *(chromosome[currentPerson]);
+            groups[i].members[j] = chromo[currentPerson];
             currentPerson++;
 
             groups[i].memberCount = personPerGroup + 1;
@@ -199,8 +198,8 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 
 /* Compare function used to sort chromosomes. Will sort in descending order */
 int genetic_q_compare(const void * i, const void * j) {
-    person ***a = (person***)i;
-    person ***b = (person***)j;
+    Chromosome *a = (Chromosome*)i;
+    Chromosome *b = (Chromosome*)j;
     
     double fa = fitness_chromosome(*a);
     double fb = fitness_chromosome(*b);
@@ -212,43 +211,44 @@ int genetic_q_compare(const void * i, const void * j) {
 }
 
 /* Returns the fitness of a chromosome */
-double fitness_chromosome(person **chromosome) {
+double fitness_chromosome(Chromosome chromo) {
     
     /* Split chromosome into groups, then calculate fitness */
-    group *groups = genetic_chromosome_to_groups(chromosome);
-    double fitness = fitness_groups(groups);
+    Group *groups = genetic_chromosome_to_groups(chromo);
+    double fitness = fitness_groups(groups, chromo.groupCount, chromo.criteria, chromo.criteriaCount);
     
-    free (groups);
+    free(groups);
     
     return fitness;
 }
 
 /* Returns the total fitness of all groups */
-double fitness_groups(group *groups) {
+double fitness_groups(Group *groups, int groupCount, Criteria *criteria, int criteriaCount) {
     double result = 0;
     int i;
-    /* Calls the fitness_group function as many times as the number of groups */
-    for (i = 0; i < _GroupCount; i++) {
-        result += fitness_group(groups + i);
+    /* Calls the fitness_group function as many times as the number of
+        groups and summerize the fitness */
+    for (i = 0; i < groupCount; i++) {
+        result += fitness_group(groups + i, criteria, criteriaCount);
     }
     return result;
 }
 
 /* Returns the total fitness of a single group */
-double fitness_group(group *g) {
+double fitness_group(Group *group, Criteria *criteria, int criteriaCount) {
     double result = 0, average, criteriaMin, criteriaMax, t;
     int i, j;
     
     /* Goes through all criteria */
-    for (i = 0; i < _CriteriaCount; i++) {
+    for (i = 0; i < criteriaCount; i++) {
         
-        /*Finds the average value of specific criteria */
-        average = average_criteria(g, i);
+        /* Finds the average value of specific criteria */
+        average = average_criteria(group, i);
         
-        /*Finds min and max values of specific criteria in group */
-        for (j = 0; j < g->memberCount; j++) {
+        /* Finds min and max values of specific criteria in group */
+        for (j = 0; j < group->memberCount; j++) {
 
-            double a = g->members[j].criteria[i];
+            double a = group->members[j].criteria[i];
             
             /* If min/max is not set yet, set them to a */
             if (j == 0) {
@@ -266,11 +266,11 @@ double fitness_group(group *g) {
         t = inverse_lerp(criteriaMin, criteriaMax, average);
         
         /* Adds the fitness of the specific criteria in the single group to result */
-        result += fitness_of_criteria(t, _Criteria[i].weight);
+        result += fitness_of_criteria(t, criteria[i].weight);
     }
     
     /* Save fitness in the group struct */
-    g->fitnessValue = result;
+    group->fitnessValue = result;
     
     return result;
 }
@@ -389,6 +389,8 @@ Chromosome * genetic_get_empty_population(int popsize, DataSet data, int groupCo
     /* Init each population */
     for (i = 0; i < popsize; i++) {
         population[i].personCount = data.personCount;
+        population[i].criteria = data.allCriteria;
+        population[i].criteriaCount = data.criteriaCount;
         population[i].groupCount = groupCount;
     }
     
