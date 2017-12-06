@@ -3,13 +3,22 @@
 #include "genetic.h"
 #include "visual.h"
 
+/* Local struct containing data about chromosomes.
+    personCount and groupCount are nessary when sending
+    a Chromosome to a function like qsort */
+typedef struct {
+    Person *persons;
+    int personCount
+    int groupCount;
+} Chromosome;
+
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - mutationrate  : how likely a mutations is to happen. Between [0..1]
     Returns a pointer to an array of groups
 */
-group* genetic_algorithm(int popsize, int generations, float mutationrate) {
+group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
 
     FILE *lgf; /* Log file */
     int gen;
@@ -18,15 +27,14 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     /* Open log file */
     lgf = fopen("genlog.csv", "w");
     assert(lgf != NULL);
-    log_make_header(lgf, popsize, generations, mutationrate);
+    log_make_header(lgf, data, settings, groupCount);
 
-    /* Setting up multi-dimensional array of pointers to persons.
-        This way no unnersasary data is copied. It's all pointers, baby.
+    /* Setting up array of Chromosomes by allocating memory.
         Also generates first generation of random chromosomes */
-    person ***population = genetic_generate_initial_population(popsize);
+    Chromosome *population = genetic_generate_initial_population(popsize, data, groupCount);
     
     /* Similarly, allocate memory to generate a new population */
-    person ***nextGeneration = genetic_get_memory_for_pop(popsize);
+    Chromosome *nextGeneration = genetic_get_empty_population(popsize, data, groupCount);
     
     printf("Population initialized...\n");
 
@@ -93,12 +101,12 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 }
 
 /* Make the header of the log file */
-void log_make_header(FILE *lgf, int popsize, int generations, float mutationrate) {
-    fprintf(lgf, "Person Count:;%d\n", _PersonCount);
-    fprintf(lgf, "Group Count:;%d\n", _GroupCount);
-    fprintf(lgf, "Population size:;%d\n", popsize);
-    fprintf(lgf, "Generations:;%d\n", generations);
-    fprintf(lgf, "Mutation rate:;%f\n", mutationrate);
+void log_make_header(FILE *lgf, DataSet data, GASettings settings, int groupCount) {
+    fprintf(lgf, "Person Count:;%d\n", data.ersonCount);
+    fprintf(lgf, "Group Count:;%d\n", groupCount);
+    fprintf(lgf, "Population size:;%d\n", settings.popsize);
+    fprintf(lgf, "Generations:;%d\n", settings.generations);
+    fprintf(lgf, "Mutation rate:;%f\n", settings.mutationrate);
     fprintf(lgf, "Generation;Avg;Median;Best;worst\n");
 }
 
@@ -371,18 +379,32 @@ void genetic_mutation(person **child, float mutationrate) {
     }
 }
 
-person*** genetic_get_memory_for_pop(int popsize) {
+/* Returns a pointer to an array of initialized chromosomes. Remeber to call free */
+Chromosome * genetic_get_empty_population(int popsize, DataSet data, int groupCount) {
+    int i;
+    
+    /* Get memory for population */
+    Chromosome *population = genetic_get_memory_for_pop(popsize, data.personCount);
+    
+    /* Init each population */
+    for (i = 0; i < popsize; i++) {
+        population[i].personCount = data.personCount;
+        population[i].groupCount = groupCount;
+    }
+    
+    return population;
+}
+
+/* Returns a pointer to an array of new chromosomes. Remember to call free */
+Chromosome * genetic_get_memory_for_pop(int popsize, int personCount) {
     int i;
 
-    /* Create an array of pointers to persons,
-        AND an array of pointers to parts of that other array */
-    person **chromosomes = (person**)malloc(_PersonCount * popsize * sizeof(person*));
-    person ***population = (person***)malloc(popsize * sizeof(person**));
+    /* Create an array of chromosomes */
+    Chromosome *population = (Chromosome*)malloc(popsize * sizeof(Chromosome));
 
+    /* Create each chromosome's array of persons */
     for (i = 0; i < popsize; i++) {
-        /* Setup populations pointers to the right spots.
-            They shall not be moved again. Only their content should change */
-        population[i] = chromosomes + i * _PersonCount;
+        population[i].persons = (Person*)malloc(personCount * sizeof(Person));
     }
     
     return population;
@@ -390,35 +412,35 @@ person*** genetic_get_memory_for_pop(int popsize) {
 
 /* Generates initial population by allocating memory and 
     setting chromosomes to random permutations */
-person*** genetic_generate_initial_population(int popsize) {
+Chromosome * genetic_generate_initial_population(int popsize, DataSet data, int groupCount) {
 
     int i;
 
     /* Allocate memory to the population */
-    person ***population = genetic_get_memory_for_pop(popsize);
+    Chromosome *population = genetic_get_empty_population(popsize, data, groupCount);
 
     /* Generate chromosomes */
     for (i = 0; i < popsize; i++) {    
-        genetic_generate_chromosome(population[i]);
+        genetic_generate_chromosome(population + i, data);
     }
 
     return population;
 }
 
 /* Put members randomly into the chromosome array */
-void genetic_generate_chromosome(person **chromosome) {
+void genetic_generate_chromosome(Chromosome *chromosome, DataSet data) {
     
-    person *temp;
+    Person temp;
     int i, n;
 
     /* Fill chromosome with all persons systematically */
-    for (i = 0; i < _PersonCount; i++) {
-        chromosome[i] = _AllPersons + i;
+    for (i = 0; i < data.personCount; i++) {
+        chromosome->persons[i] = data.allPersons[i];
     }
 
     /* Do Fisher Yates-algorithm for shuffling array */
-    for (i = 0; i < _PersonCount; i++) {
-        n = rand() % (_PersonCount - i) + i;
+    for (i = 0; i < data.personCount; i++) {
+        n = rand() % (personCount - i) + i;
         
         /* Swap index i and n */
         temp = chromosome[n];
