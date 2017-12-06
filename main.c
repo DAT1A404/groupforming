@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
     group *grps;
 
-    int test = 0, debug = 0;
+    int test = 0, debug = 0, dummy;
 
 
     if (argc >= 2 && strequal(argv[1], "--test")) test = 1;
@@ -57,6 +57,9 @@ int main(int argc, char *argv[]) {
 #if GENETIC_SETUP_DIALOG
     grps = genetic_setup(test);
     if (!test) {
+        printf("Press ANY key to continue, screen will be cleared.");
+        scanf(" %d", &dummy);
+        clear_screen();
         show_commands(grps, debug);
     }
 #endif
