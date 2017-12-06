@@ -3,28 +3,17 @@
 #include "genetic.h"
 #include "visual.h"
 
-/* Local struct containing data about chromosomes.
-    personCount and groupCount are nessary when sending
-    a Chromosome to a function like qsort */
-typedef struct {
-    Person *persons;
-    int personCount;
-    Criteria *criteria;
-    int criteriaCount;
-    int groupCount;
-} Chromosome;
-
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - mutationrate  : how likely a mutations is to happen. Between [0..1]
     Returns a pointer to an array of groups
 */
-group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
+Group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
 
     FILE *lgf; /* Log file */
     int gen;
-    group *result;
+    Group *result;
 
     /* Open log file */
     lgf = fopen("genlog.csv", "w");
@@ -51,7 +40,7 @@ group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
         genetic_analyse(lgf, gen, population, settings.popsize);
         
         /* Create new population */
-        for (i = 0; i < popsize / 2; i++) {
+        for (i = 0; i < settings.popsize / 2; i++) {
             
             Chromosome parent1, parent2, *child1, *child2;
             
@@ -66,34 +55,32 @@ group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
             genetic_crossover(parent1, parent2, child1, child2);
             
             /* Mutation. A small chance to make a small change in the chromosomes */
-            genetic_mutation(chi1, settings.mutationrate);
-            genetic_mutation(chi2, settings.mutationrate);
+            genetic_mutation(child1, settings.mutationrate);
+            genetic_mutation(child2, settings.mutationrate);
         }
         
         /* If popsize is odd, we have to add another chromosome. We just
             copy the one with highest fitness */
-        if (popsize % 2 == 1) {
-            nextGeneration[popsize - 1] = population[0];
+        if (settings.popsize % 2 == 1) {
+            nextGeneration[settings.popsize - 1] = population[0];
         }
         
         /* Set population to next generation, by swapping current and next */
-        temp = population;
+        tempPop = population;
         population = nextGeneration;
-        nextGeneration = temp;
+        nextGeneration = tempPop;
     }
     
     /* Sort according to fitness, then make the BEST chromosome into groups */
-    qsort(population, popsize, sizeof(person**), genetic_q_compare);
+    qsort(population, settings.popsize, sizeof(Chromosome), genetic_q_compare);
     result = genetic_chromosome_to_groups(population[0]);
     
     /* Calc the fitness in the final groups */
-    fitness_groups(result);
+    fitness_groups(result, groupCount, data.allCriteria, data.criteriaCount);
 
-    free(*population); /* Pointer to the array of memberpointers */
-    free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
-    
-    free(*nextGeneration); /* Pointer to the array of memberpointers */
-    free(nextGeneration); /* Pointer to the array of pointers, that points at array of memberpointers */
+    /* Clean up memory */
+    genetic_kill_population(population, settings.popsize);
+    genetic_kill_population(nextGeneration, settings.popsize);
     
     /* Close log file */
     fclose(lgf);
@@ -104,7 +91,7 @@ group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
 
 /* Make the header of the log file */
 void log_make_header(FILE *lgf, DataSet data, GASettings settings, int groupCount) {
-    fprintf(lgf, "Person Count:;%d\n", data.ersonCount);
+    fprintf(lgf, "Person Count:;%d\n", data.personCount);
     fprintf(lgf, "Group Count:;%d\n", groupCount);
     fprintf(lgf, "Population size:;%d\n", settings.popsize);
     fprintf(lgf, "Generations:;%d\n", settings.generations);
@@ -169,14 +156,14 @@ Group* genetic_chromosome_to_groups(Chromosome chromo) {
 
         /* Add persons to group */
         for (j = 0; j < personPerGroup; j++) {
-            groups[i].members[j] = chromo[currentPerson];
+            groups[i].members[j] = chromo.members[currentPerson];
             currentPerson++;
         }
         
         /* Add another person if i < leftoverPersons.
             set the memberCount variable in the group struct */
         if (i < leftoverPersons) {
-            groups[i].members[j] = chromo[currentPerson];
+            groups[i].members[j] = chromo.members[currentPerson];
             currentPerson++;
 
             groups[i].memberCount = personPerGroup + 1;
@@ -439,4 +426,16 @@ void genetic_generate_chromosome(Chromosome *chromosome, DataSet data) {
         chromosome[n] = chromosome[i];
         chromosome[i] = temp;
     }
+}
+
+/* Takes a population and cleans it up, freeing all used memory */
+void genetic_kill_population(Chromosome *population, int popsize) {
+    int i;
+    
+    /* Free all allocated memory for persons */
+    for (i = 0; i < popsize; i++) {
+        free(population->persons);
+    }
+    
+    free(population);
 }
