@@ -156,14 +156,14 @@ Group* genetic_chromosome_to_groups(Chromosome chromo) {
 
         /* Add persons to group */
         for (j = 0; j < personPerGroup; j++) {
-            groups[i].members[j] = chromo.members[currentPerson];
+            groups[i].members[j] = chromo.persons[currentPerson];
             currentPerson++;
         }
         
         /* Add another person if i < leftoverPersons.
             set the memberCount variable in the group struct */
         if (i < leftoverPersons) {
-            groups[i].members[j] = chromo.members[currentPerson];
+            groups[i].members[j] = chromo.persons[currentPerson];
             currentPerson++;
 
             groups[i].memberCount = personPerGroup + 1;
@@ -260,7 +260,7 @@ double fitness_of_criteria(double t, double weight) {
 }
 
 /* Finds average of one criteria */
-double average_criteria(group *g, int i) {
+double average_criteria(Group *g, int i) {
     double result = 0;
     int j;
     
@@ -300,7 +300,7 @@ void genetic_crossover(Chromosome parent1, Chromosome parent2, Chromosome *child
         
         /* Find index of element parent1.person[i] in parent2 */
         for (indexInPar2 = 0; indexInPar2 < personCount; indexInPar2++) {
-            if (parent1.person[i].personID == parent2.persons[indexInPar2].personID) {
+            if (parent1.persons[i].personID == parent2.persons[indexInPar2].personID) {
                 /* Set index i to indexInPar2 */
                 i = indexInPar2;
                 break;
@@ -323,14 +323,6 @@ void genetic_crossover(Chromosome parent1, Chromosome parent2, Chromosome *child
     }
     
     free(bitstring);
-}
-
-/* Sets all person pointers in a chromosome to NULL */
-void genetic_reset_chromosome(person **chromosome) {
-    int i;
-    for (i = 0; i < _PersonCount; i++) {
-        chromosome[i] = NULL;
-    }
 }
 
 /* Takes a pointer to chromosome and slighty alter it */
@@ -419,12 +411,12 @@ void genetic_generate_chromosome(Chromosome *chromosome, DataSet data) {
 
     /* Do Fisher Yates-algorithm for shuffling array */
     for (i = 0; i < data.personCount; i++) {
-        n = rand() % (personCount - i) + i;
+        n = rand() % (data.personCount - i) + i;
         
         /* Swap index i and n */
-        temp = chromosome[n];
-        chromosome[n] = chromosome[i];
-        chromosome[i] = temp;
+        temp = chromosome->persons[n];
+        chromosome->persons[n] = chromosome->persons[i];
+        chromosome->persons[i] = temp;
     }
 }
 
