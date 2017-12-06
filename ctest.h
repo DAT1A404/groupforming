@@ -1,4 +1,4 @@
 #include <assert.h>
 
 void run_tests();
-void test_fitness(person** chromosome);
+void test_fitness(Chromosome chromosome);

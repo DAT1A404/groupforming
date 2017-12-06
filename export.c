@@ -2,7 +2,7 @@
 #include "export.h"
 #include "genetic.h"
 
-void export_plain(group *grps, int groupCount) {
+void export_plain(Group *grps, int groupCount) {
     int i, e;
     /* opening/creating the txt file that the data is getting printeted to*/
     FILE* fp = fopen("generated-groups.txt", "w");
@@ -26,7 +26,7 @@ void export_plain(group *grps, int groupCount) {
 }
 
 /*exports data to csv file*/
-void export_to_csv (group *groups, int groupCount) {
+void export_to_csv (Group *groups, int groupCount) {
     int max_members;
     FILE *fp;
 
@@ -48,7 +48,7 @@ void export_to_csv (group *groups, int groupCount) {
 }
 
 /*finds the max number of members in a group*/
-int find_max_members(group *groups, int groupCount) {
+int find_max_members(Group *groups, int groupCount) {
     int i, max = 0;
     for (i = 0; i <= groupCount; i++) {
         if (groups[i].memberCount > max) {
@@ -69,7 +69,7 @@ void make_header(int groupCount, FILE *fp) {
 }
 
 /*prints all the members to the csv file*/
-void print_members(group *groups, int groupCount, int max_members, FILE *fp) {
+void print_members(Group *groups, int groupCount, int max_members, FILE *fp) {
     int i, j;
     for (i = 0; i < max_members; i++) {
         fprintf(fp, "Medlem %d;", (i+1));
