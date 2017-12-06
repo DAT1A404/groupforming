@@ -7,15 +7,22 @@
     - popsize       : the number of chromosomes in the populations
     - generations   : how many iterations the algorithm should run
     - mutationrate  : how likely a mutations is to happen. Between [0..1]
+    Returns a pointer to an array of groups
 */
 group* genetic_algorithm(int popsize, int generations, float mutationrate) {
 
+    FILE *lgf; /* Log file */
     int gen;
     group *result;
 
+    /* Open log file */
+    lgf = fopen("genlog.csv", "w");
+    assert(lgf != NULL);
+    log_make_header(lgf, popsize, generations, mutationrate);
+
     /* Setting up multi-dimensional array of pointers to persons.
         This way no unnersasary data is copied. It's all pointers, baby.
-        Also generates the some random chromosomes */
+        Also generates first generation of random chromosomes */
     person ***population = genetic_generate_initial_population(popsize);
     
     /* Similarly, allocate memory to generate a new population */
@@ -26,25 +33,21 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     for (gen = 0; gen < generations; gen++) {
         int i;
         person ***temp;
-        printf("#");
-
-        /* Algorithm ... */
 
         /* Sort according to fitness */
         qsort(population, popsize, sizeof(person**), genetic_q_compare);
         
-        /* Show how the algorithm is doing */
-        printf("GA generation %d fitness|:\tavg: %.2lf\tbest: %.2lf\t worst: %.2lf\n",
-            gen + 1, genetic_average_fitness(population, popsize), fitness_chromosome(population[0]), fitness_chromosome(population[popsize - 1]));
+        /* Analyse how the algorithm is doing */
+        genetic_analyse(lgf, gen, population, popsize);
         
         /* Create new population */
-        for (i = 0; i < popsize; i += 2) {
+        for (i = 0; i < popsize / 2; i++) {
             
             person **par1, **par2, **chi1, **chi2;
             
             /* Make child pointers point to the next positions in nextGeneration */
-            chi1 = nextGeneration[i];
-            chi2 = nextGeneration[i + 1];
+            chi1 = nextGeneration[2 * i];
+            chi2 = nextGeneration[2 * i + 1];
             
             /* Selection. Make par1 and par2 point to two chromosomes */
             genetic_selection(population, popsize, &par1, &par2);
@@ -52,11 +55,15 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
             /* Crossover. Merge par1 and par2 into two children */
             genetic_crossover(par1, par2, chi1, chi2);
             
-            /* Mutation */
+            /* Mutation. A small chance to make a small change in the chromosomes */
             genetic_mutation(chi1, mutationrate);
             genetic_mutation(chi2, mutationrate);
-            
-            /* TODO: Currently we assume popsize is an even number! */
+        }
+        
+        /* If popsize is odd, we have to add another chromosome. We just
+            copy the one with highest fitness */
+        if (popsize % 2 == 1) {
+            genetic_copy_chromosome(nextGeneration[popsize - 1], population[0]);
         }
         
         /* Set population to next generation, by swapping current and next */
@@ -68,15 +75,57 @@ group* genetic_algorithm(int popsize, int generations, float mutationrate) {
     /* Sort according to fitness, then make the BEST chromosome into groups */
     qsort(population, popsize, sizeof(person**), genetic_q_compare);
     result = genetic_chromosome_to_groups(population[0]);
+    
+    /* Calc the fitness in the final groups */
+    fitness_groups(result);
 
-    free(*population); /* Pointer to the array of memberpointers */
+    /*free(*population);  Pointer to the array of memberpointers */
     free(population); /* Pointer to the array of pointers, that points at array of memberpointers */
     
-    free(*nextGeneration);
-    free(nextGeneration);
+    /*free(*nextGeneration);  Pointer to the array of memberpointers */
+    free(nextGeneration); /* Pointer to the array of pointers, that points at array of memberpointers */
+    
+    /* Close log file */
+    fclose(lgf);
     
     /* Return an array with groups */
     return result;
+}
+
+/* Make the header of the log file */
+void log_make_header(FILE *lgf, int popsize, int generations, float mutationrate) {
+    fprintf(lgf, "Person Count:;%d\n", _PersonCount);
+    fprintf(lgf, "Group Count:;%d\n", _GroupCount);
+    fprintf(lgf, "Population size:;%d\n", popsize);
+    fprintf(lgf, "Generations:;%d\n", generations);
+    fprintf(lgf, "Mutation rate:;%f\n", mutationrate);
+    fprintf(lgf, "Generation;Avg;Median;Best;worst\n");
+}
+
+/* Analyse a generation. Calculates interesting numbers, prints some of them
+    but stores everything in the log file. Population must be sorted */
+void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize) {
+    
+    /* Calculate interesting numbers */
+    double avg = genetic_average_fitness(population, popsize);
+    double med = genetic_median_fitness(population, popsize);
+    double best = fitness_chromosome(population[0]);
+    double worst = fitness_chromosome(population[popsize - 1]);
+    
+    /* Write the numbers into the log file */
+    fprintf(lgf, "%d;%lf;%lf;%lf;%lf\n", gen, avg, med, best, worst);
+    
+    /* Show how the algorithm is doing every 10'th generation */
+    if (gen % 10 == 0)
+        print_generation(gen, avg, med, best, worst);
+}
+
+/* Copy the content of one chromosome to another */
+void genetic_copy_chromosome(person **to, person **from) {
+    int i;
+    for (i = 0; i < _PersonCount; i++) {
+        to[i] = from[i];
+    }
 }
 
 /* Returns the average fitness of the population of chromosomes */
@@ -87,6 +136,12 @@ double genetic_average_fitness(person ***population, int popsize) {
         total += fitness_chromosome(population[i]);
     }
     return total / popsize;
+}
+
+/* Returns the median fitness of the population */
+double genetic_median_fitness(person ***population, int popsize) {
+    int median = popsize / 2;
+    return fitness_chromosome(population[median]);
 }
 
 /* This function takes a chromosome from the genetic algorithm and splits
@@ -138,8 +193,14 @@ group* genetic_chromosome_to_groups(person **chromosome) {
 int genetic_q_compare(const void * i, const void * j) {
     person ***a = (person***)i;
     person ***b = (person***)j;
-
-    return fitness_chromosome(*b) - fitness_chromosome(*a);
+    
+    double fa = fitness_chromosome(*a);
+    double fb = fitness_chromosome(*b);
+    
+    /* Return -1 if A is best, returns 1 if B is best */
+    if (fa > fb) return -1;
+    if (fb > fa) return 1;
+    return 0;
 }
 
 /* Returns the fitness of a chromosome */
@@ -327,6 +388,8 @@ person*** genetic_get_memory_for_pop(int popsize) {
     return population;
 }
 
+/* Generates initial population by allocating memory and 
+    setting chromosomes to random permutations */
 person*** genetic_generate_initial_population(int popsize) {
 
     int i;

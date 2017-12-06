@@ -4,7 +4,11 @@
 #include <assert.h>
 
 group* genetic_algorithm(int popsize, int generations, float mutationrate);
+void log_make_header(FILE *lgf, int popsize, int generations, float mutationrate);
+void genetic_analyse(FILE *lgf, int gen, person*** population, int popsize);
+void genetic_copy_chromosome(person **to, person **from);
 double genetic_average_fitness(person ***population, int popsize);
+double genetic_median_fitness(person ***population, int popsize);
 int genetic_q_compare(const void * i, const void * j);
 double fitness_chromosome(person **a);
 double fitness_groups(group *g);
