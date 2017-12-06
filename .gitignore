@@ -2,5 +2,5 @@
 *.exe
 program
 genlog.csv
-generatedGroups.txt
+generated-groups.txt
 results.csv
