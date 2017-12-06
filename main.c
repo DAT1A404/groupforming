@@ -154,38 +154,29 @@ void print_setup_settings(int groupCount, GASettings settings, int personCount) 
     /* Header */
     set_color(GREEN, BLACK);
     printf("== Current settings for genetic algorithm:\n");
+    reset_color();
 
     /* print group count setting */
-    set_color(YELLOW, BLACK);
-    printf("(a)");
-    reset_color();
-    printf(" Number of groups: ");
+    printf("(a) Number of groups: ");
     set_color(MAGENTA, BLACK);
     printf("%d (%.1f in each)\n", groupCount, personCount / (float)groupCount);
+    reset_color();
 
     /* print population size setting */
-    set_color(YELLOW, BLACK);
-    printf("(b)");
-    reset_color();
-    printf(" Population size: ");
+    printf("(b) Population size: ");
     set_color(MAGENTA, BLACK);
     printf("%d\n", settings.popsize);
+    reset_color();
 
     /* print generation count setting */
-    set_color(YELLOW, BLACK);
-    printf("(c)");
-    reset_color();
-    printf(" Generations: ");
+    printf("(c) Generations: ");
     set_color(MAGENTA, BLACK);
     printf("%d\n", settings.generations);
+    reset_color();
 
     /* print mutation rate setting */
-    set_color(YELLOW, BLACK);
-    printf("(d)");
-    reset_color();
-    printf(" Mutation rate: ");
+    printf("(d) Mutation rate: ");
     set_color(MAGENTA, BLACK);
     printf("%.3f\n", settings.mutationrate);
-
     reset_color();
 }
