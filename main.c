@@ -34,7 +34,8 @@
 #define MUTATION_RATE_MAX 1
 
 Group* genetic_setup(DataSet data, int *groupCount, int debug);
-void print_setup_settings(int groupCount, GASettings settings, int personCount);
+double calculate_max_min(DataSet data);
+void print_setup_settings(int groupCount, GASettings settings, int personCount, double maxMinCriteria);
 
 int main(int argc, char *argv[]) {
 
@@ -101,9 +102,9 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
 
         clear_screen();
 
-        /* Show current settings */
-        print_setup_settings(*groupCount, settings, data.personCount);
-
+        /* Show current settings - and pass largest minimum
+        printf("PENIS: %lf\n", calculate_max_min(data)); */
+        print_setup_settings(*groupCount, settings, data.personCount, calculate_max_min(data));
         /* Instruct how to change */
         set_color(COLOR_INFO, BLACK);
         printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
@@ -148,8 +149,19 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
     return grps;
 }
 
+double calculate_max_min(DataSet data) {
+  int i;
+  double maxMin = 0;
+  for (i=0; i < data.criteriaCount; i++) {
+    if (maxMin < data.allCriteria[i].minimum) {
+      maxMin = data.allCriteria[i].minimum;
+    }
+  }
+  return maxMin;
+}
+
 /* Prints the users options nicely formatted */
-void print_setup_settings(int groupCount, GASettings settings, int personCount) {
+void print_setup_settings(int groupCount, GASettings settings, int personCount, double maxMinCriteria) {
 
     /* Header */
     set_color(GREEN, BLACK);
@@ -158,8 +170,13 @@ void print_setup_settings(int groupCount, GASettings settings, int personCount) 
 
     /* print group count setting */
     printf("(a) Number of groups: ");
-    set_color(MAGENTA, BLACK);
-    printf("%d (%.1f in each)\n", groupCount, personCount / (float)groupCount);
+    if (maxMinCriteria <= personCount / groupCount) {
+      set_color(MAGENTA, BLACK);
+      printf("%d (%.1f in each)\n", groupCount, personCount / (float)groupCount);
+    } else {
+      set_color(RED, BLACK);
+      printf("%d (%.1f in each) minimum criteria is %.2lf!\n", groupCount, personCount / (float)groupCount, maxMinCriteria);
+    }
     reset_color();
 
     /* print population size setting */

@@ -18,6 +18,7 @@ typedef struct {
 typedef struct {
     char name[40];
     double weight;
+    double minimum;
 } Criteria;
 
 typedef struct {
@@ -30,7 +31,7 @@ typedef struct {
 typedef struct {
     int popsize;
     int generations;
-    float mutationrate;    
+    float mutationrate;
 } GASettings;
 
 typedef struct {
