@@ -97,6 +97,7 @@ void see_person(Group *grps, int groupCount, int criteriaCount, int debug) {
     /* if a match is found, print group */
     if (match != -1) {
         printf("\n\"%s\" found in group %d \n",needle, i + 1);
+        reset_color();
         print_group(&(grps[i]), criteriaCount, debug);
         printf("\n");
     }
