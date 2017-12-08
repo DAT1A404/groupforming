@@ -6,39 +6,38 @@ typedef struct {
     char name[40];
     int personID;
     double criteria[20];
-} person;
+} Person;
 
 typedef struct {
-    person members[20];
+    Person members[20];
     int memberCount;
     int groupNumber;
     double fitnessValue;
-} group;
+} Group;
 
 typedef struct {
     char name[40];
     double weight;
-} criteria;
+    double minimum;
+} Criteria;
 
-typedef enum {
-    seePerson,
-    seeGroup,
-    seeAll,
-    xport,
-    quit
-} command;
+typedef struct {
+    Person *allPersons;
+    int personCount;
+    Criteria *allCriteria;
+    int criteriaCount;
+} DataSet;
 
-typedef enum {
-    csv,
-    xlsx,
-    json
-} fileType;
+typedef struct {
+    int popsize;
+    int generations;
+    float mutationrate;
+} GASettings;
 
-/* ================ */
-/* Global variables */
-/* ================ */
-person *_AllPersons;
-int _PersonCount;
-int _GroupCount;
-criteria *_Criteria;
-int _CriteriaCount;
+typedef struct {
+    Person *persons;
+    int personCount;
+    Criteria *criteria;
+    int criteriaCount;
+    int groupCount;
+} Chromosome;
