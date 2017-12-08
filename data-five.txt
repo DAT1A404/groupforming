@@ -1,5 +1,5 @@
-#Criteria and weights
-"Gender" = 1
+#Criteria, weights and minimum
+"Gender" = 1,2
 "Foreign" = 1
 "Leader" = 2
 "Social" = 1
