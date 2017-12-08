@@ -2,37 +2,36 @@
 #include "export.h"
 #include "genetic.h"
 
-
-void export_plain(group *grps, int groupCount) {
+void export_plain(Group *grps, int groupCount) {
     int i, e;
     /* opening/creating the txt file that the data is getting printeted to*/
-    FILE* fptr = fopen("generatedGroups.txt", "w");
+    FILE* fp = fopen("generated-groups.txt", "w");
     /*if the file can't open/create the txt file this error vil be printed, maybe create possibility for looping */
-    if(fptr == NULL) {
-        printf("Error: could not open 'generatedGroups.txt'\n");
+    if(fp == NULL) {
+        printf("Error: could not open 'generated-groups.txt'\n");
         return;
     }
     /* printing data to the finale file, with the given info*/
-    fprintf(fptr,"Groups generated: %d\n", groupCount);
+    fprintf(fp,"Groups generated: %d\n", groupCount);
     for (i = 0; i < groupCount; i++) {
-        if (i != 0) fprintf(fptr,"\n");
-        fprintf(fptr,"Gruppe %d \n", grps[i].groupNumber +1);
+        if (i != 0) fprintf(fp,"\n");
+        fprintf(fp,"Gruppe %d \n", grps[i].groupNumber +1);
         for (e = 0; e < grps[i].memberCount; e++) {
-          fprintf(fptr,"%s\n", grps[i].members[e].name);
+          fprintf(fp,"%s\n", grps[i].members[e].name);
         }
     }
-    printf("Exported generated groups to human readable textfile \"generatedGroups.txt\"\n\n");
+    printf("Exported generated groups to human readable textfile \"generated-groups.txt\"\n\n");
     /* close the created file pointer */
-    fclose(fptr);
+    fclose(fp);
 }
 
 /*exports data to csv file*/
-void export_to_csv (group *groups, int groupCount) {
+void export_to_csv (Group *groups, int groupCount) {
     int max_members;
     FILE *fp;
 
     /*create output file*/
-    fp = fopen("result.csv","w+");
+    fp = fopen("result.csv","w");
     assert(fp != NULL);
 
     /*find max number of members amongst the groups*/
@@ -44,12 +43,12 @@ void export_to_csv (group *groups, int groupCount) {
     /*prints all other rows (members)*/
     print_members(groups, groupCount, max_members, fp);
 
-    printf("\n\nCreated file: result.csv \n\n");
+    printf("Created and wrote file: result.csv \n\n");
     fclose(fp);
 }
 
 /*finds the max number of members in a group*/
-int find_max_members(group *groups, int groupCount) {
+int find_max_members(Group *groups, int groupCount) {
     int i, max = 0;
     for (i = 0; i <= groupCount; i++) {
         if (groups[i].memberCount > max) {
@@ -70,7 +69,7 @@ void make_header(int groupCount, FILE *fp) {
 }
 
 /*prints all the members to the csv file*/
-void print_members(group *groups, int groupCount, int max_members, FILE *fp) {
+void print_members(Group *groups, int groupCount, int max_members, FILE *fp) {
     int i, j;
     for (i = 0; i < max_members; i++) {
         fprintf(fp, "Medlem %d;", (i+1));
