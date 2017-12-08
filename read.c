@@ -5,7 +5,7 @@
 
 #define LINE_MAX_LEN 200
 
-#define READPRINT 0 /*Debug variable decides if importent info is printet*/
+#define READPRINT 0 /* Debug variable for printing verbosely */
 
 #define MAX 40
 
@@ -123,19 +123,25 @@ void extract_data(FILE *fp, DataSet *data) {
 
 void extract_criteria(char *str, Criteria *cri) {
     char name[LINE_MAX_LEN];
-    double weight;
+    double weight, minimum;
 
-	/* Scan for data and store in temporary variables */
-    sscanf(str, " \"%[^\"]\" = %lf ", name, &weight);
+	/* Scan for data and store in temporary variables,
+  utilise return value of sscanf to check if min is present or should be set */
+    switch (sscanf(str, " \"%[^\"]\" = %lf, %lf", name, &weight, &minimum)) {
+      case 0: printf("Fatal error, function couldn't extract criteria!\n"); break;
+      default: minimum = 0;
+    }
 
 #if READPRINT
-    /* Print status on criteria*/
+    /* Print status on criteria and minimum */
     printf("Criteria: %s = %.1lf\n", name, weight);
+    printf("Minimum: %s = %.1lf\n", name, minimum);
 #endif
 
     /* Store name and weight in given location */
 	strcpy(cri->name, name);
 	cri->weight = weight;
+  cri->minimum = minimum;
 }
 
 void extract_person(char *str, Person *per, int index, int criCount) {
