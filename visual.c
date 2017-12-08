@@ -27,27 +27,32 @@ void reset_color() {
 }
 #endif
 
-void print_all_groups(group *groups, int groupCount, int debug) {
+/* Prints all groups */
+void print_all_groups(Group *groups, int groupCount, Criteria *allCriteria, int criteriaCount, int debug) {
     int i;
+    
     /* print criteria-header for group generation if debug-flag is set */
     if (debug) {
       set_color(YELLOW, BLACK);
       printf("%-30s", "Criteria defined:");
+      
       /* printing criteria name, weight and separator if not last criteria */
-      for (i = 0; i < _CriteriaCount; i++) {
-        printf("C%d: %10s = %.2f %s\t", i+1, _Criteria[i].name, _Criteria[i].weight, (i<_CriteriaCount-1)?"|":"");
+      for (i = 0; i < criteriaCount; i++) {
+        printf("C%d: %10s = %.2f %s\t", i + 1, allCriteria[i].name, allCriteria[i].weight, (i < criteriaCount - 1) ? "|" : "");
       } printf("\n");
+      
       reset_color();
     }
+    
     /* invoking group-print function for i group */
     for (i = 0; i < groupCount; i++) {
         if (i != 0) printf("\n");
-        print_group(groups + i, debug);
+        print_group(groups + i, criteriaCount, debug);
     }
 }
 
 /* Print a group and it's members */
-void print_group(group *g, int debug) {
+void print_group(Group *g, int criteriaCount, int debug) {
     int i, n;
 
     /* if debug-flag is set, print groups verbosely with all criteria for each member */
@@ -55,7 +60,7 @@ void print_group(group *g, int debug) {
       printf("Group %d has %d members with collective fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
       for (i = 0; i < g->memberCount; i++) {
           printf("%-30s", g->members[i].name);
-          for (n = 0; n < _CriteriaCount; n++) {
+          for (n = 0; n < criteriaCount; n++) {
             printf("C%d:", n+1);
 
             /* printing criteria colorized for an easier overview */
@@ -67,7 +72,7 @@ void print_group(group *g, int debug) {
             printf("%18.2f", g->members[i].criteria[n]);
             reset_color();
             /* printing separator */
-            printf(" %s\t", (n<_CriteriaCount-1)?"|":"");
+            printf(" %s\t", (n < criteriaCount - 1) ? "|" : "");
           }
           printf("\n");
       }
@@ -81,21 +86,21 @@ void print_group(group *g, int debug) {
 }
 
 /* Prints an array of persons */
-void print_all_persons(person *all, int count) {
+void print_all_persons(Person *all, int personCount, int criteriaCount) {
     int i, j;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < personCount; i++) {
         printf("Person | n: %s c: ", all[i].name);
-        for (j = 0; j < _CriteriaCount; j++) {
+        for (j = 0; j < criteriaCount; j++) {
             printf("%.1lf, ", all[i].criteria[j]);
         }
         printf("\n");
     }
 }
 
-void print_chromosome(person **chromosome) {
+void print_chromosome(Chromosome chromosome) {
     int i;
-    for (i = 0; i < _PersonCount; i++) {
-        printf("chromo person: %s\n", chromosome[i]->name);
+    for (i = 0; i < chromosome.personCount; i++) {
+        printf("chromo person: %s\n", chromosome.persons[i].name);
     }
 }
 

@@ -53,21 +53,21 @@ int strequal(const char * a, const char * b) {
 
 /* Returns the max posible fitness a solution can have.
     Only works if criteria is [0..1] */
-double get_max_fitness_overall() {
-    return get_max_fitness_group() * _GroupCount;
+double get_max_fitness_overall(DataSet data, int groupCount) {
+    return get_max_fitness_group(data) * groupCount;
 }
 
 /* Returns the max posible fitness a group can have.
     Only works if criteria is [0..1] */
-double get_max_fitness_group() {
+double get_max_fitness_group(DataSet data) {
     int i;
     double maxFit = 0;
     
     /* Assuming all criteria is binary for each person, max
         fitness will be equal to the sum of all weights or
         0 if 0 is greater */
-    for (i = 0; i < _CriteriaCount; i++) {
-        maxFit = _max(0, _Criteria[i].weight);
+    for (i = 0; i < data.criteriaCount; i++) {
+        maxFit = _max(0, data.allCriteria[i].weight);
     }
     return maxFit;
 }
