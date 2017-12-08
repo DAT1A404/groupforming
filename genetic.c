@@ -256,7 +256,7 @@ double fitness_group(Group *group, Criteria *criteria, int criteriaCount) {
 
 /* Returns fitness of specific criteria, if minimum isn't satisfied, return 0 */
 double fitness_of_criteria(double t, double weight, double alpha) {
-  if (alpha <= t || t <= 1 - alpha) {
+  if (alpha <= t && t <= 1 - alpha) {
     return (-4 * weight * pow(t, 2)) + (4 * weight * t) ;
   } else {
     return 0;
