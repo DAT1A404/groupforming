@@ -129,6 +129,7 @@ void extract_criteria(char *str, Criteria *cri) {
   utilise return value of sscanf to check if min is present or should be set */
     switch (sscanf(str, " \"%[^\"]\" = %lf, %lf", name, &weight, &minimum)) {
       case 0: printf("Fatal error, function couldn't extract criteria!\n"); break;
+      case 3: break;
       default: minimum = 0;
     }
 
