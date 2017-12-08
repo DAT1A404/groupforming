@@ -17,10 +17,6 @@ DataSet read_data() {
 	/*Open file and create a pointer to it*/
     FILE *fp = filename_input();
 
-	/* fp = fopen("datafile.txt", "r"); */
-
-	/*Might not be neded*/ /*assert(fp != NULL); assert tells the user that something is wrong, in this case if the file cant be opened*/
-
     /* Count lines */
     count_lines_and_data(fp, &lineCount, &data.personCount, &data.criteriaCount);
 
