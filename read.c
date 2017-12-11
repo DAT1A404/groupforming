@@ -46,7 +46,7 @@ FILE* filename_input() {
 
     do {
 		/* Prompt for input */
-		printf("Enter filename of data-file, if not ready yet, exit with \"q\": ");
+		printf("Enter filename of data-file, or exit with \"q\": ");
 		scanf(" %s", filename);
     /* if "q" written, exit program */
     if (strequal(filename, "q")) exit(EXIT_SUCCESS);
@@ -60,9 +60,9 @@ FILE* filename_input() {
 
 		/* If the file can't be opened*/
 		if (fp == NULL) {
-      set_color(COLOR_ERROR, BLACK);
+            set_color(COLOR_ERROR, BLACK);
 			printf("Could not open file. Check file name and location of the file and try again\n");
-      reset_color();
+            reset_color();
 		} else
             printf("Succes!\n");
 

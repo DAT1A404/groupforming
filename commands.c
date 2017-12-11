@@ -13,7 +13,7 @@ void show_commands(Group *grps, int groupCount, DataSet data, int debug) {
 
         /* Ask user about what they wanna do next */
         set_color(GREEN, BLACK);
-        printf("What do you want to do now?\n");
+        printf("\nWhat do you want to do now?\n");
         reset_color();
 
         /* Print options */

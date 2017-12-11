@@ -57,7 +57,9 @@ void print_group(Group *g, int criteriaCount, int debug) {
 
     /* if debug-flag is set, print groups verbosely with all criteria for each member */
     if (debug) {
-      printf("Group %d has %d members with collective fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      set_color(YELLOW, BLACK);
+      printf("Group %d has %d members and fitness = %.2lf:\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      reset_color();
       for (i = 0; i < g->memberCount; i++) {
           printf("%-30s", g->members[i].name);
           for (n = 0; n < criteriaCount; n++) {
@@ -78,7 +80,9 @@ void print_group(Group *g, int criteriaCount, int debug) {
       }
 
     } else {
-      printf("Group %d (fitness = %.2lf):\n", g->groupNumber + 1, g->fitnessValue);
+      set_color(YELLOW, BLACK);
+      printf("Group %d (%d members):\n", g->groupNumber + 1, g->memberCount);
+      reset_color();
       for (i = 0; i < g->memberCount; i++) {
           printf("%s\n", g->members[i].name);
       }

@@ -69,7 +69,9 @@ int main(int argc, char *argv[]) {
 #if DO_GENETIC_SETUP_DIALOG
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
-        printf("Press ANY key to continue, screen will be cleared.");
+        set_color(COLOR_INFO, BLACK);
+        printf("Press ANY key to continue. The screen will be cleared.");
+        reset_color();
         scanf(" %s", dummy);
         clear_screen();
         show_commands(grps, groupCount, data, debug);
