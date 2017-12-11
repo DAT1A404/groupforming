@@ -4,10 +4,10 @@
 #include "read.h"
 
 #define LINE_MAX_LEN 200
+#define FILE_NAME_MAX_LENGTH 40
 
-#define READPRINT 0 /* Debug variable for printing verbosely */
+#define DEBUG_READ_PRINT 0 /* Debug variable for printing verbosely */
 
-#define MAX 40
 
 DataSet read_data() {
 
@@ -20,7 +20,7 @@ DataSet read_data() {
     /* Count lines */
     count_lines_and_data(fp, &lineCount, &data.personCount, &data.criteriaCount);
 
-#if READPRINT
+#if DEBUG_READ_PRINT
     /* Print status */
     printf("Line count: %d\nPerson count: %d\nCriteria count: %d\n", lineCount, data.personCount, data.criteriaCount);
 #endif
@@ -42,7 +42,7 @@ DataSet read_data() {
 /* Ask user for file name */
 FILE* filename_input() {
 	FILE *fp;
-    char filename[MAX];
+    char filename[FILE_NAME_MAX_LENGTH];
 
     do {
 		/* Prompt for input */
@@ -122,7 +122,7 @@ void extract_data(FILE *fp, DataSet *data) {
 }
 
 void extract_criteria(char *str, Criteria *cri) {
-    char name[LINE_MAX_LEN];
+    char name[NAME_MAX_LENGTH];
     double weight, minimum;
 
 	/* Scan for data and store in temporary variables,
@@ -133,7 +133,7 @@ void extract_criteria(char *str, Criteria *cri) {
       default: minimum = 0;
     }
 
-#if READPRINT
+#if DEBUG_READ_PRINT
     /* Print status on criteria and minimum */
     printf("Criteria: %s = %.1lf\n", name, weight);
     printf("Minimum: %s = %.1lf\n", name, minimum);
@@ -147,9 +147,9 @@ void extract_criteria(char *str, Criteria *cri) {
 
 void extract_person(char *str, Person *per, int index, int criCount) {
     int i;
-    char name[LINE_MAX_LEN];
+    char name[NAME_MAX_LENGTH];
     char *token;
-    double cri[20];
+    double cri[CRITERIA_MAX_COUNT];
 
 	/* Scan for data and store in temporary variables */
     sscanf(str, " \"%[^\"]\" = ", name);
@@ -161,7 +161,7 @@ void extract_person(char *str, Person *per, int index, int criCount) {
         token = strtok(NULL, ","); /* Go trough string 'token' and find the next ',' sign and replace it with a null character */
     }
 
-#if READPRINT
+#if DEBUG_READ_PRINT
     /* Print status of data for a person */
     printf("Name: %s = ", name);
     for (i = 0; i < criCount; i++) {

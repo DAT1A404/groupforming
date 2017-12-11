@@ -16,8 +16,8 @@
 #include "utility.h"
 #include "ctest.h"
 
-#define POSTREADPRINT 0
-#define GENETIC_SETUP_DIALOG 1
+#define DEBUG_POST_READ_PRINT 0
+#define DO_GENETIC_SETUP_DIALOG 1
 #define DO_GENETIC_ALGORITHM 1
 
 #define GROUP_MEMBERS_STD 6
@@ -62,11 +62,11 @@ int main(int argc, char *argv[]) {
     /* Read datafile */
     data = read_data();
 
-#if POSTREADPRINT
+#if DEBUG_POST_READ_PRINT
     print_all_persons(data.allPersons, data.personCount);
 #endif
 
-#if GENETIC_SETUP_DIALOG
+#if DO_GENETIC_SETUP_DIALOG
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
         printf("Press ANY key to continue, screen will be cleared.");
