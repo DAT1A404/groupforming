@@ -56,7 +56,10 @@ int main(int argc, char *argv[]) {
 
     /* Printing welcome-message for user */
     set_color(COLOR_INFO, BLACK);
-    printf("GroupForming-project, please follow on-screen instructions when prompted.\n");
+    printf("Group Forming\n");
+    printf("This program helps you forming groups based on criterias.\n");
+    printf("---------------------------------------\n");
+    printf("Please follow on-screen instructions when prompted.\n");
     reset_color();
 
     /* Read datafile */
