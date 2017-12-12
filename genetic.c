@@ -436,7 +436,7 @@ void genetic_kill_population(Chromosome *population, int popsize) {
     /* Free all allocated memory for persons */
     /* for (i = 0; i < popsize; i++) {
         free(population->persons);
-    } */
+    } 
 
-    free(population);
+     free(population); */
 }
