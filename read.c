@@ -11,9 +11,9 @@
 
 DataSet read_data() {
 
-	int data_error_check = 0;
+	int data_error_check = 0; /* Variable data_error_check is used to store a boolean value to know if there is an error*/
     DataSet data;
-    int lineCount; /* Variablen lineCount is used to know how many lines there is in the file*/
+    int lineCount; /* Variable lineCount is used to know how many lines there is in the file*/
 	
 	do{
 		
@@ -25,13 +25,14 @@ DataSet read_data() {
 		/* Count lines */
 		data_error_check = count_lines_and_data(fp, &lineCount, &data.personCount, &data.criteriaCount);
 	  
-
+		/* If there are no criterias then error */
 		if(data.criteriaCount < 1){
 			set_color(RED, BLACK);
 			printf("Error not enough criteria to function \n");
 			reset_color();
 			data_error_check = 1;
 		}
+		/* If there is less than two people then error */
 		if(data.personCount < 2){
 			set_color(RED, BLACK);
 			printf("Error not enough few people to function \n");
@@ -56,15 +57,15 @@ DataSet read_data() {
 		/* Close file */
 		fclose(fp);
 		
+		/* If data_error_check is True then let the user know that the error is in the datafile */
 		if(data_error_check == 1){
 			set_color(RED, BLACK);
 			printf(" Error in data-file!\n");
 			reset_color();
 		}
 		
-		printf("Tell %d\n ", data_error_check);
 		
-	} while(data_error_check == 1);
+	} while(data_error_check == 1); /* When an error happens begin anew */
 	
     return data;
 }
@@ -116,7 +117,7 @@ int count_lines_and_data(FILE *fp, int *lineCount, int *personCount, int *criter
             case '"': mode ? (*personCount)++ : (*criteriaCount)++; break; /* Increment a variable depending on what value mode has */
             case '#': break;
             case '$': mode = 1; break; /* Set variable mode to 1 to signify the shift from criterias to persons */
-            default:
+            default: /* If none of the cases are True then there must be an error*/
                 set_color(COLOR_ERROR, BLACK);
                 printf("Error in line %d. Unexpected character '%c' \n", *lineCount, buffer[0]); /* Print error if unknown sign, the line the error is on and the string stored in 'buffer' */
                 reset_color();
@@ -140,7 +141,6 @@ int extract_data(FILE *fp, DataSet *data) {
         switch (buffer[0]) {
             case '"': /* If a '"' is read then depending on the value of mode either take data of a person or take data of a criteria */
                 if (mode) {
-					/*printf("Real\n");*/
                     error_check = extract_person(buffer, data->allPersons + p, p, data->criteriaCount, lineCount);
                     p++;
                 }
@@ -196,19 +196,11 @@ int extract_person(char *str, Person *per, int index, int criCount, int lineCoun
 	
 	/* Scan for data and store in temporary variables */
     sscanf(str, " \"%[^\"]\" = ", name);
-
-	/*printf("f**king\n");*/
 	
     token = strchr(str, '=') + 1; /* Sets the pointer token to after the '=' sign */
 	
-	/*
-	Help function
-	Make a pointer to tokens placement and check if there are any ',' sings that are right beside a ',' sign
-	If there is return error
-	*/
+	/* Function that check for a double dot ',' sing if there is return a 1 to dot */
 	dot = check_dot(token, str, &d);
-	
-	/*printf("*");*/
 	
 	if(dot == 1){
 		set_color(RED, BLACK);
@@ -221,21 +213,17 @@ int extract_person(char *str, Person *per, int index, int criCount, int lineCoun
 		strtok(token, ","); /* Go trough the file from pointer 'token' placement, find the first ',' sign and replace it with a null character */
     
 		for (i = 0; i < criCount; i++) {
-			/*printf("^");*/
-			if(*token == '\0' || sscanf(token, " %lf ", cri + i) != 1){   /*sscanf saves the data that comes after the pointer token and the if statement checks if there is not a valid input */
+			if(*token == '\0' || sscanf(token, " %lf ", cri + i) != 1){   /* If there is a null character or if sscanf returns something that is not 1 then error. sscanf saves the data that comes after the pointer token*/
 				set_color(RED, BLACK);
 				printf("Error could not read value\n");
 				reset_color();
 				printf(" Name: %s - Criteria '%s' \n Line %d Criteria nr. %d \n", name, token, lineCount, i + 1 );
 	
-				/*printf("'\n");*/
 				return 1;
 			}
 			else
-				/*printf("\"\n");*/
 				token = strtok(NULL, ","); /* Go trough the file from last placement, find the next ',' sign and replace it with a null character */
 		}
-		/*printf("Deal\n");*/
 	}
 	
 #if READPRINT
@@ -260,6 +248,7 @@ int extract_person(char *str, Person *per, int index, int criCount, int lineCoun
 int check_dot(char *token, char *str, int *pd){
 	char *point_token = token;
 	
+	/* Go trough the string str from tokens placement and check for places where a double dot ',,' occurs */
 	while (*point_token + 1 != '\0') {
 		if (*point_token == ',' && *(point_token + 1) == ',') {
 			/* ERROR FOUND */
@@ -271,13 +260,3 @@ int check_dot(char *token, char *str, int *pd){
 	
 	return 0;
 }
-
-/*
-void error_cnrv(char name, char *token, int lineCount, int i){
-	set_color(RED, BLACK);
-	printf("Error could not read value\n");
-	reset_color();
-	printf(" Name: %s - Criteria '%s'\n Line %d Criteria nr. %d \n", name, token, lineCount, i + 1);
-				
-}
-*/
