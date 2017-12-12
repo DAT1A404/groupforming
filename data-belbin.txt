@@ -1,0 +1,18 @@
+#Belbins grupperoller
+"Idémand" = 1
+"Analysator" = 2
+"Specialist" = 1
+"Opstarter" = 1
+"Organisator" = 2
+"Afslutter" = 2
+"Koordinator" = 1
+"Kontakttager" = 1
+"Formidler" = 1
+$
+#Navne og data
+"Mac Miller" =     0,0,1,0,1,1,0,1,0
+"Uffe Elbaek" =    0,0,1,1,0,0,1,0,0
+"Hans Petersen" =  1,0,1,0,1,0,0,0,1
+"Nicolaj Slot" =   0,1,0,0,0,1,1,1,0
+
+

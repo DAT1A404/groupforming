@@ -90,6 +90,7 @@ void count_lines_and_data(FILE *fp, int *lineCount, int *personCount, int *crite
                 set_color(COLOR_ERROR, BLACK);
                 printf("! Error in line %d. Unexpected character '%c'.\n", *lineCount, buffer[0]); /* Print error if unknown sign, the line the error is on and the string stored in 'buffer' */
                 reset_color();
+                exit(0);
         }
     }
 }
