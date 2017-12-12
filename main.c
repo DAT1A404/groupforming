@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
 
     /* Printing welcome-message for user */
     set_color(COLOR_INFO, BLACK);
-    printf("Group Forming\n");
-    printf("This program helps you forming groups based on criterias.\n");
+    printf("GroupForming, created by dat1a404.\n");
+    printf("This program forms groups based on weighted criteria, utilising a genetic algorithm.\n");
     printf("---------------------------------------\n");
     printf("Please follow on-screen instructions when prompted.\n");
     reset_color();
