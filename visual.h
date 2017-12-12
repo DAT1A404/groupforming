@@ -20,9 +20,8 @@
 #define MAGENTA         13
 #define YELLOW          14
 #define WHITE           15
-#endif
 
-#ifdef __unix__
+#else
 /* Color ANSI escape sequences */
 #define BLACK           "\x1b[30m"
 #define DARKBLUE        "\x1b[34m"
@@ -49,8 +48,7 @@
 
 #ifdef _WIN32
 void set_color(int ForgC, int BackC);
-#endif
-#ifdef __unix__
+#else
 void set_color(char *ForgC, char *BackC);
 #endif
 

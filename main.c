@@ -141,6 +141,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
     clear_screen();
 
     if (test) {
+        grps = NULL;
         /* run_tests(settings, data, *groupCount); */
     } else {
         /* Run algorithm */

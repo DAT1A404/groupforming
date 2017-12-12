@@ -14,10 +14,9 @@ void set_color(int ForgC, int BackC)
 void reset_color() {
   set_color(GRAY, BLACK);
 }
-#endif
+#else
 
 /* Set the terminal printing colors for Linux-platform. Remember to reset */
-#ifdef __unix__
 void set_color(char *ForgC, char *BackC) {
   printf(ForgC);
 }
