@@ -1,6 +1,7 @@
 *.o
 *.exe
 program
+groupforming*
 genlog.csv
 generated-groups.txt
-results.csv
+result.csv
