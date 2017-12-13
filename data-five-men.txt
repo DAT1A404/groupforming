@@ -1,7 +1,7 @@
 #Criteria, weights and minimum
 "Gender" = 1,2
 "Foreign" = 1
-"Leader" = 2
+"Leader" = 1
 "Social" = 1
 "Ambition" = -1
 $
@@ -48,20 +48,3 @@ $
 "Michonne Grimes" = 1,1,0,1,0
 "Amira Melita" = 1,1,0,0,1
 "Musheera Habibi" = 1,1,1,0,1
-"Inger Stoejberg" = 1,0,0,1,1
-"Ida Auken" = 1,0,1,0,1
-"Claire Underwood" = 1,0,1,0,0
-"Zoe Barnes" = 1,0,1,0,1
-"Lori Grimes" = 1,0,1,1,1
-"Maggie Greene" = 1,0,1,0,0
-"Beth Greene" = 1,0,0,1,1
-"Katy Perry" = 1,0,1,0,1
-"Liselotte Hansen" = 1,0,0,0,0
-"Ida Vejlby" = 1,0,0,1,0
-"Olga Vejlby" = 1,0,1,1,1
-"Sarah Thorsen" = 1,0,1,0,0
-"Kristina Sloth" = 1,0,0,1,1
-"Britta Frutti" = 1,0,1,1,1
-"Grit Grimm" = 1,0,0,1,0
-"Trine Lem" = 1,0,1,0,1
-"Pia Kjaersgaard" = 1,0,0,0,1

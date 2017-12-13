@@ -14,10 +14,9 @@ void set_color(int ForgC, int BackC)
 void reset_color() {
   set_color(GRAY, BLACK);
 }
-#endif
+#else
 
 /* Set the terminal printing colors for Linux-platform. Remember to reset */
-#ifdef __unix__
 void set_color(char *ForgC, char *BackC) {
   printf(ForgC);
 }
@@ -38,7 +37,7 @@ void print_all_groups(Group *groups, int groupCount, Criteria *allCriteria, int 
       
       /* printing criteria name, weight and separator if not last criteria */
       for (i = 0; i < criteriaCount; i++) {
-        printf("C%d: %10s = %.2f %s\t", i + 1, allCriteria[i].name, allCriteria[i].weight, (i < criteriaCount - 1) ? "|" : "");
+        printf("%.5s = %2.2f\t", allCriteria[i].name, allCriteria[i].weight);
       } printf("\n");
       
       reset_color();
@@ -57,11 +56,12 @@ void print_group(Group *g, int criteriaCount, int debug) {
 
     /* if debug-flag is set, print groups verbosely with all criteria for each member */
     if (debug) {
-      printf("Group %d has %d members with collective fitness = %.2lf):\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      set_color(YELLOW, BLACK);
+      printf("Group %d has %d members:\n(fitness = %.2lf)\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      reset_color();
       for (i = 0; i < g->memberCount; i++) {
           printf("%-30s", g->members[i].name);
           for (n = 0; n < criteriaCount; n++) {
-            printf("C%d:", n+1);
 
             /* printing criteria colorized for an easier overview */
             if (g->members[i].criteria[n] == 0) {
@@ -69,16 +69,16 @@ void print_group(Group *g, int criteriaCount, int debug) {
             } else {
               set_color(BLUE, BLACK);
             }
-            printf("%18.2f", g->members[i].criteria[n]);
+            printf("%12.2f\t", g->members[i].criteria[n]);
             reset_color();
-            /* printing separator */
-            printf(" %s\t", (n < criteriaCount - 1) ? "|" : "");
           }
           printf("\n");
       }
 
     } else {
-      printf("Group %d (fitness = %.2lf):\n", g->groupNumber + 1, g->fitnessValue);
+      set_color(YELLOW, BLACK);
+      printf("Group %d (%d members):\n", g->groupNumber + 1, g->memberCount);
+      reset_color();
       for (i = 0; i < g->memberCount; i++) {
           printf("%s\n", g->members[i].name);
       }

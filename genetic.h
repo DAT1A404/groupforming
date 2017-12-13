@@ -16,7 +16,8 @@ double fitness_chromosome(Chromosome chromo);
 double fitness_groups(Group *groups, int groupCount, Criteria *criteria, int criteriaCount);
 double fitness_group(Group *group, Criteria *criteria, int criteriaCount);
 double average_criteria(Group *g, int i);
-double fitness_of_criteria(double t, double weight);
+double fitness_of_criteria(double t, double weight, double alpha);
+double fitness_alpha(int groupSize, double minimum);
 
 void genetic_selection(Chromosome *population, int popsize, Chromosome *par1, Chromosome *par2);
 void genetic_crossover(Chromosome parent1, Chromosome parent2, Chromosome *child1, Chromosome *child2);

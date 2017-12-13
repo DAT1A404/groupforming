@@ -1,23 +1,28 @@
 
+#define NAME_MAX_LENGTH 40
+#define MEMBER_MAX_COUNT 20
+#define CRITERIA_MAX_COUNT 20
+
 /* ================= */
-/* Structs and enums */
+/*       Structs     */
 /* ================= */
 typedef struct {
-    char name[40];
+    char name[NAME_MAX_LENGTH];
     int personID;
-    double criteria[20];
+    double criteria[CRITERIA_MAX_COUNT];
 } Person;
 
 typedef struct {
-    Person members[20];
+    Person members[MEMBER_MAX_COUNT];
     int memberCount;
     int groupNumber;
     double fitnessValue;
 } Group;
 
 typedef struct {
-    char name[40];
+    char name[NAME_MAX_LENGTH];
     double weight;
+    double minimum;
 } Criteria;
 
 typedef struct {
@@ -30,7 +35,7 @@ typedef struct {
 typedef struct {
     int popsize;
     int generations;
-    float mutationrate;    
+    float mutationrate;
 } GASettings;
 
 typedef struct {

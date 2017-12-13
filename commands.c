@@ -13,7 +13,7 @@ void show_commands(Group *grps, int groupCount, DataSet data, int debug) {
 
         /* Ask user about what they wanna do next */
         set_color(GREEN, BLACK);
-        printf("What do you want to do now?\n");
+        printf("\nWhat do you want to do now?\n");
         reset_color();
 
         /* Print options */
@@ -56,7 +56,7 @@ void see_group(Group *grps, int groupCount, int criteriaCount, int debug) {
   int groupID;
 
   do {
-    printf("%d groups present. Type the ID of the group you wish to inspect: ", groupCount );
+    printf("There is %d groups present. Type the group number you wish to inspect: ", groupCount );
     /* if an int is not input, terminate program, however if "f" or "q" is used, program switches in function-dialogue */
     if (scanf(" %d", &groupID) != 1) {
       printf("Input not recognised as an integer.\n");
@@ -97,6 +97,7 @@ void see_person(Group *grps, int groupCount, int criteriaCount, int debug) {
     /* if a match is found, print group */
     if (match != -1) {
         printf("\n\"%s\" found in group %d \n",needle, i + 1);
+        reset_color();
         print_group(&(grps[i]), criteriaCount, debug);
         printf("\n");
     }

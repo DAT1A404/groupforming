@@ -16,8 +16,8 @@
 #include "utility.h"
 #include "ctest.h"
 
-#define POSTREADPRINT 0
-#define GENETIC_SETUP_DIALOG 1
+#define DEBUG_POST_READ_PRINT 0
+#define DO_GENETIC_SETUP_DIALOG 1
 #define DO_GENETIC_ALGORITHM 1
 
 #define GROUP_MEMBERS_STD 6
@@ -26,7 +26,7 @@
 #define POPSIZE_STD 60
 #define POPSIZE_MIN 10
 #define POPSIZE_MAX 500
-#define GENERATIONS_STD 400
+#define GENERATIONS_STD 600
 #define GENERATIONS_MIN 1
 #define GENERATIONS_MAX 10000
 #define MUTATION_RATE_STD 0.05f
@@ -34,7 +34,8 @@
 #define MUTATION_RATE_MAX 1
 
 Group* genetic_setup(DataSet data, int *groupCount, int debug);
-void print_setup_settings(int groupCount, GASettings settings, int personCount);
+double calculate_max_min(DataSet data);
+void print_setup_settings(int groupCount, GASettings settings, int personCount, double maxMinCriteria);
 
 int main(int argc, char *argv[]) {
 
@@ -55,20 +56,25 @@ int main(int argc, char *argv[]) {
 
     /* Printing welcome-message for user */
     set_color(COLOR_INFO, BLACK);
-    printf("GroupForming-project, please follow on-screen instructions when prompted.\n");
+    printf("GroupForming, created by dat1a404.\n");
+    printf("This program forms groups based on weighted criteria, utilising a genetic algorithm.\n");
+    printf("---------------------------------------\n");
+    printf("Please follow on-screen instructions when prompted.\n");
     reset_color();
 
     /* Read datafile */
     data = read_data();
 
-#if POSTREADPRINT
+#if DEBUG_POST_READ_PRINT
     print_all_persons(data.allPersons, data.personCount);
 #endif
 
-#if GENETIC_SETUP_DIALOG
+#if DO_GENETIC_SETUP_DIALOG
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
-        printf("Press ANY key to continue, screen will be cleared.");
+        set_color(COLOR_INFO, BLACK);
+        printf("Write anything to proceed.\n");
+        reset_color();
         scanf(" %s", dummy);
         clear_screen();
         show_commands(grps, groupCount, data, debug);
@@ -101,12 +107,12 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
 
         clear_screen();
 
-        /* Show current settings */
-        print_setup_settings(*groupCount, settings, data.personCount);
-
+        /* Show current settings - and pass largest minimum
+        printf("PENIS: %lf\n", calculate_max_min(data)); */
+        print_setup_settings(*groupCount, settings, data.personCount, calculate_max_min(data));
         /* Instruct how to change */
         set_color(COLOR_INFO, BLACK);
-        printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
+        printf("\nTo change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\nCommand: ");
         reset_color();
         scanf(" %c", &option);
 
@@ -135,6 +141,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
     clear_screen();
 
     if (test) {
+        grps = NULL;
         /* run_tests(settings, data, *groupCount); */
     } else {
         /* Run algorithm */
@@ -148,18 +155,39 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
     return grps;
 }
 
+double calculate_max_min(DataSet data) {
+  int i;
+  double maxMin = 0;
+  for (i=0; i < data.criteriaCount; i++) {
+    if (maxMin < data.allCriteria[i].minimum) {
+      maxMin = data.allCriteria[i].minimum;
+    }
+  }
+  return maxMin;
+}
+
 /* Prints the users options nicely formatted */
-void print_setup_settings(int groupCount, GASettings settings, int personCount) {
+void print_setup_settings(int groupCount, GASettings settings, int personCount, double maxMinCriteria) {
 
     /* Header */
     set_color(GREEN, BLACK);
-    printf("== Current settings for genetic algorithm:\n");
+    printf("Current group settings:\n");
     reset_color();
 
     /* print group count setting */
     printf("(a) Number of groups: ");
-    set_color(MAGENTA, BLACK);
-    printf("%d (%.1f in each)\n", groupCount, personCount / (float)groupCount);
+    if (maxMinCriteria <= personCount / groupCount) {
+      set_color(MAGENTA, BLACK);
+      printf("%d (%.1f in each)\n", groupCount, personCount / (float)groupCount);
+    } else {
+      set_color(RED, BLACK);
+      printf("%d (%.1f in each) minimum criteria is %.2lf!\n", groupCount, personCount / (float)groupCount, maxMinCriteria);
+    }
+    reset_color();
+
+    /* Print GA specific variables */
+    set_color(GREEN, BLACK);
+    printf("\nGenetic algorithm settings:\n");
     reset_color();
 
     /* print population size setting */

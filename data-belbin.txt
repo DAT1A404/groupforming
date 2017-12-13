@@ -1,0 +1,38 @@
+#Belbins grupperoller
+#Analysatorer, organisatorer og afslutteres fordeling er vigtigst
+"Idemand" = 1
+"Analysator" = 2
+"Specialist" = 1
+"Opstarter" = 1
+"Organisator" = 2
+"Afslutter" = 2
+"Koordinator" = 1
+"Kontakttager" = 1
+"Formidler" = 1
+$
+#Navne og data
+"Mac Miller" =       0,0,1,0,1,1,0,1,0
+"Uffe Elbaek" =      0,0,1,1,0,0,1,0,0
+"Hans Petersen" =    1,0,1,0,1,0,0,0,1
+"Nicolaj Slot" =     0,1,0,0,0,1,1,1,0
+"Peter Moeller" =    0,0,0,1,1,0,1,0,1
+"Uffe Elbaek" =      1,1,1,0,0,0,0,1,0
+"Bertel Haarder" =   1,0,1,0,0,0,1,1,0
+"Joachim B. Olsen" = 0,0,1,1,1,1,0,0,0
+"Soeren Pind" =      0,1,0,0,1,0,0,0,1
+"Lars Juul" =        0,0,0,1,0,1,1,0,0
+"Frank Underby" =    0,1,1,0,1,1,0,0,0
+"Mads Stampe" =      1,0,0,1,0,0,1,1,0
+"Joakim Sand" =      1,0,0,1,1,0,0,0,0
+"Philip Thorsen" =   1,1,1,0,1,0,0,1,0
+"Falke Vejlby" =     0,1,1,0,0,1,0,1,0
+"Mathias Mehl" =     0,0,0,0,1,0,0,1,1
+"Daniel Larsen" =    0,1,1,1,0,1,0,0,0
+"Joan Christensen" = 1,0,0,0,0,1,1,1,0
+"Anne Kobborg" =     1,1,0,1,0,0,1,0,0
+"Signe Poulsen" =    1,0,0,0,0,1,1,1,0
+"Liselotte Hansen" = 1,0,0,0,1,0,0,0,1
+"Ida Vejlby" =       1,0,1,0,1,1,0,0,0
+"Olga Vejlby" =      0,1,0,0,0,0,1,1,0
+"Sarah Thorsen" =    0,0,1,0,0,1,1,0,0
+"Kristina Sloth" =   0,0,0,1,0,1,0,1,0

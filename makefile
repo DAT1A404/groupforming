@@ -2,8 +2,8 @@
 
 CFLAGS = -Wall -ansi -lm
 
-program: read.o utility.o genetic.o visual.o datastructs.o commands.o export.o ctest.o main.c
-	gcc $(CFLAGS) -o program read.o utility.o genetic.o visual.o datastructs.o commands.o export.o ctest.o main.c
+groupforming: read.o utility.o genetic.o visual.o datastructs.o commands.o export.o ctest.o main.c
+	gcc $(CFLAGS) -o groupforming read.o utility.o genetic.o visual.o datastructs.o commands.o export.o ctest.o main.c
 
 read.o: read.c read.h datastructs.c
 	gcc $(CFLAGS) -c read.c
@@ -30,4 +30,4 @@ ctest.o: ctest.c
 	gcc $(CFLAGS) -c ctest.c
 
 clean:
-	rm *.o program*
+	rm *.o groupforming*
