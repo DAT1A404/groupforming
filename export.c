@@ -43,7 +43,7 @@ void export_to_csv (Group *groups, int groupCount) {
     /*prints all other rows (members)*/
     print_members(groups, groupCount, max_members, fp);
 
-    printf("Created and wrote file: result.csv \n\n");
+    printf("Exported generated groups to \"result.csv\"\n\n");
     fclose(fp);
 }
 

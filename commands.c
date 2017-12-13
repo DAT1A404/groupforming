@@ -56,7 +56,7 @@ void see_group(Group *grps, int groupCount, int criteriaCount, int debug) {
   int groupID;
 
   do {
-    printf("%d groups present. Type the ID of the group you wish to inspect: ", groupCount );
+    printf("There is %d groups present. Type the group number you wish to inspect: ", groupCount );
     /* if an int is not input, terminate program, however if "f" or "q" is used, program switches in function-dialogue */
     if (scanf(" %d", &groupID) != 1) {
       printf("Input not recognised as an integer.\n");

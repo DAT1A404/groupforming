@@ -26,7 +26,7 @@
 #define POPSIZE_STD 60
 #define POPSIZE_MIN 10
 #define POPSIZE_MAX 500
-#define GENERATIONS_STD 400
+#define GENERATIONS_STD 600
 #define GENERATIONS_MIN 1
 #define GENERATIONS_MAX 10000
 #define MUTATION_RATE_STD 0.05f
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     grps = genetic_setup(data, &groupCount, debug);
     if (!test) {
         set_color(COLOR_INFO, BLACK);
-        printf("Press ANY key to continue. The screen will be cleared.");
+        printf("Write anything to proceed.\n");
         reset_color();
         scanf(" %s", dummy);
         clear_screen();
@@ -112,7 +112,7 @@ Group* genetic_setup(DataSet data, int *groupCount, int test) {
         print_setup_settings(*groupCount, settings, data.personCount, calculate_max_min(data));
         /* Instruct how to change */
         set_color(COLOR_INFO, BLACK);
-        printf("To change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\n");
+        printf("\nTo change a variable, write the letter next to the setting you wanna change.\nIf ready, write (x) to start algorithm. Write (q) to cancel.\nCommand: ");
         reset_color();
         scanf(" %c", &option);
 
@@ -171,7 +171,7 @@ void print_setup_settings(int groupCount, GASettings settings, int personCount, 
 
     /* Header */
     set_color(GREEN, BLACK);
-    printf("== Current settings for genetic algorithm:\n");
+    printf("Current group settings:\n");
     reset_color();
 
     /* print group count setting */
@@ -183,6 +183,11 @@ void print_setup_settings(int groupCount, GASettings settings, int personCount, 
       set_color(RED, BLACK);
       printf("%d (%.1f in each) minimum criteria is %.2lf!\n", groupCount, personCount / (float)groupCount, maxMinCriteria);
     }
+    reset_color();
+
+    /* Print GA specific variables */
+    set_color(GREEN, BLACK);
+    printf("\nGenetic algorithm settings:\n");
     reset_color();
 
     /* print population size setting */
