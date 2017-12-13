@@ -1,4 +1,4 @@
-﻿#Kriterier og V�gte
+﻿#Criteria, weights and minimum		ERROR! DOES NOT WORK!!!
 "Gender" = 1
 "Foreign" = 1
 $
@@ -62,5 +62,3 @@ $
 "Grit Grimm" = 1,0
 "Trine Lem" = 1,0
 "Pia Kjaersgaard" = 1,0
-#Test p� ekstra udefineret input
-#!Ende

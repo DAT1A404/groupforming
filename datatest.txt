@@ -1,0 +1,8 @@
+#Criteria, vægte og minimum
+"gender" = 1
+"Foreign" = 1
+$
+#Name & data
+"Mac Miller" = 0,0
+"Uffe Elbaek" = 0,0
+"Musheera Habibi" = 1,1
