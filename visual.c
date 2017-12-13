@@ -37,7 +37,7 @@ void print_all_groups(Group *groups, int groupCount, Criteria *allCriteria, int 
       
       /* printing criteria name, weight and separator if not last criteria */
       for (i = 0; i < criteriaCount; i++) {
-        printf("C%d: %10s = %.2f %s\t", i + 1, allCriteria[i].name, allCriteria[i].weight, (i < criteriaCount - 1) ? "|" : "");
+        printf("%.5s = %2.2f\t", allCriteria[i].name, allCriteria[i].weight);
       } printf("\n");
       
       reset_color();
@@ -57,12 +57,11 @@ void print_group(Group *g, int criteriaCount, int debug) {
     /* if debug-flag is set, print groups verbosely with all criteria for each member */
     if (debug) {
       set_color(YELLOW, BLACK);
-      printf("Group %d has %d members and fitness = %.2lf:\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
+      printf("Group %d has %d members:\n(fitness = %.2lf)\n", g->groupNumber + 1, g->memberCount, g->fitnessValue);
       reset_color();
       for (i = 0; i < g->memberCount; i++) {
           printf("%-30s", g->members[i].name);
           for (n = 0; n < criteriaCount; n++) {
-            printf("C%d:", n+1);
 
             /* printing criteria colorized for an easier overview */
             if (g->members[i].criteria[n] == 0) {
@@ -70,10 +69,8 @@ void print_group(Group *g, int criteriaCount, int debug) {
             } else {
               set_color(BLUE, BLACK);
             }
-            printf("%18.2f", g->members[i].criteria[n]);
+            printf("%12.2f\t", g->members[i].criteria[n]);
             reset_color();
-            /* printing separator */
-            printf(" %s\t", (n < criteriaCount - 1) ? "|" : "");
           }
           printf("\n");
       }
