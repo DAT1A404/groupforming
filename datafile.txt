@@ -1,6 +1,6 @@
 #Criteria, vaegte og minimum
-"gender" = 1,2
-"Foreign" = 1
+"gender" = 1
+"foreign" = 2,1
 $
 #Name & data
 "Peter Moeller" = 0,0
@@ -28,7 +28,7 @@ $
 "Patrick Havgaard" = 0,0
 "Sebastian Hvid" = 0,0
 "Thor Mortensen" = 0,0
-"Esben Høj" = 0,0
+"Esben Hoej" = 0,0
 "David Holler" = 0,0
 "Alfred Ganger" = 0,0
 "Jonas Moeller" = 0,0
