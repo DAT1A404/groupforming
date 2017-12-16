@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
 
 void export_plain(Group *grps, int _GroupCount);
 void export_to_csv (Group *groups, int groupCount);

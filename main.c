@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-#include "datastructs.c"
+#include "datastructs.h"
 #include "read.h"
 #include "genetic.h"
 #include "commands.h"

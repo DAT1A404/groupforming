@@ -1,7 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
 
 Group* genetic_algorithm(GASettings settings, DataSet data, int groupCount);
 void log_make_header(FILE *lgf, DataSet data, GASettings settings, int groupCount);

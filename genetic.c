@@ -1,7 +1,11 @@
-#include "datastructs.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include "datastructs.h"
 #include "utility.h"
-#include "genetic.h"
 #include "visual.h"
+#include "genetic.h"
 
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations

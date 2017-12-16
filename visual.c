@@ -1,4 +1,5 @@
-#include "datastructs.c"
+#include <stdio.h>
+#include "datastructs.h"
 #include "genetic.h"
 #include "visual.h"
 

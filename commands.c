@@ -1,9 +1,10 @@
-#include "datastructs.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include "datastructs.h"
 #include "visual.h"
 #include "utility.h"
 #include "export.h"
 #include "commands.h"
-#include "export.h"
 
 /* Dialog with user post algorithm. Allows user to print and export in various ways */
 void show_commands(Group *grps, int groupCount, DataSet data, int debug) {

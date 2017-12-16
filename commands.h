@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 
 void show_commands(Group *grps, int groupCount, DataSet data, int debug);
 void print_not_implemented();
