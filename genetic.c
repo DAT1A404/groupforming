@@ -245,7 +245,7 @@ double fitness_group(Group *group, Criteria *criteria, int criteriaCount) {
         t = inverse_lerp(criteriaMin, criteriaMax, average);
 
         /* Adds the fitness of the specific criteria in the single group to result */
-        result += fitness_of_criteria(t, criteria[i].weight, fitness_alpha(group->memberCount, criteria->minimum));
+        result += fitness_of_criteria(t, criteria[i].weight, fitness_alpha(group->memberCount, criteria[i].minimum));
     }
 
     /* Save fitness in the group struct */
