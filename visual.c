@@ -152,6 +152,7 @@ void print_generation(int gen, double avg, double med, double best, double worst
 
     /* Save this average as prev average */
     prevAvg = avg;
+    prevMed = med;
     prevBest = best;
     prevWorst = worst;
 }
