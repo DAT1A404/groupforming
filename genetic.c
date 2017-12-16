@@ -431,13 +431,11 @@ void genetic_generate_chromosome(Chromosome *chromosome, DataSet data) {
 
 /* Takes a population and cleans it up, freeing all used memory */
 void genetic_kill_population(Chromosome *population, int popsize) {
-#ifdef _WIN32
     int i;
+    
     /* Free all allocated memory for persons */
      for (i = 0; i < popsize; i++) {
-        free(population->persons);
+        free(population[i].persons);
     } 
-
-     free(population);
-#endif
+    free(population);
 }
