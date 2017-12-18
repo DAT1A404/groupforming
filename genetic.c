@@ -66,7 +66,7 @@ Group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
         /* If popsize is odd, we have to add another chromosome. We just
             copy the one with highest fitness */
         if (settings.popsize % 2 == 1) {
-            nextGeneration[settings.popsize - 1] = population[0];
+            genetic_copy_chromosome(nextGeneration + settings.popsize - 1, population[0], data.personCount);
         }
 
         /* Set population to next generation, by swapping current and next */
@@ -430,6 +430,14 @@ void genetic_generate_chromosome(Chromosome *chromosome, DataSet data) {
         temp = chromosome->persons[n];
         chromosome->persons[n] = chromosome->persons[i];
         chromosome->persons[i] = temp;
+    }
+}
+
+/* Copies the persons from one chromosome to another */
+void genetic_copy_chromosome(Chromosome *to, Chromosome from, int personCount) {
+    int i;
+    for (i = 0; i < personCount; i++) {
+        to->persons[i] = from.persons[i];
     }
 }
 
