@@ -1,4 +1,7 @@
-#include "datastructs.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "datastructs.h"
 #include "export.h"
 #include "genetic.h"
 

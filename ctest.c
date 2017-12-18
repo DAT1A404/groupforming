@@ -1,4 +1,4 @@
-#include "datastructs.c"
+#include "datastructs.h"
 #include "genetic.h"
 #include "visual.h"
 #include "ctest.h"

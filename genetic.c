@@ -1,7 +1,11 @@
-#include "datastructs.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include "datastructs.h"
 #include "utility.h"
-#include "genetic.h"
 #include "visual.h"
+#include "genetic.h"
 
 /* Starts the genetic algorithm
     - popsize       : the number of chromosomes in the populations
@@ -62,7 +66,7 @@ Group* genetic_algorithm(GASettings settings, DataSet data, int groupCount) {
         /* If popsize is odd, we have to add another chromosome. We just
             copy the one with highest fitness */
         if (settings.popsize % 2 == 1) {
-            nextGeneration[settings.popsize - 1] = population[0];
+            genetic_copy_chromosome(nextGeneration + settings.popsize - 1, population[0], data.personCount);
         }
 
         /* Set population to next generation, by swapping current and next */
@@ -245,7 +249,7 @@ double fitness_group(Group *group, Criteria *criteria, int criteriaCount) {
         t = inverse_lerp(criteriaMin, criteriaMax, average);
 
         /* Adds the fitness of the specific criteria in the single group to result */
-        result += fitness_of_criteria(t, criteria[i].weight, fitness_alpha(group->memberCount, criteria->minimum));
+        result += fitness_of_criteria(t, criteria[i].weight, fitness_alpha(group->memberCount, criteria[i].minimum));
     }
 
     /* Save fitness in the group struct */
@@ -429,15 +433,21 @@ void genetic_generate_chromosome(Chromosome *chromosome, DataSet data) {
     }
 }
 
+/* Copies the persons from one chromosome to another */
+void genetic_copy_chromosome(Chromosome *to, Chromosome from, int personCount) {
+    int i;
+    for (i = 0; i < personCount; i++) {
+        to->persons[i] = from.persons[i];
+    }
+}
+
 /* Takes a population and cleans it up, freeing all used memory */
 void genetic_kill_population(Chromosome *population, int popsize) {
-#ifdef _WIN32
     int i;
+    
     /* Free all allocated memory for persons */
      for (i = 0; i < popsize; i++) {
-        free(population->persons);
+        free(population[i].persons);
     } 
-
-     free(population);
-#endif
+    free(population);
 }

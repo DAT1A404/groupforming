@@ -1,6 +1,6 @@
 #Criteria, vaegte og minimum
-"gender" = 1
-"foreign" = 2,1
+"gender" = 2,2
+"foreign" = 1
 $
 #Name & data
 "Peter Moeller" = 0,0

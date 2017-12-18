@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "datastructs.c"
+#include "datastructs.h"
 #include "utility.h"
 
 #if _WIN32

@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-#include "datastructs.c"
+#include "datastructs.h"
 #include "read.h"
 #include "genetic.h"
 #include "commands.h"
@@ -25,11 +25,11 @@
 #define GROUP_MEMBERS_MIN 2
 #define POPSIZE_STD 60
 #define POPSIZE_MIN 10
-#define POPSIZE_MAX 500
-#define GENERATIONS_STD 600
-#define GENERATIONS_MIN 1
+#define POPSIZE_MAX 150
+#define GENERATIONS_STD 2000
+#define GENERATIONS_MIN 0
 #define GENERATIONS_MAX 10000
-#define MUTATION_RATE_STD 0.05f
+#define MUTATION_RATE_STD 0.15f
 #define MUTATION_RATE_MIN 0
 #define MUTATION_RATE_MAX 1
 

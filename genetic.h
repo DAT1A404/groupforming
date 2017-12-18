@@ -1,7 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <assert.h>
 
 Group* genetic_algorithm(GASettings settings, DataSet data, int groupCount);
 void log_make_header(FILE *lgf, DataSet data, GASettings settings, int groupCount);
@@ -27,4 +24,5 @@ Chromosome * genetic_get_empty_population(int popsize, DataSet data, int groupCo
 Chromosome * genetic_get_memory_for_pop(int popsize, int personCount);
 Chromosome * genetic_generate_initial_population(int popsize, DataSet data, int groupCount);
 void genetic_generate_chromosome(Chromosome *chromosome, DataSet data);
+void genetic_copy_chromosome(Chromosome *to, Chromosome from, int personCount);
 void genetic_kill_population(Chromosome *population, int popsize);
