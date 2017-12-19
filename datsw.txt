@@ -4,7 +4,7 @@
 $
 #Names and data
 "Mike Lund Andersen" = 0, 0
-"Michelle Bundgaard" = 0, 0
+"Michelle Bundgaard" = 1, 0
 "Maria-Theresa Oanh Hoang" = 1, 1
 "Lasse Jannik Reimer" = 0, 0
 "Peter Joergensen Lundgreen" = 0, 0
@@ -44,10 +44,10 @@ $
 "Mark Brinchmann Jensen" = 0, 0
 "Jonas Pedersen" = 0, 0
 "Rune Tikaer Andersen" = 0, 0
-"Cecilie Skyth" = 1, 0"
+"Cecilie Skyth" = 1, 0
 "Mathias Hindsgaul" = 0, 0
-"Falke Bjernemose oetker Vejlby" = 0, 0
-"Nicolaj oesterby Jensen" = 0, 0
+"Falke Bjernemose Oetker Vejlby" = 0, 0
+"Nicolaj Oesterby Jensen" = 0, 0
 "Christian Hoej" = 0, 0
 "Mathias Mehl Soerensen" = 0, 0
 "Lars Bro Moegelbjerg Nielsen" = 0, 0
@@ -56,7 +56,7 @@ $
 "Jacob Jenner Rasmussen" = 0, 0
 "Mikkel Haurholm Vig Kuntz" = 0, 0
 "Phillip Irming Holler" = 0, 0
-"Alihan oezturk" = 0, 1
+"Alihan Oezturk" = 0, 1
 "Niels Noergaard Svendsen" = 0, 0
 "Michelle Broens Pedersen" = 1, 0
 "Stefan I Dali Mir-Mackiewicz" = 0, 1
@@ -100,7 +100,7 @@ $
 "Phillip Bengtson Joergensen" = 0, 0
 "Kasper Suamchiang Nielsen" = 0, 1
 "Ian Stroemkjaer Jensen" = 0, 0
-"Aleksander oester Nielsen" = 0, 0
+"Aleksander Oester Nielsen" = 0, 0
 "Simon Klit Pacis" = 0, 1
 "Rasmus Brandt Soerensen" = 0, 0
 "Mathias Andresen" = 0, 0
