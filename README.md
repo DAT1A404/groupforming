@@ -8,14 +8,14 @@ Execute program with `groupforming.exe` or `./groupforming` depending on your pl
 
 The program will prompt the user at each stage that user-intervention is needed with contextual instruction.
 ## example datasets
-* data-belbin.txt
+`data-belbin.txt`
 contains small dataset with Belbins team-roles for testing
 
-* data-five-men.txt
+`data-five-men.txt`
 contains dataset with multiple criteria and few women to test minimum-criteria in edge cases
 
-* data-five.txt
+`data-five.txt`
 contains dataset with multiple criteria, different weights and evenly distributed members
 
-* datsw.txt
+`datsw.txt`
 contains representative dataset of use-case at AAU for computer science with relevant data and criteria
