@@ -44,4 +44,6 @@ typedef struct {
     Criteria *criteria;
     int criteriaCount;
     int groupCount;
+    int fitnessChecked;
+    double fitness;
 } Chromosome;

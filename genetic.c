@@ -110,8 +110,8 @@ void genetic_analyse(FILE *lgf, int gen, Chromosome *population, int popsize) {
     /* Calculate interesting numbers */
     double avg = genetic_average_fitness(population, popsize);
     double med = genetic_median_fitness(population, popsize);
-    double best = fitness_chromosome(population[0]);
-    double worst = fitness_chromosome(population[popsize - 1]);
+    double best = fitness_chromosome(population);
+    double worst = fitness_chromosome(&(population[popsize - 1]));
 
     /* Write the numbers into the log file */
     fprintf(lgf, "%d;%lf;%lf;%lf;%lf\n", gen, avg, med, best, worst);
@@ -126,7 +126,7 @@ double genetic_average_fitness(Chromosome *population, int popsize) {
     int i;
     double total = 0;
     for (i = 0; i < popsize; i++) {
-        total += fitness_chromosome(population[i]);
+        total += fitness_chromosome(population + i);
     }
     return total / popsize;
 }
@@ -134,7 +134,7 @@ double genetic_average_fitness(Chromosome *population, int popsize) {
 /* Returns the median fitness of the population */
 double genetic_median_fitness(Chromosome *population, int popsize) {
     int median = popsize / 2;
-    return fitness_chromosome(population[median]);
+    return fitness_chromosome(population + median);
 }
 
 /* This function takes a chromosome from the genetic algorithm and splits
@@ -184,8 +184,8 @@ int genetic_q_compare(const void * i, const void * j) {
     Chromosome *a = (Chromosome*)i;
     Chromosome *b = (Chromosome*)j;
 
-    double fa = fitness_chromosome(*a);
-    double fb = fitness_chromosome(*b);
+    double fa = fitness_chromosome(a);
+    double fb = fitness_chromosome(b);
 
     /* Return -1 if A is best, returns 1 if B is best */
     if (fa > fb) return -1;
@@ -194,11 +194,19 @@ int genetic_q_compare(const void * i, const void * j) {
 }
 
 /* Returns the fitness of a chromosome */
-double fitness_chromosome(Chromosome chromo) {
+double fitness_chromosome(Chromosome *chromo) {
+
+    /* Check if fitness is already calculated for this chromosome */
+    if (chromo->fitnessChecked)
+        return chromo->fitness;
 
     /* Split chromosome into groups, then calculate fitness */
-    Group *groups = genetic_chromosome_to_groups(chromo);
-    double fitness = fitness_groups(groups, chromo.groupCount, chromo.criteria, chromo.criteriaCount);
+    Group *groups = genetic_chromosome_to_groups(*chromo);
+    double fitness = fitness_groups(groups, chromo->groupCount, chromo->criteria, chromo->criteriaCount);
+
+    /* Save fitness so we don't have to recalculate */
+    chromo->fitnessChecked = 1;
+    chromo->fitness = fitness;
 
     free(groups);
 
@@ -334,6 +342,10 @@ void genetic_crossover(Chromosome parent1, Chromosome parent2, Chromosome *child
             child2->persons[i] = parent1.persons[i];
         }
     }
+    
+    /* Mark that fitness needs to be recalculated for children */
+    child1->fitnessChecked = 0;
+    child2->fitnessChecked = 0;
 
     free(bitstring);
 }
@@ -359,6 +371,9 @@ void genetic_mutation(Chromosome *chromo, float mutationrate) {
         chromo->persons[i] = chromo->persons[j];
         chromo->persons[j] = temp;
     }
+    
+    /* Mark that fitness needs to be recalculated */
+    chromo->fitnessChecked = 0;
 }
 
 /* Returns a pointer to an array of initialized chromosomes. Remeber to call free */
@@ -374,6 +389,8 @@ Chromosome * genetic_get_empty_population(int popsize, DataSet data, int groupCo
         population[i].criteria = data.allCriteria;
         population[i].criteriaCount = data.criteriaCount;
         population[i].groupCount = groupCount;
+        population[i].fitnessChecked = 0;
+        population[i].fitness = 0;
     }
 
     return population;
