@@ -9,7 +9,7 @@ double genetic_median_fitness(Chromosome *population, int popsize);
 Group* genetic_chromosome_to_groups(Chromosome chromo);
 
 int genetic_q_compare(const void * i, const void * j);
-double fitness_chromosome(Chromosome chromo);
+double fitness_chromosome(Chromosome *chromo);
 double fitness_groups(Group *groups, int groupCount, Criteria *criteria, int criteriaCount);
 double fitness_group(Group *group, Criteria *criteria, int criteriaCount);
 double average_criteria(Group *g, int i);
