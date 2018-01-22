@@ -44,7 +44,7 @@ void export_to_csv (Group *groups, int groupCount) {
     make_header(groupCount, fp);
 
     /*prints all other rows (members)*/
-    print_members(groups, groupCount, max_members, fp);
+    csv_print_members(groups, groupCount, max_members, fp);
 
     printf("Exported generated groups to \"result.csv\"\n\n");
     fclose(fp);
@@ -72,13 +72,13 @@ void make_header(int groupCount, FILE *fp) {
 }
 
 /*prints all the members to the csv file*/
-void print_members(Group *groups, int groupCount, int max_members, FILE *fp) {
+void csv_print_members(Group *groups, int groupCount, int max_members, FILE *fp) {
     int i, j;
     for (i = 0; i < max_members; i++) {
         fprintf(fp, "Medlem %d;", (i+1));
         for (j = 0; j < groupCount; j++) {
            fprintf(fp, "%s;",groups[j].members[i].name);
         }
-    fprintf(fp,"\n");
+        fprintf(fp,"\n");
     }
 }
