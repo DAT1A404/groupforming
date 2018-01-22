@@ -146,7 +146,7 @@ Group* genetic_chromosome_to_groups(Chromosome chromo) {
     /* personPerGroup is the minimum size of each group. leftoverPerons
         is the amount of groups, which have an extra member */
     int personPerGroup = chromo.personCount / chromo.groupCount;
-    int leftoverPersons = chromo.personCount % personPerGroup;
+    int leftoverPersons = chromo.personCount - personPerGroup * chromo.groupCount;
 
     /* Allocate memory */
     Group *groups = (Group*)malloc(chromo.groupCount * sizeof(Group));
