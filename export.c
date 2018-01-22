@@ -53,7 +53,7 @@ void export_to_csv (Group *groups, int groupCount) {
 /*finds the max number of members in a group*/
 int find_max_members(Group *groups, int groupCount) {
     int i, max = 0;
-    for (i = 0; i <= groupCount; i++) {
+    for (i = 0; i < groupCount; i++) {
         if (groups[i].memberCount > max) {
             max = groups[i].memberCount;
         }
